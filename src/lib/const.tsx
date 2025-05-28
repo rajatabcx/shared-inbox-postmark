@@ -273,3 +273,20 @@ export const COMPANY_SIZES = [
   '251 - 1,000 employees',
   '1,001+ employees',
 ] as const;
+
+export function getColorForInbox(): string {
+  const colors = [
+    '#3b82f6', // blue
+    '#22c55e', // green
+    '#a855f7', // purple
+    '#ef4444', // red
+    '#eab308', // yellow
+    '#06b6d4', // cyan
+    '#ec4899', // pink
+    '#f97316', // orange
+    '#8b5cf6', // violet
+    '#14b8a6', // teal
+  ];
+
+  return colors[Math.floor(Math.random() * colors.length)];
+}
