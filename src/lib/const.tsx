@@ -247,3 +247,29 @@ export const footerLinks = {
 };
 
 export const CALL_LINK = 'https://cal.com/rajat-mondal';
+
+export const INDUSTRIES = [
+  'Technology',
+  'Logistics',
+  'Manufacturing',
+  'Professional Services',
+  'Financial Services',
+  'Travel & Hospitality',
+  'Healthcare',
+  'Retail',
+  'Non-profit',
+  'Education',
+  'Real Estate',
+  'Consumer Services',
+  'Other',
+] as const;
+
+export const COMPANY_SIZES = [
+  '1 - 10 employees',
+  '11 - 50 employees',
+  '51 - 100 employees',
+  '101 - 150 employees',
+  '151 - 250 employees',
+  '251 - 1,000 employees',
+  '1,001+ employees',
+] as const;
