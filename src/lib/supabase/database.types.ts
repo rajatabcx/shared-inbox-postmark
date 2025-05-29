@@ -589,30 +589,30 @@ export type Database = {
       }
       shared_inboxes: {
         Row: {
-          created_at: string | null
-          created_by: number | null
-          email_alias: string | null
+          created_at: string
+          created_by: number
+          email_alias: string
           forwarding_email: string
           id: number
-          name: string | null
+          name: string
           organization_id: number
         }
         Insert: {
-          created_at?: string | null
-          created_by?: number | null
-          email_alias?: string | null
+          created_at?: string
+          created_by: number
+          email_alias: string
           forwarding_email: string
-          id?: never
-          name?: string | null
+          id?: number
+          name: string
           organization_id: number
         }
         Update: {
-          created_at?: string | null
-          created_by?: number | null
-          email_alias?: string | null
+          created_at?: string
+          created_by?: number
+          email_alias?: string
           forwarding_email?: string
-          id?: never
-          name?: string | null
+          id?: number
+          name?: string
           organization_id?: number
         }
         Relationships: [

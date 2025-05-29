@@ -61,3 +61,8 @@ export const emailAliasSchema = z.object({
   alias: z.string().min(1, { message: 'Alias is required' }),
   displayName: z.string().min(1, { message: 'Display name is required' }),
 });
+
+export const labelSchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  color: z.string().min(1, { message: 'Color is required' }),
+});

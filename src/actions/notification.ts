@@ -7,7 +7,6 @@ import {
 } from '@/lib/types';
 import { currentUser } from './user';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { Json } from '@/lib/supabase/database.types';
 import { allChatsFromIds } from './chat';
 
 export const toggleEmailBookmark = async ({

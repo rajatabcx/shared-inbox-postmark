@@ -292,3 +292,83 @@ export function getColorForInbox(): string {
 }
 
 export const LIST_LIMIT = 25;
+
+export const darkThemeColors: Record<string, { text: string; bg: string }> = {
+  Crimson: {
+    text: '#FFDEE9',
+    bg: '#70001F',
+  },
+  Emerald: {
+    text: '#D2FFE8',
+    bg: '#014D40',
+  },
+  Sapphire: {
+    text: '#DAF4FF',
+    bg: '#002E5D',
+  },
+  Amber: {
+    text: '#FFF7D6',
+    bg: '#7A4D00',
+  },
+  Violet: {
+    text: '#F0E9FF',
+    bg: '#4B0082',
+  },
+  Cyan: {
+    text: '#E0FFFF',
+    bg: '#00575B',
+  },
+  Rose: {
+    text: '#FFE5EC',
+    bg: '#6B0012',
+  },
+  Lime: {
+    text: '#F4FFD2',
+    bg: '#3B5E00',
+  },
+  Indigo: {
+    text: '#E6E8FF',
+    bg: '#2C2A72',
+  },
+  Charcoal: {
+    text: '#E2E2E2',
+    bg: '#1B1B1B',
+  },
+};
+
+export function isValidEmail(email: string): boolean {
+  const match = email.match(/<([^>]+)>/);
+  const emailToValidate = match ? match[1] : email.trim();
+
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(emailToValidate);
+}
+
+export function getDistinctEmails(
+  toEmails: string[],
+  replyTo: string | null
+): string[] {
+  // Helper to extract the actual email address
+  const extractEmail = (input: string) => {
+    const match = input.match(/<([^>]+)>/);
+    return match ? match[1].trim() : input.trim();
+  };
+
+  const emailMap = new Map<string, string>();
+
+  // Add all toEmails, using the email address as the key
+  for (const e of toEmails) {
+    const email = extractEmail(e);
+    if (!emailMap.has(email)) {
+      emailMap.set(email, e);
+    }
+  }
+
+  // For replyTo, always set/overwrite so its format is preserved
+  if (replyTo) {
+    const replyToEmail = extractEmail(replyTo);
+    emailMap.set(replyToEmail, replyTo);
+  }
+
+  return Array.from(emailMap.values());
+}
