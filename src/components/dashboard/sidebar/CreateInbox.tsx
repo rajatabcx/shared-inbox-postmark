@@ -22,19 +22,18 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Form } from '@/components/ui/form';
-import { useServerAction } from '@/hooks/useServerAction';
-import { createInbox } from '@/actions/inbox';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { inboxSchema } from '@/lib/validationSchema';
 import { TextInput } from '@/components/form/TextInput';
+import { useCreateInbox } from '@/hooks/inbox.hooks';
 
 type InboxFormValues = z.infer<typeof inboxSchema>;
 
 export default function CreateInbox() {
   const [open, setOpen] = useState(false);
   const { mutateAsync: createInboxMutation, isPending: isCreatingInbox } =
-    useServerAction(createInbox);
+    useCreateInbox();
 
   const form = useForm<InboxFormValues>({
     resolver: zodResolver(inboxSchema),

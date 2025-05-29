@@ -290,3 +290,5 @@ export function getColorForInbox(): string {
 
   return colors[Math.floor(Math.random() * colors.length)];
 }
+
+export const LIST_LIMIT = 25;

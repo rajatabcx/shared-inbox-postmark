@@ -5,8 +5,6 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { ActionResponse, ResponseType } from '@/lib/types';
 import { inboxSchema } from '@/lib/validationSchema';
 import { currentUser } from './user';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function createInbox(
   formData: z.infer<typeof inboxSchema>
@@ -63,10 +61,6 @@ export async function createInbox(
   if (error) {
     return { message: error.message, type: ResponseType.ERROR };
   }
-
-  revalidatePath('/dashboard', 'layout');
-
-  // redirect(`/dashboard/inbox/${data.id}`);
 
   return { message: 'Inbox created successfully', type: ResponseType.SUCCESS };
 }
@@ -129,8 +123,6 @@ export async function deleteInbox(id: number) {
   if (error) {
     return { message: error.message, type: ResponseType.ERROR };
   }
-
-  revalidatePath('/dashboard', 'layout');
 
   return { message: 'Inbox deleted successfully', type: ResponseType.SUCCESS };
 }

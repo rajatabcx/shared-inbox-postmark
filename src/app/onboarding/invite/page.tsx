@@ -18,10 +18,9 @@ import { Loader, Mail } from 'lucide-react';
 import { inviteSchema } from '@/lib/validationSchema';
 import Link from 'next/link';
 import { ResponseType, UserRole } from '@/lib/types';
-import { useServerAction } from '@/hooks/useServerAction';
-import { inviteUser } from '@/actions/invitation';
 import { toastHelper } from '@/lib/toastHelper';
 import { SelectInput } from '@/components/form/SelectInput';
+import { useInviteUser } from '@/hooks/invitation.hooks';
 
 type InviteFormValues = z.infer<typeof inviteSchema>;
 
@@ -34,7 +33,7 @@ export default function OnboardingInvite() {
     },
   });
 
-  const { mutateAsync, isPending } = useServerAction(inviteUser);
+  const { mutateAsync, isPending } = useInviteUser();
 
   const onSubmit = async (values: InviteFormValues) => {
     const response = await mutateAsync(values);

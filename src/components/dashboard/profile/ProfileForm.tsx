@@ -9,10 +9,9 @@ import React from 'react';
 import { TextInput } from '@/components/form/TextInput';
 import ImageInput from '@/components/form/ImageInput';
 import { Button } from '@/components/ui/button';
-import { useServerAction } from '@/hooks/useServerAction';
-import { updateUserProfile } from '@/actions/user';
 import { toastHelper } from '@/lib/toastHelper';
 import { Loader } from 'lucide-react';
+import { useUpdateUserProfile } from '@/hooks/user.hooks';
 
 export default function ProfileForm({
   user,
@@ -28,8 +27,7 @@ export default function ProfileForm({
     imageUrl: string | null;
   };
 }) {
-  const { mutateAsync: updateProfile, isPending } =
-    useServerAction(updateUserProfile);
+  const { mutateAsync: updateProfile, isPending } = useUpdateUserProfile();
 
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),

@@ -17,11 +17,10 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { TextInput } from '@/components/form/TextInput';
 import { Mail, Lock, Loader } from 'lucide-react';
-import { useServerAction } from '@/hooks/useServerAction';
-import { signin } from '@/actions/auth';
 import { toastHelper } from '@/lib/toastHelper';
 import { ResponseType } from '@/lib/types';
 import { useRouter } from 'next/navigation';
+import { useSignin } from '@/hooks/auth.hooks';
 
 type SigninFormValues = z.infer<typeof signinSchema>;
 
@@ -35,7 +34,7 @@ export default function SignupPage() {
     },
   });
 
-  const { mutateAsync, isPending } = useServerAction(signin);
+  const { mutateAsync, isPending } = useSignin();
 
   const onSubmit = async (values: SigninFormValues) => {
     const res = await mutateAsync(values);

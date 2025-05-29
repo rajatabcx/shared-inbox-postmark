@@ -1,4 +1,3 @@
-import { deleteInbox } from '@/actions/inbox';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useServerAction } from '@/hooks/useServerAction';
+import { useDeleteInbox } from '@/hooks/inbox.hooks';
 import { toastHelper } from '@/lib/toastHelper';
 import { ResponseType } from '@/lib/types';
 import { Loader } from 'lucide-react';
@@ -26,7 +25,7 @@ export function DeleteConfirmation({
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { mutateAsync, isPending } = useServerAction(deleteInbox);
+  const { mutateAsync, isPending } = useDeleteInbox();
 
   const handleDelete = async () => {
     const res = await mutateAsync(id);

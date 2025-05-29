@@ -17,13 +17,12 @@ import { TextInput } from '@/components/form/TextInput';
 import { Form } from '@/components/ui/form';
 import { InboxIcon, Loader } from 'lucide-react';
 import { inboxSchema } from '@/lib/validationSchema';
-import { createInbox } from '@/actions/inbox';
 import { useRouter } from 'next/navigation';
 import { ResponseType } from '@/lib/types';
 import { toastHelper } from '@/lib/toastHelper';
-import { updateUserOnboarding } from '@/actions/user';
 import { toast } from 'sonner';
-import { useServerAction } from '@/hooks/useServerAction';
+import { useCompleteOnboarding } from '@/hooks/onboarding.hooks';
+import { useCreateInbox } from '@/hooks/inbox.hooks';
 
 type InboxFormValues = z.infer<typeof inboxSchema>;
 
@@ -33,9 +32,9 @@ export default function OnboardingInbox() {
   const {
     mutateAsync: updateUserOnboardingMutation,
     isPending: isUpdatingUserOnboarding,
-  } = useServerAction(updateUserOnboarding);
+  } = useCompleteOnboarding();
   const { mutateAsync: createInboxMutation, isPending: isCreatingInbox } =
-    useServerAction(createInbox);
+    useCreateInbox();
 
   const form = useForm<InboxFormValues>({
     resolver: zodResolver(inboxSchema),

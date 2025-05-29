@@ -26,11 +26,10 @@ import {
   Building,
   Loader,
 } from 'lucide-react';
-import { useServerAction } from '@/hooks/useServerAction';
-import { signup } from '@/actions/auth';
 import { toastHelper } from '@/lib/toastHelper';
 import { ResponseType } from '@/lib/types';
 import { useRouter } from 'next/navigation';
+import { useSignup } from '@/hooks/auth.hooks';
 
 type SignupFormValues = z.infer<typeof signupSchema>;
 
@@ -50,7 +49,7 @@ export default function SignupPage() {
     },
   });
 
-  const { mutateAsync, isPending } = useServerAction(signup);
+  const { mutateAsync, isPending } = useSignup();
 
   const onSubmit = async (values: SignupFormValues) => {
     const res = await mutateAsync(values);

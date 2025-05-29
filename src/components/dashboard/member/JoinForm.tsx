@@ -11,11 +11,10 @@ import { Loader } from 'lucide-react';
 import { Mail, Lock, UserIcon } from 'lucide-react';
 import { Form } from '@/components/ui/form';
 import { TextInput } from '@/components/form/TextInput';
-import { useServerAction } from '@/hooks/useServerAction';
-import { joinOrganization } from '@/actions/invitation';
 import { ResponseType, UserRoleType } from '@/lib/types';
 import { toastHelper } from '@/lib/toastHelper';
 import { useRouter } from 'next/navigation';
+import { useJoinOrganization } from '@/hooks/invitation.hooks';
 
 type JoinFormValues = z.infer<typeof joinSchema>;
 
@@ -41,12 +40,12 @@ export default function JoinForm({
     },
   });
 
-  const { mutateAsync, isPending } = useServerAction(joinOrganization);
+  const { mutateAsync, isPending } = useJoinOrganization();
 
   const onSubmit = async (values: JoinFormValues) => {
     const res = await mutateAsync({
       invitationId,
-      formData: values,
+      data: values,
     });
 
     toastHelper(res);

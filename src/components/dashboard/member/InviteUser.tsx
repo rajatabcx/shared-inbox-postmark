@@ -19,11 +19,10 @@ import { Loader, UserRoundPlus } from 'lucide-react';
 import { Mail } from 'lucide-react';
 import { Form } from '@/components/ui/form';
 import { TextInput } from '@/components/form/TextInput';
-import { useServerAction } from '@/hooks/useServerAction';
-import { inviteUser } from '@/actions/invitation';
 import { SelectInput } from '@/components/form/SelectInput';
 import { ResponseType, UserRole } from '@/lib/types';
 import { toastHelper } from '@/lib/toastHelper';
+import { useInviteUser } from '@/hooks/invitation.hooks';
 
 type InviteFormValues = z.infer<typeof inviteSchema>;
 
@@ -37,7 +36,7 @@ export function InviteUser() {
     },
   });
 
-  const { mutateAsync, isPending } = useServerAction(inviteUser);
+  const { mutateAsync, isPending } = useInviteUser();
 
   const onSubmit = async (values: InviteFormValues) => {
     const response = await mutateAsync(values);

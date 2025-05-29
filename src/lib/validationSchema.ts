@@ -47,3 +47,17 @@ export const joinSchema = z.object({
     .string()
     .min(8, { message: 'Password must be at least 8 characters' }),
 });
+
+export const internalCommentSchema = z.object({
+  comment: z.string().min(1, { message: 'Comment is required' }),
+  mentions: z.array(z.number()).optional(),
+});
+
+export const domainSchema = z.object({
+  domain: z.string().min(1, { message: 'Domain is required' }),
+});
+
+export const emailAliasSchema = z.object({
+  alias: z.string().min(1, { message: 'Alias is required' }),
+  displayName: z.string().min(1, { message: 'Display name is required' }),
+});
