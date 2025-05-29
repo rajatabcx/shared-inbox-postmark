@@ -3,7 +3,6 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { currentUser } from './user';
 import { ActionResponse, ResponseType } from '@/lib/types';
-import { revalidatePath } from 'next/dist/server/web/spec-extension/revalidate';
 
 export async function addAlias({
   domainId,
@@ -36,14 +35,13 @@ export async function addAlias({
       message: error.message,
     };
   }
-  revalidatePath(`/dashboard/domains/${domainId}`);
   return {
     type: ResponseType.SUCCESS,
     message: 'Alias added successfully',
   };
 }
 
-export async function emailAliasList(orgId: number) {
+export async function emailAliasList() {
   const user = await currentUser();
 
   if (!user) {
@@ -56,7 +54,7 @@ export async function emailAliasList(orgId: number) {
   const { data: domains, error: domainsError } = await supabase
     .from('domains')
     .select('id')
-    .eq('organization_id', orgId);
+    .eq('organization_id', user.organizationId);
 
   if (domainsError || !domains) {
     return [];
@@ -78,4 +76,31 @@ export async function emailAliasList(orgId: number) {
     return [];
   }
   return aliases;
+}
+
+export async function deleteAlias(aliasId: number) {
+  const user = await currentUser();
+
+  if (!user) {
+    return {
+      type: ResponseType.ERROR,
+      message: 'User not found',
+    };
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase
+    .from('email_aliases')
+    .delete()
+    .eq('id', aliasId);
+  if (error) {
+    return {
+      type: ResponseType.ERROR,
+      message: error.message,
+    };
+  }
+  return {
+    type: ResponseType.SUCCESS,
+    message: 'Alias deleted successfully',
+  };
 }

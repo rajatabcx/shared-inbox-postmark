@@ -175,13 +175,7 @@ export async function domainDetails(
   };
 }
 
-export async function deleteDomain({
-  domainId,
-  domainName,
-}: {
-  domainId: number;
-  domainName: string;
-}) {
+export async function deleteDomain(domainId: number) {
   const user = await currentUser();
 
   if (!user) {
@@ -197,7 +191,6 @@ export async function deleteDomain({
     .from('domains')
     .delete()
     .eq('id', domainId)
-    .eq('domain', domainName)
     .eq('organization_id', user.organizationId)
     .select('domain_id')
     .single();
