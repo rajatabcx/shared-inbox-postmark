@@ -1,15 +1,17 @@
-import { pendingInvitations } from '@/actions/invitation';
-import { organizationMembers } from '@/actions/organization';
 import { InviteUser } from '@/components/dashboard/member/InviteUser';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { usePendingInvitations } from '@/hooks/invitation.hooks';
+import { useOrganizationMembers } from '@/hooks/organization.hooks';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, EllipsisVertical } from 'lucide-react';
 import Link from 'next/link';
 
-export default async function Members() {
-  const pendingInvites = await pendingInvitations();
-  const orgMembers = await organizationMembers();
+export default function Members() {
+  const { data: pendingInvites, isLoading: isPendingInvitesLoading } =
+    usePendingInvitations();
+  const { data: orgMembers, isLoading: isOrgMembersLoading } =
+    useOrganizationMembers();
   return (
     <div className='container mx-auto px-4 sm:px-6 py-6 min-h-screen flex flex-col gap-y-6'>
       <div className='flex items-center justify-between'>
@@ -36,7 +38,11 @@ export default async function Members() {
 
       <div className='flex flex-col gap-y-6'>
         <div>
-          {orgMembers && orgMembers?.length > 0 ? (
+          {isOrgMembersLoading ? (
+            <div>Loading...</div>
+          ) : !orgMembers?.length ? (
+            <p className='text-sm text-muted-foreground'>No team members</p>
+          ) : (
             <div className='flex flex-col gap-y-2'>
               {orgMembers.map((member) => (
                 <div
@@ -67,14 +73,18 @@ export default async function Members() {
                 </div>
               ))}
             </div>
-          ) : (
-            <p className='text-sm text-muted-foreground'>No team members</p>
           )}
         </div>
         <div>
           <h2 className='text-lg font-bold mb-4'>Pending Invitations</h2>
 
-          {pendingInvites && pendingInvites?.length > 0 ? (
+          {isPendingInvitesLoading ? (
+            <div>Loading...</div>
+          ) : !pendingInvites?.length ? (
+            <p className='text-sm text-muted-foreground'>
+              No pending invitations
+            </p>
+          ) : (
             <div className='flex flex-col gap-y-2 border-b'>
               {pendingInvites.map((invite) => (
                 <div
@@ -103,10 +113,6 @@ export default async function Members() {
                 </div>
               ))}
             </div>
-          ) : (
-            <p className='text-sm text-muted-foreground'>
-              No pending invitations
-            </p>
           )}
         </div>
       </div>
