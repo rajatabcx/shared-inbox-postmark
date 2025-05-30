@@ -12,7 +12,7 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import { useEmailAliasList } from '@/hooks/alias.hooks';
 
-export async function EmailAlias({
+export function EmailAlias({
   domainVerified,
   domainName,
   domainId,

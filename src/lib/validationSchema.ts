@@ -66,3 +66,13 @@ export const labelSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
   color: z.string().min(1, { message: 'Color is required' }),
 });
+
+export const emailReplyFormSchema = z.object({
+  from: z.string().min(1, { message: 'From is required' }),
+  to: z.array(z.string()).min(1, { message: 'To is required' }),
+  cc: z.array(z.string()).optional(),
+  bcc: z.array(z.string()).optional(),
+  message: z.string().min(1, { message: 'Message is required' }),
+  archive: z.boolean().optional(),
+  messageText: z.string().min(1, { message: 'Message is required' }),
+});

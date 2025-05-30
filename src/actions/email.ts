@@ -94,8 +94,11 @@ const handleEmailStatus = async (
 
 const handleEmailAttachments = async (
   attachments: {
-    attachment: File;
-    cid: string;
+    Name: string;
+    Content: string;
+    ContentType: string;
+    ContentLength: number;
+    ContentID: string;
   }[],
   orgName: string,
   sharedInboxName: string,
@@ -108,8 +111,8 @@ const handleEmailAttachments = async (
       await supabase.storage
         .from('attachments')
         .upload(
-          `${orgName}/${sharedInboxName}/${attachment.attachment.name}`,
-          attachment.attachment
+          `${orgName}/${sharedInboxName}/${attachment.Name}`,
+          attachment.Content
         );
     if (attachmentError) {
       console.error('❌Error saving email attachment:❌', attachmentError);
@@ -117,7 +120,7 @@ const handleEmailAttachments = async (
     if (attachmentData) {
       fileData.push({
         path: attachmentData.path,
-        cid: attachment.cid,
+        cid: attachment.ContentID,
       });
     }
   }
@@ -174,24 +177,24 @@ export const saveEmail = async (email: EmailData) => {
       alias_email: email.aliasEmail,
       body_html: email.bodyHtml,
       body_plain: email.bodyPlain,
-      cc_email: email.ccEmail,
-      send_at: new Date(email.dateWithTimezone).toISOString(),
-      from_email: email.from,
+      cc_emails: email.ccs.map((cc) => `${cc.name} <${cc.email}>`),
+      send_at: new Date(email.timestamp).toISOString(),
+      from_email: email.fromEmail,
+      from_name: email.fromName,
       mail_id: email.messageId,
       references_mail_ids: email.referencesMailIds,
       reply_to_mail_id: email.replyToMessageId || null,
       shared_inbox_id: sharedInbox.id,
       subject: email.subject,
-      stripped_html: email.strippedHtml,
-      stripped_signature: email.strippedSignature,
       stripped_text: email.strippedText,
-      to_email: email.to,
+      to_emails: email.to.map((to) => `${to.name} <${to.email}>`),
       reply_to: email.replyToEmail,
       created_at: new Date().toISOString(),
       status: EmailStatus.TODO,
       assignee: null,
       organization_id: sharedInbox.organization_id,
       attachments: email.attachmentCount,
+      is_spam: email.spamStatus,
     })
     .select('id')
     .single();
@@ -678,7 +681,7 @@ export const emailDetails = async ({
       ]
     : [...(data.references_mail_ids || []), data.mail_id];
 
-  const hasLinks = await emailBodyHasLinks(data.stripped_html!);
+  const hasLinks = await emailBodyHasLinks(data.body_html!);
 
   const activities = await emailActivityLogs({ emailId });
 
@@ -700,12 +703,12 @@ export const emailDetails = async ({
       activities,
     };
   }
-  const manipulatedHtml = await manipulateHtmlServerSide(data.stripped_html!);
+  const manipulatedHtml = await manipulateHtmlServerSide(data.body_html!);
   return {
     email: {
       ...data,
       user_email_status: data.user_email_status[0],
-      stripped_html: manipulatedHtml,
+      body_html: manipulatedHtml,
       replyData: {
         replyTo: lastReferenceEmail?.mail_id || data.mail_id,
         references: updatedReferences,
@@ -956,9 +959,10 @@ async function allExternalEmailReplies(allReferencedEmailIds: number[]) {
         id,
         subject,
         from_email,
-        to_email,
+        to_emails,
         send_at,
-        stripped_html,
+        body_html,
+        body_plain,
         stripped_text
     `
     )
@@ -979,14 +983,14 @@ async function allExternalEmailReplies(allReferencedEmailIds: number[]) {
     stripped_text: string;
   }[] = [];
   for (const email of data) {
-    const manipulatedHtml = email.stripped_html
-      ? await manipulateHtmlServerSide(email.stripped_html)
+    const manipulatedHtml = email.body_html
+      ? await manipulateHtmlServerSide(email.body_html)
       : '';
     allExternalEmails.push({
       id: email.id,
       subject: email.subject,
       from_email: email.from_email,
-      to_email: email.to_email,
+      to_email: email.to_emails?.join(', '),
       send_at: email.send_at,
       stripped_html: manipulatedHtml,
       stripped_text: email.stripped_text || '',

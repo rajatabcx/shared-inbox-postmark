@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export default function CopyElement({
+export function CopyElement({
   defaultValue,
   label,
   className,

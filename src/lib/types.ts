@@ -176,20 +176,25 @@ export interface EmailData {
   subject: string;
   timestamp: string;
   strippedText: string;
-  strippedHtml: string;
-  strippedSignature: string;
   bodyPlain: string;
   bodyHtml: string;
   replyToMessageId: string;
   replyToEmail: string;
   messageId: string;
   referencesMailIds: string[];
-  dateWithTimezone: string;
-  to: string;
-  from: string;
-  ccEmail: string[];
-  attachments: { attachment: File; cid: string }[];
+  to: { email: string; name: string }[];
+  fromEmail: string;
+  fromName: string;
+  ccs: { email: string; name: string }[];
+  attachments: {
+    Name: string;
+    Content: string;
+    ContentType: string;
+    ContentLength: number;
+    ContentID: string;
+  }[];
   attachmentCount: number;
+  spamStatus: boolean;
 }
 
 export interface EmailDetail {
@@ -197,17 +202,15 @@ export interface EmailDetail {
   alias_email: string;
   body_html: string | null;
   body_plain: string | null;
-  cc_email: string[] | null;
+  cc_emails: string[];
   mail_id: string | null;
   from_email: string | null;
   references_mail_ids: string[] | null;
   reply_to_mail_id: string | null;
   shared_inbox_id: number;
   subject: string;
-  stripped_html: string | null;
-  stripped_signature: string | null;
   stripped_text: string | null;
-  to_email: string | null;
+  to_emails: string[];
   reply_to: string | null;
   created_at: string | null;
   replied: boolean | null;

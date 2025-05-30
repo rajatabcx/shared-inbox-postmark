@@ -14,7 +14,7 @@ export type Database = {
           created_at: string | null
           created_by: number
           domain: string
-          domain_id: string
+          domain_id: number
           id: number
           organization_id: number
           verified: boolean | null
@@ -23,7 +23,7 @@ export type Database = {
           created_at?: string | null
           created_by: number
           domain: string
-          domain_id: string
+          domain_id: number
           id?: never
           organization_id: number
           verified?: boolean | null
@@ -32,7 +32,7 @@ export type Database = {
           created_at?: string | null
           created_by?: number
           domain?: string
-          domain_id?: string
+          domain_id?: number
           id?: never
           organization_id?: number
           verified?: boolean | null
@@ -240,9 +240,10 @@ export type Database = {
           attachments: number
           body_html: string | null
           body_plain: string | null
-          cc_email: string[] | null
+          cc_emails: string[]
           created_at: string | null
           from_email: string
+          from_name: string
           id: number
           is_archived: boolean
           is_reply: boolean
@@ -257,11 +258,9 @@ export type Database = {
           send_at: string
           shared_inbox_id: number
           status: Database["public"]["Enums"]["EmailStatus"]
-          stripped_html: string | null
-          stripped_signature: string | null
           stripped_text: string | null
           subject: string
-          to_email: string
+          to_emails: string[]
         }
         Insert: {
           alias_email: string
@@ -269,9 +268,10 @@ export type Database = {
           attachments?: number
           body_html?: string | null
           body_plain?: string | null
-          cc_email?: string[] | null
+          cc_emails: string[]
           created_at?: string | null
           from_email: string
+          from_name?: string
           id?: number
           is_archived?: boolean
           is_reply?: boolean
@@ -286,11 +286,9 @@ export type Database = {
           send_at: string
           shared_inbox_id: number
           status?: Database["public"]["Enums"]["EmailStatus"]
-          stripped_html?: string | null
-          stripped_signature?: string | null
           stripped_text?: string | null
           subject: string
-          to_email: string
+          to_emails: string[]
         }
         Update: {
           alias_email?: string
@@ -298,9 +296,10 @@ export type Database = {
           attachments?: number
           body_html?: string | null
           body_plain?: string | null
-          cc_email?: string[] | null
+          cc_emails?: string[]
           created_at?: string | null
           from_email?: string
+          from_name?: string
           id?: number
           is_archived?: boolean
           is_reply?: boolean
@@ -315,11 +314,9 @@ export type Database = {
           send_at?: string
           shared_inbox_id?: number
           status?: Database["public"]["Enums"]["EmailStatus"]
-          stripped_html?: string | null
-          stripped_signature?: string | null
           stripped_text?: string | null
           subject?: string
-          to_email?: string
+          to_emails?: string[]
         }
         Relationships: [
           {

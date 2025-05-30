@@ -40,13 +40,11 @@ export function DomainDetailsPage({ id }: { id: number }) {
             <DnsRecords domainData={domainData} />
           </TabsContent>
           <TabsContent value='email-aliases'>
-            {/* <EmailAlias
-            domainVerified={domainData.sending_dns_records.every(
-              (record) => record.valid === 'valid'
-            )}
-            domainName={domainData.domain.name}
-            domainId={Number(id)}
-          /> */}
+            <EmailAlias
+              domainVerified={domainData.verified}
+              domainName={domainData.domain}
+              domainId={Number(id)}
+            />
           </TabsContent>
         </Tabs>
       )}

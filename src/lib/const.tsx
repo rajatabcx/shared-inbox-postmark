@@ -422,3 +422,9 @@ export function extractNameAndEmail(input: string): {
         .trim() || 'Unknown',
   };
 }
+
+export const linkifyOptions = {
+  defaultProtocol: 'https',
+  target: '_blank',
+  rel: 'noopener noreferrer',
+};

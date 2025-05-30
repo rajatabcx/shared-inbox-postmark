@@ -9,6 +9,7 @@ import {
   updateEmailStatus,
   toggleEmailReadStatus,
   bookmarkedEmailList,
+  emailDetails,
 } from '@/actions/email';
 import { toggleEmailBookmark } from '@/actions/notification';
 import { EmailStatus, EmailViewType } from '@/lib/types';
@@ -225,6 +226,28 @@ export const useBookmarkedEmailListPrefetch = async ({
         search,
       });
       return emails;
+    },
+  });
+  return queryClient;
+};
+
+export const useEmailDetails = (emailId: number) =>
+  useQuery({
+    queryKey: ['emailDetails', emailId],
+    queryFn: async () => {
+      const email = await emailDetails({ emailId });
+      return email;
+    },
+    staleTime: 0,
+  });
+
+export const emailDetailsPrefetch = async (emailId: number) => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ['emailDetails', emailId],
+    queryFn: async () => {
+      const email = await emailDetails({ emailId });
+      return email;
     },
   });
   return queryClient;

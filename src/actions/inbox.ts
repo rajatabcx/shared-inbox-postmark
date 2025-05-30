@@ -54,6 +54,7 @@ export async function createInbox(
       organization_id: user.organizationId,
       forwarding_email: `${emailAlias}@${process.env.MY_DOMAIN}`,
       email_alias: emailAlias,
+      created_by: user.profileId,
     })
     .select('id')
     .single();
