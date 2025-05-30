@@ -1,3 +1,4 @@
+'use client';
 import { InviteUser } from '@/components/dashboard/member/InviteUser';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';

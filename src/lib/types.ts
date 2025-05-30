@@ -41,10 +41,24 @@ export type Member = {
 };
 
 export interface DomainData {
+  id: number;
+  domain: string;
+  verified: boolean;
+  created_by: number;
+  organization_id: number;
+  domain_id: number;
+  created_at: string;
+
+  // Duplicate or alias fields (preserved for completeness)
+  ID: number;
   Name: string;
+
+  // SPF (Sender Policy Framework) fields
   SPFVerified: boolean;
   SPFHost: string;
   SPFTextValue: string;
+
+  // DKIM (DomainKeys Identified Mail) fields
   DKIMVerified: boolean;
   WeakDKIM: boolean;
   DKIMHost: string;
@@ -54,13 +68,13 @@ export interface DomainData {
   DKIMRevokedHost: string;
   DKIMRevokedTextValue: string;
   SafeToRemoveRevokedKeyFromDNS: boolean;
-  DKIMUpdateStatus: string;
+  DKIMUpdateStatus: string; // enum preferred if known
+
+  // Return-Path domain verification
   ReturnPathDomain: string;
   ReturnPathDomainVerified: boolean;
   ReturnPathDomainCNAMEValue: string;
-  ID: number;
 }
-
 export type EmailViewType = 'inbox' | 'all' | 'archived' | 'starred' | 'spam';
 export enum EmailView {
   INBOX = 'inbox',

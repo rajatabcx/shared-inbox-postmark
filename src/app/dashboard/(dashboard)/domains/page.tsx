@@ -1,3 +1,4 @@
+'use client';
 import {
   Card,
   CardContent,
@@ -20,6 +21,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { DomainOptions } from '@/components/common/DomainOptions';
 import { useDomainList } from '@/hooks/domain.hooks';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DomainPage() {
   const { data: domains, isLoading } = useDomainList();
@@ -42,7 +44,11 @@ export default function DomainPage() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div>Loading...</div>
+            <div className='space-y-2'>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Skeleton key={index} className='h-10 w-full' />
+              ))}
+            </div>
           ) : !domains?.length ? (
             <div className='text-center py-12 border rounded-md max-w-3xl mx-auto'>
               <Globe className='h-12 w-12 mx-auto text-muted-foreground' />
