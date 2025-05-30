@@ -1,5 +1,5 @@
-import { MailDashboard } from '@/components/Mail/Dashboard';
-import { emailListPrefetch } from '@/hooks/emails';
+import { MailDashboard } from '@/components/mail/Dashboard';
+import { emailListPrefetch } from '@/hooks/email.hooks';
 import { EmailViewType } from '@/lib/types';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import {

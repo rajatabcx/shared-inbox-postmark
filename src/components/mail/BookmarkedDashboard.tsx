@@ -8,7 +8,7 @@ import MailboxViewSwitcher from '@/components/mail/list/MailboxViewSwitcher';
 import { EmailCard } from '@/components/mail/list/EmailCard';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
-import { useMyEmailList } from '@/hooks/email.hooks';
+import { useBookmarkedEmailList } from '@/hooks/email.hooks';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useOrganizationMembers } from '@/hooks/organization.hooks';
 import { useEffect, useState } from 'react';
@@ -16,7 +16,7 @@ import { createSupabaseClient } from '@/lib/supabase/client';
 import { ListPagination } from '@/components/common/ListPagination';
 import { useQueryClient } from '@tanstack/react-query';
 
-export function MyDashboard({
+export function BookmarkedDashboard({
   page,
   profileId,
 }: {
@@ -27,7 +27,7 @@ export function MyDashboard({
   const [value] = useDebounce(text, 1000);
 
   const supabase = createSupabaseClient();
-  const { data, isLoading } = useMyEmailList(value, page);
+  const { data, isLoading } = useBookmarkedEmailList(value, page);
 
   const { data: members } = useOrganizationMembers();
 
@@ -35,7 +35,7 @@ export function MyDashboard({
 
   useEffect(() => {
     const channel = supabase
-      .channel(`my-tickets-${profileId}`)
+      .channel(`bookmarked-emails-${profileId}`)
       .on(
         'postgres_changes',
         {
@@ -50,7 +50,7 @@ export function MyDashboard({
             payload.new.assignee !== payload.old.assignee
           ) {
             queryClient.invalidateQueries({
-              queryKey: ['emailList', value, page],
+              queryKey: ['bookmarkedEmailList', value, page],
             });
           }
         }

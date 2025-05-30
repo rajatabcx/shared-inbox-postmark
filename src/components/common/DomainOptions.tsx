@@ -6,11 +6,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ArrowBigUpDash, EllipsisVertical, Trash2 } from 'lucide-react';
+import { EllipsisVertical, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useServerAction } from '@/hooks/useServerAction';
 import { toastHelper } from '@/lib/toastHelper';
-import { deleteDomain } from '@/actions/domain';
+import { useDeleteDomain } from '@/hooks/domain.hooks';
 
 export function DomainOptions({
   domainId,
@@ -19,10 +18,10 @@ export function DomainOptions({
   domainId: number;
   domainName: string;
 }) {
-  const { mutateAsync, isPending } = useServerAction(deleteDomain);
+  const { mutateAsync, isPending } = useDeleteDomain();
 
   const handleDeleteDomain = async () => {
-    const res = await mutateAsync({ domainId, domainName });
+    const res = await mutateAsync(domainId);
     toastHelper(res);
   };
 

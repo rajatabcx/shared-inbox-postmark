@@ -1158,3 +1158,99 @@ export const toggleEmailSpam = async ({
     type: ResponseType.SUCCESS,
   };
 };
+
+export const bookmarkedEmailList = async ({
+  page,
+  search,
+}: {
+  page: number;
+  search: string;
+}): Promise<{ data: EmailListItem[]; metadata: PaginationMetadata }> => {
+  const supabase = await createSupabaseServerClient();
+  const user = await currentUser();
+  if (!user) {
+    return {
+      data: [],
+      metadata: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        totalPages: 0,
+        totalItems: 0,
+        currentPage: page,
+      },
+    };
+  }
+  const query = supabase
+    .from('emails')
+    .select(
+      `
+    id,
+    from_email,
+    subject,
+    stripped_text,
+    send_at,
+    references_mail_ids,
+    status,
+    shared_inbox_id,
+    user_email_status!inner(is_read, is_bookmarked, is_subscribed),
+    assignee:user_profiles(id, first_name, last_name, image_url),
+    is_starred,
+    is_archived,
+    is_spam,
+    email_labels(
+      label:labels(
+        id,
+        name,
+        color
+      )
+    ),
+    reference_count: email_references!referenced_email_id(count),
+    replied
+  `,
+      { count: 'exact' }
+    )
+    .not('replied', 'is', true)
+    .eq('user_email_status.user_profile_id', user.profileId)
+    .eq('user_email_status.is_bookmarked', true)
+    .order('send_at', { ascending: false });
+
+  if (search) {
+    query.or(`subject.ilike.%${search}%,stripped_text.ilike.%${search}%`);
+  }
+
+  const { count, error: countError } = await query;
+
+  const { data, error } = await query.range(
+    (page - 1) * LIST_LIMIT,
+    page * LIST_LIMIT - 1
+  );
+
+  if (error || countError) {
+    return {
+      data: [],
+      metadata: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        totalPages: 0,
+        totalItems: 0,
+        currentPage: page,
+      },
+    };
+  }
+  const totalPages = Math.ceil((count || 0) / LIST_LIMIT);
+
+  return {
+    data: data.map((email) => ({
+      ...email,
+      user_email_status: email.user_email_status[0],
+      reference_count: email.reference_count[0]?.count || 0,
+    })),
+    metadata: {
+      hasNextPage: page < totalPages,
+      hasPreviousPage: page > 1,
+      totalPages,
+      totalItems: count || 0,
+      currentPage: page,
+    },
+  };
+};

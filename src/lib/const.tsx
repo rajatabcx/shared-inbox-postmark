@@ -372,3 +372,53 @@ export function getDistinctEmails(
 
   return Array.from(emailMap.values());
 }
+
+/**
+ * Extracts name and email from a string in the format "Name <email@example.com>"
+ * @param input The input string containing name and email
+ * @returns An object with name and email properties
+ */
+export function extractNameAndEmail(input: string): {
+  name: string;
+  email: string;
+  backupName: string;
+} {
+  const regex = /^(.*?)\s*<([^>]+)>$/;
+  const match = input.match(regex);
+
+  if (match) {
+    // Get the display name and email
+    const displayName = match[1].trim();
+    const email = match[2].trim();
+
+    // Clean the display name by removing special characters
+    const cleanName = displayName.replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
+
+    // Get the part before @ in email as backup name
+    const emailPrefix = email.split('@')[0];
+    // Convert email prefix to title case (e.g., "noreply" -> "Noreply")
+    const formattedEmailPrefix = emailPrefix
+      .split(/[._-]/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+
+    return {
+      name: cleanName,
+      email: email,
+      // Use display name if available, otherwise use formatted email prefix
+      backupName: formattedEmailPrefix,
+    };
+  }
+
+  // Return default values if no match found
+  return {
+    name: '',
+    email: '',
+    // Even for no match, try to extract something usable from the input
+    backupName:
+      input
+        .split('@')[0]
+        .replace(/[^a-zA-Z0-9\s]/g, ' ')
+        .trim() || 'Unknown',
+  };
+}

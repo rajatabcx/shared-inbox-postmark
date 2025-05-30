@@ -7,10 +7,10 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowUp, Loader } from 'lucide-react';
-import { addInternalComment } from '@/actions/chat';
 import { Member, ResponseType } from '@/lib/types';
-import { ChatEditor } from '../Editor/chat/ChatEditor';
+import { ChatEditor } from '@/components/editor/chat/ChatEditor';
 import { useState } from 'react';
+import { useAddInternalComment } from '@/hooks/internalChat.hooks';
 
 type InternalCommentType = z.infer<typeof internalCommentSchema>;
 
@@ -30,7 +30,7 @@ export function InternalChat({
     },
   });
 
-  const { mutateAsync, isPending } = useServerAction(addInternalComment);
+  const { mutateAsync, isPending } = useAddInternalComment();
 
   const onSubmit = async (data: InternalCommentType) => {
     const response = await mutateAsync({

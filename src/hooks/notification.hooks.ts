@@ -1,5 +1,5 @@
-import { notifications } from '@/actions/notification';
-import { QueryClient, useQuery } from '@tanstack/react-query';
+import { notifications, toggleEmailSubscription } from '@/actions/notification';
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 
 export const useNotifications = () => {
   return useQuery({
@@ -21,4 +21,19 @@ export const notificationsPrefetch = async () => {
     },
   });
   return queryClient;
+};
+
+export const useToggleEmailSubscription = () => {
+  return useMutation({
+    mutationFn: async ({
+      emailId,
+      subscribe,
+    }: {
+      emailId: number;
+      subscribe: boolean;
+    }) => {
+      const res = await toggleEmailSubscription({ emailId, subscribe });
+      return res;
+    },
+  });
 };

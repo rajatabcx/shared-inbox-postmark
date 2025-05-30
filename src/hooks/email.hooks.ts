@@ -7,6 +7,8 @@ import {
   toggleEmailStar,
   updateEmailAssignee,
   updateEmailStatus,
+  toggleEmailReadStatus,
+  bookmarkedEmailList,
 } from '@/actions/email';
 import { toggleEmailBookmark } from '@/actions/notification';
 import { EmailStatus, EmailViewType } from '@/lib/types';
@@ -21,6 +23,20 @@ export const useToggleEmailArchive = () =>
       archive: boolean;
     }) => {
       const res = await toggleEmailArchive({ emailId, archive });
+      return res;
+    },
+  });
+
+export const useToggleEmailReadStatus = () =>
+  useMutation({
+    mutationFn: async ({
+      emailId,
+      status,
+    }: {
+      emailId: number;
+      status: boolean;
+    }) => {
+      const res = await toggleEmailReadStatus({ emailId, status });
       return res;
     },
   });
@@ -86,7 +102,7 @@ export const useToggleEmailStar = () =>
     },
   });
 
-export const useUpdateEmailSpam = () =>
+export const useToggleEmailSpam = () =>
   useMutation({
     mutationFn: async ({
       emailId,
@@ -171,6 +187,40 @@ export const myEmailListPrefetch = async ({
     queryKey: ['myEmailList', search, page],
     queryFn: async () => {
       const emails = await myEmailList({
+        page,
+        search,
+      });
+      return emails;
+    },
+  });
+  return queryClient;
+};
+
+export const useBookmarkedEmailList = (search: string, page: number) =>
+  useQuery({
+    queryKey: ['bookmarkedEmailList', search, page],
+    queryFn: async () => {
+      const emails = await bookmarkedEmailList({
+        page,
+        search,
+      });
+      return emails;
+    },
+    staleTime: 0,
+  });
+
+export const useBookmarkedEmailListPrefetch = async ({
+  page,
+  search,
+}: {
+  search: string;
+  page: number;
+}) => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ['bookmarkedEmailList', search, page],
+    queryFn: async () => {
+      const emails = await bookmarkedEmailList({
         page,
         search,
       });

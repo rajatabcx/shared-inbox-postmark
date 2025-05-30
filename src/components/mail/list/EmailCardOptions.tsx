@@ -21,15 +21,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { useServerAction } from '@/hooks/useServerAction';
-import {
-  toggleEmailArchive,
-  toggleEmailReadStatus,
-  toggleEmailSpam,
-} from '@/actions/email';
 import { toastHelper } from '@/lib/toastHelper';
 import { ResponseType } from '@/lib/types';
-import { toggleEmailSubscription } from '@/actions/notification';
+import {
+  useToggleEmailArchive,
+  useToggleEmailReadStatus,
+  useToggleEmailSpam,
+} from '@/hooks/email.hooks';
+import { useToggleEmailSubscription } from '@/hooks/notification.hooks';
 
 export function EmailCardOptions({
   archived,
@@ -53,15 +52,15 @@ export function EmailCardOptions({
   setIsSpam: Dispatch<SetStateAction<boolean>>;
 }) {
   const [isSubscribedState, setIsSubscribedState] = useState(isSubscribed);
-  const { mutateAsync, isPending } = useServerAction(toggleEmailArchive);
+  const { mutateAsync, isPending } = useToggleEmailArchive();
   const { mutateAsync: mutateSpam, isPending: isSpamPending } =
-    useServerAction(toggleEmailSpam);
+    useToggleEmailSpam();
 
-  const { mutateAsync: mutateRead, isPending: isReadPending } = useServerAction(
-    toggleEmailReadStatus
-  );
+  const { mutateAsync: mutateRead, isPending: isReadPending } =
+    useToggleEmailReadStatus();
   const { mutateAsync: mutateSubscribe, isPending: isSubscribePending } =
-    useServerAction(toggleEmailSubscription);
+    useToggleEmailSubscription();
+
   const handleArchive = async () => {
     setArchived(!archived);
     const res = await mutateAsync({ emailId, archive: !archived });

@@ -39,6 +39,7 @@ import { userOrganization } from '@/actions/user';
 import { currentUser } from '@/actions/user';
 import { SidebarUser } from './SidebarUser';
 import { NotificationItem } from './NotificationItem';
+import { SidebarItem } from './SidebarItem';
 
 export async function DashboardSidebar() {
   const organization = await userOrganization();
@@ -67,15 +68,13 @@ export async function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/dashboard/my-tickets' prefetch={false}>
-                    <div className='relative'>
-                      <Scan className='size-4' />
-                      <Dot className='size-4 absolute top-0 right-0' />
-                    </div>
-                    <span>My Emails</span>
-                  </Link>
-                </SidebarMenuButton>
+                <SidebarItem href='/dashboard/my-tickets'>
+                  <div className='relative'>
+                    <Scan className='size-4' />
+                    <Dot className='size-4 absolute top-0 right-0' />
+                  </div>
+                  <span>My Emails</span>
+                </SidebarItem>
               </SidebarMenuItem>
               <NotificationItem profileId={user?.profileId!} />
             </SidebarMenu>
@@ -92,12 +91,10 @@ export async function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/dashboard/bookmarked' prefetch={false}>
-                    <Bookmark className='h-4 w-4' />
-                    <span>My Bookmarks</span>
-                  </Link>
-                </SidebarMenuButton>
+                <SidebarItem href='/dashboard/bookmarked'>
+                  <Bookmark className='h-4 w-4' />
+                  <span>My Bookmarks</span>
+                </SidebarItem>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
@@ -145,20 +142,16 @@ export async function DashboardSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href='/dashboard/domains' prefetch={false}>
-                <Globe className='h-4 w-4' />
-                <span>Domains</span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarItem href='/dashboard/domains'>
+              <Globe className='h-4 w-4' />
+              <span>Domains</span>
+            </SidebarItem>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href='/dashboard/labels' prefetch={false}>
-                <Tags className='h-4 w-4' />
-                <span>Labels</span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarItem href='/dashboard/labels'>
+              <Tags className='h-4 w-4' />
+              <span>Labels</span>
+            </SidebarItem>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarUser

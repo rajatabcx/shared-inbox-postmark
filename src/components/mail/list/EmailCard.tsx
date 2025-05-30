@@ -17,12 +17,12 @@ import {
 } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { AlertOctagon, Archive, Plus, Reply } from 'lucide-react';
-import { EmailStatus } from '../features/EmailStatus';
-import { StarEmail } from '../features/StarEmail';
-import { AssignUser } from '../features/AssignUser';
-import { Label } from '../label/Label';
-import { BookmarkEmail } from '../features/BookmarkEmail';
-import { EmailCardOptions } from './EmailCardOptions';
+import { EmailStatus } from '@/components/mail/features/EmailStatus';
+import { StarEmail } from '@/components/mail/features/StarEmail';
+import { AssignUser } from '@/components/mail/features/AssignUser';
+import { Label } from '@/components/mail/label/Label';
+import { BookmarkEmail } from '@/components/mail/features/BookmarkEmail';
+import { EmailCardOptions } from '@/components/mail/list/EmailCardOptions';
 
 export function EmailCard({
   email,
