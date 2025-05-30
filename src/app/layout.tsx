@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { Poppins } from 'next/font/google';
+import { Raleway } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/providers/Providers';
 
-const poppins = Poppins({
-  variable: '--font-poppins',
-  subsets: ['latin'],
+const raleway = Raleway({
+  variable: '--font-raleway',
+  subsets: ['latin-ext'],
   weight: ['400', '500', '600', '700', '800'],
 });
 
@@ -47,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${poppins.variable} antialiased w-full overflow-x-hidden`}
+        className={`${raleway.className} antialiased w-full overflow-x-hidden`}
       >
         <Providers>{children}</Providers>
       </body>

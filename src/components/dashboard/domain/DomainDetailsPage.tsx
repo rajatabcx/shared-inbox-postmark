@@ -5,8 +5,9 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDomainDetails } from '@/hooks/domain.hooks';
 import { Globe } from 'lucide-react';
+import { DnsRecords } from './DnsRecords';
 
-function DomainDetailsPage({ id }: { id: number }) {
+export function DomainDetailsPage({ id }: { id: number }) {
   const { data: domainData, isLoading } = useDomainDetails(id);
 
   return (
@@ -36,10 +37,7 @@ function DomainDetailsPage({ id }: { id: number }) {
             <TabsTrigger value='email-aliases'>Email Aliases</TabsTrigger>
           </TabsList>
           <TabsContent value='dns'>
-            <div className='text-sm whitespace-pre-wrap'>
-              {JSON.stringify(domainData, null, 2)}
-            </div>
-            {/* <DnsRecords domainData={domainData} /> */}
+            <DnsRecords domainData={domainData} />
           </TabsContent>
           <TabsContent value='email-aliases'>
             {/* <EmailAlias
@@ -55,5 +53,3 @@ function DomainDetailsPage({ id }: { id: number }) {
     </div>
   );
 }
-
-export default DomainDetailsPage;

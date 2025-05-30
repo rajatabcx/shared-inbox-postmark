@@ -1,4 +1,4 @@
-import DomainDetailsPage from '@/components/dashboard/domain/DomainDetailsPage';
+import { DomainDetailsPage } from '@/components/dashboard/domain/DomainDetailsPage';
 import React from 'react';
 
 export default async function DomainDetails({
