@@ -1,7 +1,6 @@
 import { Bookmark } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
-import { toggleEmailBookmark } from '@/actions/notification';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ResponseType } from '@/lib/types';

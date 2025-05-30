@@ -7,7 +7,6 @@ import { ActionResponse, InvitationStatus, ResponseType } from '@/lib/types';
 import { inviteSchema, joinSchema } from '@/lib/validationSchema';
 import { z } from 'zod';
 import { currentUser } from './user';
-import { revalidatePath } from 'next/cache';
 import { simpleSendEmail } from './sendEmail';
 
 const invitationEmailTemplate = (
@@ -93,7 +92,6 @@ export const inviteUser = async (
     ),
   });
 
-  revalidatePath('/dashboard/members', 'page');
   return { type: ResponseType.SUCCESS, message: 'Invitation sent' };
 };
 

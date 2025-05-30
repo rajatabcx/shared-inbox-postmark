@@ -1,5 +1,5 @@
 import { invitationData } from '@/actions/invitation';
-import JoinForm from '@/components/dashboard/members/JoinForm';
+import { JoinForm } from '@/components/dashboard/member/JoinForm';
 import { InvitationStatus } from '@/lib/types';
 import React from 'react';
 

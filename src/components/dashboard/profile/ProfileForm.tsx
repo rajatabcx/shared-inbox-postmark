@@ -5,37 +5,26 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { profileSchema } from '@/lib/validationSchema';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TextInput } from '@/components/form/TextInput';
 import ImageInput from '@/components/form/ImageInput';
 import { Button } from '@/components/ui/button';
 import { toastHelper } from '@/lib/toastHelper';
 import { Loader } from 'lucide-react';
-import { useUpdateUserProfile } from '@/hooks/user.hooks';
+import { useCurrentUser, useUpdateUserProfile } from '@/hooks/user.hooks';
 
-export default function ProfileForm({
-  user,
-}: {
-  user: {
-    organizationId: number;
-    profileId: number;
-    id: string;
-    onboarded: boolean;
-    firstName: string;
-    lastName: string;
-    email: string;
-    imageUrl: string | null;
-  };
-}) {
+export default function ProfileForm() {
   const { mutateAsync: updateProfile, isPending } = useUpdateUserProfile();
+
+  const { data: user } = useCurrentUser();
 
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      imageUrl: user.imageUrl || '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      imageUrl: '',
     },
   });
 
@@ -43,6 +32,17 @@ export default function ProfileForm({
     const res = await updateProfile(values);
     toastHelper(res);
   };
+
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        imageUrl: user.imageUrl || '',
+      });
+    }
+  }, [user]);
 
   return (
     <div className='container px-4 sm:px-6 mx-auto py-6 h-screen flex flex-col gap-y-6 justify-center items-center'>
@@ -56,10 +56,11 @@ export default function ProfileForm({
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <ImageInput
-                image={user.imageUrl || undefined}
+                image={user?.imageUrl || undefined}
                 setValue={(value) => form.setValue('imageUrl', value)}
-                name={`${user.firstName} ${user.lastName}`}
-                userId={user.profileId}
+                name={`${user?.firstName || ''} ${user?.lastName || ''}`}
+                userId={user?.profileId || 0}
+                disabled={isPending || !user}
               />
               <div className='flex flex-col gap-3 mt-8 mb-8'>
                 <div className='grid grid-cols-2 gap-4'>
@@ -68,12 +69,14 @@ export default function ProfileForm({
                     placeholder='First Name'
                     control={form.control}
                     label='First Name'
+                    disabled={isPending || !user}
                   />
                   <TextInput
                     name='lastName'
                     placeholder='Last Name'
                     control={form.control}
                     label='Last Name'
+                    disabled={isPending || !user}
                   />
                 </div>
                 <TextInput
@@ -81,12 +84,13 @@ export default function ProfileForm({
                   placeholder='Email'
                   control={form.control}
                   label='Email'
+                  disabled={isPending || !user}
                 />
               </div>
               <Button
                 type='submit'
                 className='w-full flex gap-2'
-                disabled={isPending}
+                disabled={isPending || !user}
               >
                 Update Profile{' '}
                 {isPending ? <Loader className='size-4 animate-spin' /> : null}

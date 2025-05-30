@@ -26,10 +26,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { signout } from '@/actions/auth';
 import { toastHelper } from '@/lib/toastHelper';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useSignout } from '@/hooks/auth.hooks';
 
 export function SidebarUser({
   user,
@@ -40,6 +40,7 @@ export function SidebarUser({
     image_url: string;
   };
 }) {
+  const { mutateAsync: signout, isPending } = useSignout();
   const { isMobile } = useSidebar();
   const router = useRouter();
   const handleSignout = async () => {
@@ -118,7 +119,7 @@ export function SidebarUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignout}>
+            <DropdownMenuItem onClick={handleSignout} disabled={isPending}>
               <LogOutIcon />
               Log out
             </DropdownMenuItem>

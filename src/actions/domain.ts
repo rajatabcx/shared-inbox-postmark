@@ -3,7 +3,6 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { currentUser } from './user';
 import { ActionResponse, ResponseType, DomainData } from '@/lib/types';
-import { revalidatePath } from 'next/cache';
 
 export async function addDomain(domain: string): Promise<ActionResponse> {
   const user = await currentUser();
@@ -22,7 +21,7 @@ export async function addDomain(domain: string): Promise<ActionResponse> {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-Postmark-Account-Token': process.env.POSTMARK_API_KEY!,
+      'X-Postmark-Account-Token': process.env.POSTMARK_ACCOUNT_TOKEN!,
     },
     body: JSON.stringify({
       name: domain,
@@ -34,7 +33,7 @@ export async function addDomain(domain: string): Promise<ActionResponse> {
   if (!res.ok) {
     return {
       type: ResponseType.ERROR,
-      message: data.message,
+      message: data.Message || 'Failed to add domain',
     };
   }
 
@@ -42,7 +41,7 @@ export async function addDomain(domain: string): Promise<ActionResponse> {
     domain,
     created_by: user.profileId,
     organization_id: user.organizationId,
-    domain_id: data.domain.id as string,
+    domain_id: data.ID,
     verified: false,
   });
 
@@ -53,7 +52,6 @@ export async function addDomain(domain: string): Promise<ActionResponse> {
     };
   }
 
-  revalidatePath('/dashboard/domains', 'page');
   return {
     type: ResponseType.SUCCESS,
     message: 'Domain added successfully',
@@ -83,7 +81,7 @@ export async function verifyDomain(domainId: number) {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
-          'X-Postmark-Account-Token': process.env.POSTMARK_API_KEY!,
+          'X-Postmark-Account-Token': process.env.POSTMARK_ACCOUNT_TOKEN!,
         },
       }
     ),
@@ -94,7 +92,7 @@ export async function verifyDomain(domainId: number) {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
-          'X-Postmark-Account-Token': process.env.POSTMARK_API_KEY!,
+          'X-Postmark-Account-Token': process.env.POSTMARK_ACCOUNT_TOKEN!,
         },
       }
     ),
@@ -162,7 +160,7 @@ export async function domainDetails(
     {
       headers: {
         Accept: 'application/json',
-        'X-Postmark-Account-Token': process.env.POSTMARK_API_KEY!,
+        'X-Postmark-Account-Token': process.env.POSTMARK_ACCOUNT_TOKEN!,
       },
     }
   );
@@ -208,7 +206,7 @@ export async function deleteDomain(domainId: number) {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
-        'X-Postmark-Account-Token': process.env.POSTMARK_API_KEY!,
+        'X-Postmark-Account-Token': process.env.POSTMARK_ACCOUNT_TOKEN!,
       },
     }
   );

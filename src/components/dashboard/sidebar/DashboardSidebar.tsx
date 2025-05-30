@@ -1,20 +1,12 @@
 import {
-  Bell,
   Bookmark,
   ChevronDown,
   Dot,
-  FileText,
   GalleryVerticalEnd,
-  GitBranchPlus,
   Globe,
-  Plus,
   Scan,
-  Send,
-  Star,
   Tags,
-  Ticket,
 } from 'lucide-react';
-import Link from 'next/link';
 
 import {
   Sidebar,

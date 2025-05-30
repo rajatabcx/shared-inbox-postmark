@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { currentUser } from './user';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { ActionResponse, NotificationType, ResponseType } from '@/lib/types';
-import { revalidatePath } from 'next/cache';
 
 export const createLabel = async (
   label: z.infer<typeof labelSchema>
@@ -29,8 +28,6 @@ export const createLabel = async (
   if (error) {
     return { message: error.message, type: ResponseType.ERROR };
   }
-
-  revalidatePath('/dashboard/labels');
 
   return { message: 'Label created successfully', type: ResponseType.SUCCESS };
 };
@@ -88,7 +85,6 @@ export const updateLabel = async ({
     return { message: error.message, type: ResponseType.ERROR };
   }
 
-  revalidatePath('/dashboard/labels');
   return { message: 'Label updated successfully', type: ResponseType.SUCCESS };
 };
 
@@ -105,7 +101,6 @@ export const deleteLabel = async (id: number) => {
     return { message: error.message, type: ResponseType.ERROR };
   }
 
-  revalidatePath('/dashboard/labels');
   return { message: 'Label deleted successfully', type: ResponseType.SUCCESS };
 };
 

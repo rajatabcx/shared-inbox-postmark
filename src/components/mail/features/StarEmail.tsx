@@ -1,5 +1,4 @@
 'use client';
-import { toggleEmailStar } from '@/actions/email';
 import { Button } from '@/components/ui/button';
 import { useToggleEmailStar } from '@/hooks/email.hooks';
 import { ResponseType } from '@/lib/types';
@@ -16,6 +15,7 @@ export function StarEmail({
 }) {
   const [isStarredState, setIsStarredState] = useState(isStarred);
   const { mutateAsync, isPending } = useToggleEmailStar();
+
   const handleStarToggle = async () => {
     setIsStarredState(!isStarredState);
     const res = await mutateAsync({ emailId, star: !isStarredState });

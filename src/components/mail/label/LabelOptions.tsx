@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import { deleteLabel } from '@/actions/label';
 import { toastHelper } from '@/lib/toastHelper';
 import { parseAsInteger, useQueryStates, parseAsString } from 'nuqs';
 import { useDeleteLabel } from '@/hooks/label.hooks';

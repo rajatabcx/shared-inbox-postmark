@@ -1,4 +1,4 @@
-import postmark from 'postmark';
+import * as postmark from 'postmark';
 
 let client: postmark.ServerClient | null = null;
 

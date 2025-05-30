@@ -6,11 +6,10 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { getColorForInbox } from '@/lib/const';
-import { listInboxes } from '@/actions/inbox';
 import InboxSidebarOption from './InboxSidebarOptions';
-import { SidebarItem } from './SidebarItem';
 import { useListInboxes } from '@/hooks/inbox.hooks';
 import { usePathname } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function SharedInboxList() {
   const { data: inboxes, isLoading } = useListInboxes();
@@ -20,9 +19,11 @@ export function SharedInboxList() {
   return (
     <SidebarMenu>
       {isLoading ? (
-        <SidebarMenuItem className='px-2 text-muted-foreground'>
-          Loading...
-        </SidebarMenuItem>
+        Array.from({ length: 5 }).map((_, index) => (
+          <SidebarMenuItem key={index}>
+            <Skeleton className='h-8 w-full' />
+          </SidebarMenuItem>
+        ))
       ) : inboxes && inboxes.length ? (
         inboxes.map((inbox) => (
           <SidebarMenuItem key={inbox.id}>

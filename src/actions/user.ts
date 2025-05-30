@@ -2,7 +2,7 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { ActionResponse, ResponseType } from '@/lib/types';
 import { profileSchema } from '@/lib/validationSchema';
-import { revalidatePath } from 'next/cache';
+import {} from 'next/cache';
 import { z } from 'zod';
 
 export const currentUser = async () => {
@@ -130,8 +130,6 @@ export const updateUserProfile = async (
       type: ResponseType.ERROR,
     };
   }
-
-  revalidatePath('/dashboard/profile');
 
   return {
     message: 'User profile updated successfully',

@@ -1,11 +1,12 @@
-import { labels } from '@/actions/label';
+'use client';
 import { CreateLabelForm } from '@/components/mail/label/CreateLabelForm';
 import { LabelOptions } from '@/components/mail/label/LabelOptions';
 import { Label } from '@/components/mail/label/Label';
 import React from 'react';
+import { useLabels } from '@/hooks/label.hooks';
 
-export default async function LabelPage() {
-  const allLabels = await labels();
+export default function LabelPage() {
+  const { data: allLabels, isLoading } = useLabels();
   return (
     <div className='container mx-auto px-4 sm:px-6 py-6 min-h-screen flex flex-col gap-y-6'>
       <div className='flex justify-between items-center'>
@@ -15,7 +16,15 @@ export default async function LabelPage() {
         <CreateLabelForm />
       </div>
       <div className='max-w-2xl mx-auto w-full'>
-        {allLabels.length > 0 ? (
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : !allLabels?.length ? (
+          <div className='flex flex-col gap-4'>
+            <p className='text-sm text-muted-foreground'>
+              No labels found. Create a new label to get started.
+            </p>
+          </div>
+        ) : (
           <div className='flex flex-col gap-4 w-full'>
             {allLabels.map((label) => (
               <div
@@ -39,12 +48,6 @@ export default async function LabelPage() {
                 </div>
               </div>
             ))}
-          </div>
-        ) : (
-          <div className='flex flex-col gap-4'>
-            <p className='text-sm text-muted-foreground'>
-              No labels found. Create a new label to get started.
-            </p>
           </div>
         )}
       </div>

@@ -18,7 +18,7 @@ import { useJoinOrganization } from '@/hooks/invitation.hooks';
 
 type JoinFormValues = z.infer<typeof joinSchema>;
 
-export default function JoinForm({
+export function JoinForm({
   orgName,
   email,
   role,

@@ -10,11 +10,13 @@ export default function ImageInput({
   setValue,
   name,
   userId,
+  disabled,
 }: {
   image?: string;
   setValue: (value: string) => void;
   name: string;
   userId: number;
+  disabled: boolean;
 }) {
   const supabase = createSupabaseClient();
   const [selectedImage, setSelectedImage] = useState<string | null | undefined>(
@@ -59,7 +61,7 @@ export default function ImageInput({
       {...getRootProps()}
       className='cursor-pointer size-24 rounded-full bg-secondary flex items-center justify-center mx-auto relative group'
     >
-      <input {...getInputProps()} />
+      <input {...getInputProps()} disabled={disabled} />
       {isDragActive ? null : (
         <Avatar className='size-24 opacity-100 group-hover:opacity-0 transition-opacity duration-300'>
           {selectedImage ? (

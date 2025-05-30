@@ -7,7 +7,6 @@ import {
 } from '@/components/ui/card';
 import { Globe } from 'lucide-react';
 import AddDomain from '@/components/dashboard/domain/AddDomain';
-import { domainList } from '@/actions/domain';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import {
@@ -20,9 +19,10 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { DomainOptions } from '@/components/common/DomainOptions';
+import { useDomainList } from '@/hooks/domain.hooks';
 
-export default async function DomainPage() {
-  const domains = await domainList();
+export default function DomainPage() {
+  const { data: domains, isLoading } = useDomainList();
 
   return (
     <div className='container px-4 sm:px-6 mx-auto space-y-6 py-6'>
@@ -41,7 +41,20 @@ export default async function DomainPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {domains.length > 0 ? (
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : !domains?.length ? (
+            <div className='text-center py-12 border rounded-md max-w-3xl mx-auto'>
+              <Globe className='h-12 w-12 mx-auto text-muted-foreground' />
+              <h3 className='mt-4 text-lg font-medium'>No domains added yet</h3>
+              <p className='text-muted-foreground mb-4'>
+                Add your first domain to get started
+              </p>
+              <div className='flex justify-center'>
+                <AddDomain />
+              </div>
+            </div>
+          ) : (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -83,17 +96,6 @@ export default async function DomainPage() {
                 ))}
               </TableBody>
             </Table>
-          ) : (
-            <div className='text-center py-12 border rounded-md max-w-3xl mx-auto'>
-              <Globe className='h-12 w-12 mx-auto text-muted-foreground' />
-              <h3 className='mt-4 text-lg font-medium'>No domains added yet</h3>
-              <p className='text-muted-foreground mb-4'>
-                Add your first domain to get started
-              </p>
-              <div className='flex justify-center'>
-                <AddDomain />
-              </div>
-            </div>
           )}
         </CardContent>
       </Card>
