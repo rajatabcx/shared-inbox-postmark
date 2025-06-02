@@ -17,14 +17,35 @@ import {
   UserNotificationType,
 } from '@/lib/types';
 import { currentUser } from './user';
-import * as cheerio from 'cheerio';
 import { LIST_LIMIT } from '@/lib/const';
 import { chatListForEmail } from './chat';
 import { getEMailSubscribers } from './notification';
 
+function processBase64Data(base64String: string) {
+  // Remove data URL prefix if present
+  const base64Data = base64String.includes(',')
+    ? base64String.split(',')[1]
+    : base64String;
+
+  // Convert to ArrayBuffer
+  const buffer = Buffer.from(base64Data, 'base64');
+  const arrayBuffer = buffer.buffer.slice(
+    buffer.byteOffset,
+    buffer.byteOffset + buffer.byteLength
+  );
+
+  // Now you can work with the ArrayBuffer
+  // Example: create a Uint8Array view
+  const uint8Array = new Uint8Array(arrayBuffer);
+
+  return uint8Array; // or return arrayBuffer directly
+}
+
 const handleEmailReferences = async (
   referencesMailIds: string[],
-  emailId: number
+  emailId: number,
+  emailStrippedText: string,
+  emailSubject: string
 ) => {
   if (referencesMailIds.length > 0) {
     const supabase = await createSupabaseAdminServerClient();
@@ -32,7 +53,7 @@ const handleEmailReferences = async (
     const { data: referencedEmails, error: referencedEmailsError } =
       await supabase
         .from('emails')
-        .select('id')
+        .select('id, references_mail_ids')
         .in('mail_id', referencesMailIds);
 
     if (referencedEmailsError) {
@@ -63,8 +84,18 @@ const handleEmailReferences = async (
 
     await supabase.from('emails').update({ is_reply: true }).eq('id', emailId);
 
+    const firstEmailId = referencedEmails?.find(
+      (email) => email.references_mail_ids.length === 0
+    )?.id;
+
     if (referenceError) {
       console.error('❌Error saving email references:❌', referenceError);
+    }
+    if (firstEmailId) {
+      await supabase
+        .from('emails')
+        .update({ list_text: emailStrippedText, subject: emailSubject })
+        .eq('id', firstEmailId);
     }
     console.log(`✅Email references saved✅`);
   }
@@ -104,26 +135,42 @@ const handleEmailAttachments = async (
   sharedInboxName: string,
   emailId: number
 ) => {
-  const fileData: { path: string; cid: string }[] = [];
+  const fileData: { path: string; cid: string; name: string }[] = [];
   const supabase = await createSupabaseAdminServerClient();
-  for (const attachment of attachments) {
-    const { data: attachmentData, error: attachmentError } =
-      await supabase.storage
-        .from('attachments')
-        .upload(
-          `${orgName}/${sharedInboxName}/${attachment.Name}`,
-          attachment.Content
-        );
+
+  // Upload all attachments in parallel
+  const uploadPromises = attachments.map((attachment) =>
+    supabase.storage
+      .from('attachments')
+      .upload(
+        `${orgName}/${sharedInboxName}/${
+          attachment.Name
+        }-${new Date().getTime()}`,
+        processBase64Data(attachment.Content)
+      )
+  );
+
+  const uploadResults = await Promise.all(uploadPromises);
+
+  // Process results based on array position
+  uploadResults.forEach((result, index) => {
+    const { data: attachmentData, error: attachmentError } = result;
+    const attachment = attachments[index];
+
     if (attachmentError) {
-      console.error('❌Error saving email attachment:❌', attachmentError);
+      console.error(
+        '❌Error saving email attachment:❌',
+        attachmentError.message
+      );
     }
     if (attachmentData) {
       fileData.push({
         path: attachmentData.path,
         cid: attachment.ContentID,
+        name: attachment.Name,
       });
     }
-  }
+  });
 
   const { error: updateError } = await supabase
     .from('email_attachments')
@@ -132,6 +179,7 @@ const handleEmailAttachments = async (
         attachment_path: file.path,
         cid: file.cid,
         email_id: emailId,
+        original_name: file.name,
       }))
     );
 
@@ -195,6 +243,7 @@ export const saveEmail = async (email: EmailData) => {
       organization_id: sharedInbox.organization_id,
       attachments: email.attachmentCount,
       is_spam: email.spamStatus,
+      list_text: email.strippedText,
     })
     .select('id')
     .single();
@@ -212,7 +261,12 @@ export const saveEmail = async (email: EmailData) => {
     emailData.id
   );
 
-  await handleEmailReferences(email.referencesMailIds, emailData.id);
+  await handleEmailReferences(
+    email.referencesMailIds,
+    emailData.id,
+    email.strippedText,
+    email.subject
+  );
 
   // need status only for parent emails
   if (!email.referencesMailIds.length) {
@@ -257,6 +311,7 @@ export const emailList = async ({
       `
       id,
       from_email,
+      from_name,
       subject,
       stripped_text,
       send_at,
@@ -364,6 +419,7 @@ export const myEmailList = async ({
       `
     id,
     from_email,
+    from_name,
     subject,
     stripped_text,
     send_at,
@@ -432,151 +488,6 @@ export const myEmailList = async ({
     },
   };
 };
-
-async function emailBodyHasLinks(rawHtml: string): Promise<boolean> {
-  const hasAnchorTags = /<a\b[^>]*\shref\s*=/i.test(rawHtml);
-
-  return hasAnchorTags;
-}
-
-async function manipulateHtmlServerSide(html: string) {
-  const $ = cheerio.load(html);
-
-  // Handle style tags
-  $('style').each((_, el) => {
-    let styleContent = $(el).html() || '';
-    styleContent = styleContent
-      // Replace background colors
-      .replace(
-        /background-color\s*:\s*[^;]*(;|$)/gi,
-        'background-color: var(--accent)$2'
-      )
-      .replace(/background\s*:\s*[^;]*(;|$)/gi, 'background: var(--accent)$2')
-      .replace(
-        /(?<!-)color\s*:\s*[^;]*(;|$)/gi,
-        'color: var(--muted-foreground)$2'
-      )
-      // Remove empty rules
-      .replace(/[^{}]*{\s*}/g, '')
-      // Remove empty media queries
-      .replace(/@media[^{]*{\s*}/g, '');
-
-    if (styleContent.trim()) {
-      $(el).html(styleContent);
-    } else {
-      $(el).remove();
-    }
-  });
-
-  // Handle inline styles
-  $('*').each((_, el) => {
-    const $el = $(el);
-
-    const style = $el.attr('style');
-    if (style) {
-      let newStyle = style;
-
-      // Replace background colors
-      newStyle = newStyle
-        .replace(
-          /background-color\s*:\s*[^;]*(;|$)/gi,
-          'background-color: var(--accent)$1'
-        )
-        .replace(/background\s*:\s*[^;]*(;|$)/gi, 'background: var(--accent)$1')
-        .replace(
-          /(?<!-)color\s*:\s*[^;]*(;|$)/gi,
-          'color: var(--muted-foreground)$1'
-        );
-
-      if (newStyle.trim()) {
-        $el.attr('style', newStyle.trim());
-      } else {
-        $el.removeAttr('style');
-      }
-    }
-
-    // Remove old color attributes
-    $el.removeAttr('bgcolor');
-    $el.removeAttr('color');
-  });
-
-  // Handle anchor tags separately
-  $('a').each((_, el) => {
-    const $el = $(el);
-    let style = $el.attr('style') || '';
-
-    // Add or update color property for links
-    if (style.match(/(?<!-)color\s*:\s*[^;]*(;|$)/gi)) {
-      style = style.replace(
-        /(?<!-)color\s*:\s*[^;]*(;|$)/gi,
-        'color: var(--primary)$1'
-      );
-    } else {
-      style += (style ? ';' : '') + 'color: var(--primary)';
-    }
-
-    if (style.match(/(?<!-)background-color\s*:\s*[^;]*(;|$)/gi)) {
-      style = style.replace(
-        /(?<!-)background-color\s*:\s*[^;]*(;|$)/gi,
-        'background-color: var(--sidebar-border)$1'
-      );
-    }
-
-    $el.attr('style', style.trim());
-    $el.attr('target', '_blank');
-    $el.attr('rel', 'noopener noreferrer');
-  });
-
-  // Remove inline event handlers like onclick, onmouseover, etc.
-  $(
-    '[onload], [onclick], [onmouseover], [onerror], [onfocus], [onmouseenter], [onmouseleave]'
-  ).each((_, el) => {
-    const attribs = Object.keys(el.attribs);
-    attribs.forEach((attr) => {
-      if (attr.startsWith('on')) $(el).removeAttr(attr);
-    });
-  });
-
-  // Optionally: Strip dangerous CSS (like position: fixed, etc.)
-  $('[style]').each((_, el) => {
-    const style = $(el).attr('style');
-    if (style) {
-      const safeStyle = style
-        .split(';')
-        .map((rule) => rule.trim())
-        .filter(
-          (rule) =>
-            !/^position\s*:\s*(fixed|absolute)/i.test(rule) && // Avoid overlays
-            !/^z-index\s*:/i.test(rule) && // Avoid stacking above UI
-            !/^behavior\s*:/i.test(rule) // Legacy IE hacks
-        )
-        .join('; ');
-      $(el).attr('style', safeStyle);
-    }
-  });
-
-  $('body').wrap('<div class="email-wrapper"></div>');
-
-  // Update <style> tags to scope their selectors
-  $('style').each((_, el) => {
-    const css = $(el).html();
-    if (!css) return;
-
-    const scopedCss = css.replace(/(^|\})\s*([^{]+)/g, (_, sep, selector) => {
-      const scoped = selector
-        .split(',')
-        .map((sel: string) => `.email-wrapper ${sel.trim()}`)
-        .join(', ');
-      return `${sep} ${scoped}`;
-    });
-
-    $(el).text(scopedCss);
-  });
-
-  $('script, style, iframe, object, embed, link').remove();
-
-  return $.html();
-}
 
 export const toggleEmailReadStatus = async ({
   emailId,
@@ -664,7 +575,7 @@ export const emailDetails = async ({
     });
   }
 
-  // get all the emails where reference emails contains mailId
+  // get the last email where reference emails contains mailId
   const { data: referenceEmails } = await supabase
     .from('emails')
     .select('mail_id,references_mail_ids,send_at,subject')
@@ -681,34 +592,12 @@ export const emailDetails = async ({
       ]
     : [...(data.references_mail_ids || []), data.mail_id];
 
-  const hasLinks = await emailBodyHasLinks(data.body_html!);
-
   const activities = await emailActivityLogs({ emailId });
 
-  if (!hasLinks) {
-    return {
-      email: {
-        ...data,
-        user_email_status: data.user_email_status[0],
-        replyData: {
-          replyTo: lastReferenceEmail?.mail_id || data.mail_id,
-          references: updatedReferences,
-        },
-        ...(lastReferenceEmail
-          ? {
-              updatedSubject: lastReferenceEmail.subject,
-            }
-          : {}),
-      },
-      activities,
-    };
-  }
-  const manipulatedHtml = await manipulateHtmlServerSide(data.body_html!);
   return {
     email: {
       ...data,
       user_email_status: data.user_email_status[0],
-      body_html: manipulatedHtml,
       replyData: {
         replyTo: lastReferenceEmail?.mail_id || data.mail_id,
         references: updatedReferences,
@@ -959,6 +848,7 @@ async function allExternalEmailReplies(allReferencedEmailIds: number[]) {
         id,
         subject,
         from_email,
+        from_name,
         to_emails,
         send_at,
         body_html,
@@ -977,23 +867,20 @@ async function allExternalEmailReplies(allReferencedEmailIds: number[]) {
     id: number;
     subject: string;
     from_email: string;
+    from_name: string;
     to_email: string;
     send_at: string;
-    stripped_html: string;
-    stripped_text: string;
+    html: string;
   }[] = [];
   for (const email of data) {
-    const manipulatedHtml = email.body_html
-      ? await manipulateHtmlServerSide(email.body_html)
-      : '';
     allExternalEmails.push({
       id: email.id,
       subject: email.subject,
       from_email: email.from_email,
+      from_name: email.from_name,
       to_email: email.to_emails?.join(', '),
       send_at: email.send_at,
-      stripped_html: manipulatedHtml,
-      stripped_text: email.stripped_text || '',
+      html: email.body_html || email.body_plain || '',
     });
   }
 
@@ -1087,7 +974,7 @@ export const emailActivityLogs = async ({
         },
       };
     } else if (item.type === NotificationType.REPLY_RECEIVED) {
-      const allExternalEmails = externalEmails.find(
+      const externalEmailData = externalEmails.find(
         (email) =>
           email.id ===
           (item.metadata as { referenced_email_id: number }).referenced_email_id
@@ -1096,7 +983,7 @@ export const emailActivityLogs = async ({
         ...item,
         metadata: {
           ...(item.metadata as {}),
-          ...allExternalEmails,
+          ...externalEmailData,
         },
       };
     } else if (item.type === NotificationType.REPLY_SENT) {
@@ -1190,6 +1077,7 @@ export const bookmarkedEmailList = async ({
       `
     id,
     from_email,
+    from_name,
     subject,
     stripped_text,
     send_at,

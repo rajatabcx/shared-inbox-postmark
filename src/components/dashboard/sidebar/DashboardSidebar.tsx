@@ -118,7 +118,7 @@ export async function DashboardSidebar() {
           <Collapsible defaultOpen className='w-full'>
             <SidebarGroupLabel className='flex items-center justify-between pr-2'>
               <CollapsibleTrigger className='group flex items-center gap-2 cursor-pointer'>
-                <span>Shared Inboxes</span>
+                <span>Inboxes</span>
                 <ChevronDown className='h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180' />
               </CollapsibleTrigger>
               <CreateInbox />

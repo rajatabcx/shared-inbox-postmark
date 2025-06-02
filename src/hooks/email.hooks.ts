@@ -134,7 +134,7 @@ export const useEmailList = (
       });
       return emails;
     },
-    staleTime: 0,
+    staleTime: 5 * 60 * 1000,
   });
 
 export const useMyEmailList = (search: string, page: number) =>
@@ -147,6 +147,7 @@ export const useMyEmailList = (search: string, page: number) =>
       });
       return emails;
     },
+    staleTime: 5 * 60 * 1000,
   });
 
 export const emailListPrefetch = async ({
@@ -172,6 +173,7 @@ export const emailListPrefetch = async ({
       });
       return emails;
     },
+    staleTime: 5 * 60 * 1000,
   });
   return queryClient;
 };
@@ -193,21 +195,26 @@ export const myEmailListPrefetch = async ({
       });
       return emails;
     },
+    staleTime: 5 * 60 * 1000,
   });
   return queryClient;
 };
 
-export const useBookmarkedEmailList = (search: string, page: number) =>
+export const useBookmarkedEmailList = (
+  search: string,
+  page: number,
+  searchValue: string
+) =>
   useQuery({
-    queryKey: ['bookmarkedEmailList', search, page],
+    queryKey: ['bookmarkedEmailList', search, page, searchValue],
     queryFn: async () => {
       const emails = await bookmarkedEmailList({
         page,
-        search,
+        search: searchValue,
       });
       return emails;
     },
-    staleTime: 0,
+    staleTime: 5 * 60 * 1000,
   });
 
 export const useBookmarkedEmailListPrefetch = async ({
@@ -227,6 +234,7 @@ export const useBookmarkedEmailListPrefetch = async ({
       });
       return emails;
     },
+    staleTime: 5 * 60 * 1000,
   });
   return queryClient;
 };
@@ -238,7 +246,7 @@ export const useEmailDetails = (emailId: number) =>
       const email = await emailDetails({ emailId });
       return email;
     },
-    staleTime: 0,
+    staleTime: 5 * 60 * 1000,
   });
 
 export const emailDetailsPrefetch = async (emailId: number) => {
@@ -249,6 +257,7 @@ export const emailDetailsPrefetch = async (emailId: number) => {
       const email = await emailDetails({ emailId });
       return email;
     },
+    staleTime: 5 * 60 * 1000,
   });
   return queryClient;
 };

@@ -145,6 +145,7 @@ export type Database = {
           created_at: string | null
           email_id: number
           id: number
+          original_name: string
         }
         Insert: {
           attachment_path: string
@@ -152,6 +153,7 @@ export type Database = {
           created_at?: string | null
           email_id: number
           id?: never
+          original_name?: string
         }
         Update: {
           attachment_path?: string
@@ -159,6 +161,7 @@ export type Database = {
           created_at?: string | null
           email_id?: number
           id?: never
+          original_name?: string
         }
         Relationships: [
           {
@@ -249,6 +252,7 @@ export type Database = {
           is_reply: boolean
           is_spam: boolean
           is_starred: boolean
+          list_text: string
           mail_id: string
           organization_id: number | null
           references_mail_ids: string[]
@@ -277,6 +281,7 @@ export type Database = {
           is_reply?: boolean
           is_spam?: boolean
           is_starred?: boolean
+          list_text?: string
           mail_id: string
           organization_id?: number | null
           references_mail_ids?: string[]
@@ -305,6 +310,7 @@ export type Database = {
           is_reply?: boolean
           is_spam?: boolean
           is_starred?: boolean
+          list_text?: string
           mail_id?: string
           organization_id?: number | null
           references_mail_ids?: string[]

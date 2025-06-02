@@ -14,8 +14,8 @@ import {
 
 export default function MailboxViewSwitcher() {
   const [view, setView] = useQueryStates({
-    view: parseAsString.withOptions({ shallow: false }).withDefault('inbox'),
-    page: parseAsInteger.withOptions({ shallow: false }).withDefault(1),
+    view: parseAsString.withDefault('inbox'),
+    page: parseAsInteger.withDefault(1),
   });
 
   const handleViewChange = (value: string) => {

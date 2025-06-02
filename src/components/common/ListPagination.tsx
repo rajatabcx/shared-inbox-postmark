@@ -18,10 +18,7 @@ export function ListPagination({
 }: {
   metadata?: PaginationMetadata;
 }) {
-  const [_, setPage] = useQueryState(
-    'page',
-    parseAsInteger.withOptions({ shallow: false }).withDefault(1)
-  );
+  const [_, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
 
   const handlePage = (pageNumber: number) => {
     setPage(pageNumber);

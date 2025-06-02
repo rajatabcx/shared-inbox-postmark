@@ -6,8 +6,7 @@ import {
   Member,
 } from '@/lib/types';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { extractNameAndEmail } from '@/lib/const';
+import React, { memo, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { format, formatDistanceToNow } from 'date-fns';
 import {
@@ -28,21 +27,20 @@ export function EmailCard({
   email,
   inboxId,
   members,
-  view,
 }: {
   email: EmailListItem;
   inboxId: number;
   members: Member[];
-  view?: EmailViewType;
 }) {
+  console.log('EmailCard rendering');
   const [archived, setArchived] = useState(email.is_archived);
   const [isSpam, setIsSpam] = useState(email.is_spam);
   const [isRead, setIsRead] = useState(email.user_email_status.is_read);
-  const fromMetadata = extractNameAndEmail(email.from_email!);
 
   useEffect(() => {
     setIsRead(email.user_email_status.is_read);
   }, [email.user_email_status]);
+
   return (
     <div
       key={email.id}
@@ -70,7 +68,7 @@ export function EmailCard({
             isRead && 'opacity-50'
           )}
         >
-          {fromMetadata.name || fromMetadata.backupName}
+          {email.from_name || email.from_email}
           {email.reference_count > 0 ? ` (${email.reference_count + 1})` : null}
         </Link>
         <div className='flex gap-1 flex-shrink-0'>
@@ -196,9 +194,9 @@ export function EmailCard({
               </TooltipContent>
             </Tooltip>
           ) : null}
-          {view === EmailView.SPAM || view === EmailView.ARCHIVED ? null : (
+          {/* {view === EmailView.SPAM || view === EmailView.ARCHIVED ? null : (
             <StarEmail isStarred={email.is_starred} emailId={email.id} />
-          )}
+          )} */}
           <BookmarkEmail
             emailId={email.id}
             bookmarked={email.user_email_status.is_bookmarked}

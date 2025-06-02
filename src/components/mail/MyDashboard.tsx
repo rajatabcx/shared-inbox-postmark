@@ -15,19 +15,17 @@ import { useEffect, useState } from 'react';
 import { createSupabaseClient } from '@/lib/supabase/client';
 import { ListPagination } from '@/components/common/ListPagination';
 import { useQueryClient } from '@tanstack/react-query';
+import { useQueryStates, parseAsString, parseAsInteger } from 'nuqs';
 
-export function MyDashboard({
-  page,
-  profileId,
-}: {
-  page: number;
-  profileId: number;
-}) {
-  const [text, setText] = useState('');
-  const [value] = useDebounce(text, 1000);
+export function MyDashboard({ profileId }: { profileId: number }) {
+  const [values, setValues] = useQueryStates({
+    page: parseAsInteger.withDefault(1),
+    search: parseAsString.withDefault(''),
+  });
+  const [value] = useDebounce(values.search, 1000);
 
   const supabase = createSupabaseClient();
-  const { data, isLoading } = useMyEmailList(value, page);
+  const { data, isLoading } = useMyEmailList(value, values.page);
 
   const { data: members } = useOrganizationMembers();
 
@@ -50,7 +48,7 @@ export function MyDashboard({
             payload.new.assignee !== payload.old.assignee
           ) {
             queryClient.invalidateQueries({
-              queryKey: ['emailList', value, page],
+              queryKey: ['emailList', value, values.page],
             });
           }
         }
@@ -60,7 +58,7 @@ export function MyDashboard({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, profileId, queryClient, value, page]);
+  }, [supabase, profileId, queryClient, value, values.page]);
 
   return (
     <div className='flex h-full flex-col w-full'>
@@ -68,11 +66,6 @@ export function MyDashboard({
         <div className='border-b p-4 flex justify-between items-center'>
           <div className='flex items-center'>
             <SidebarTrigger className='-ml-1' />
-            <Separator
-              orientation='vertical'
-              className='mx-2 data-[orientation=vertical]:h-4'
-            />
-            <MailboxViewSwitcher />
           </div>
           <div className='relative'>
             <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
@@ -80,8 +73,10 @@ export function MyDashboard({
               type='search'
               placeholder='Search'
               className='pl-8'
-              value={text}
-              onChange={(e) => setText(e.target.value)}
+              value={values.search}
+              onChange={(e) =>
+                setValues((prev) => ({ ...prev, search: e.target.value }))
+              }
             />
           </div>
         </div>

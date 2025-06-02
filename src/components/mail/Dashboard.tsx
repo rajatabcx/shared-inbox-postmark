@@ -18,21 +18,30 @@ import { useCallback, useEffect, useState } from 'react';
 import { createSupabaseClient } from '@/lib/supabase/client';
 import { ListPagination } from '../common/ListPagination';
 import { useQueryClient } from '@tanstack/react-query';
+import {
+  parseAsInteger,
+  parseAsString,
+  parseAsStringEnum,
+  useQueryStates,
+} from 'nuqs';
 
-export function MailDashboard({
-  inboxId,
-  view,
-  page,
-}: {
-  inboxId: number;
-  view: EmailViewType;
-  page: number;
-}) {
-  const [text, setText] = useState('');
-  const [value] = useDebounce(text, 1000);
+export function MailDashboard({ inboxId }: { inboxId: number }) {
+  const [values, setValues] = useQueryStates({
+    view: parseAsStringEnum<EmailView>(Object.values(EmailView)).withDefault(
+      EmailView.INBOX
+    ),
+    page: parseAsInteger.withDefault(1),
+    search: parseAsString.withDefault(''),
+  });
+  const [value] = useDebounce(values.search, 1000);
 
   const supabase = createSupabaseClient();
-  const { data, isLoading } = useEmailList(inboxId, view, value, page);
+  const { data, isLoading } = useEmailList(
+    inboxId,
+    values.view,
+    value,
+    values.page
+  );
 
   const { data: members } = useOrganizationMembers();
 
@@ -45,20 +54,21 @@ export function MailDashboard({
       );
       if (
         emailExistsInList ||
-        (email.is_starred && view === EmailView.STARRED) ||
-        (email.is_archived && view === EmailView.ARCHIVED) ||
-        (email.is_spam && view === EmailView.SPAM) ||
+        (email.is_starred && values.view === EmailView.STARRED) ||
+        (email.is_archived && values.view === EmailView.ARCHIVED) ||
+        (email.is_spam && values.view === EmailView.SPAM) ||
         event === 'INSERT'
       ) {
         queryClient.invalidateQueries({
-          queryKey: ['emailList', inboxId, view, value, page],
+          queryKey: ['emailList', inboxId, values.view, value, values.page],
         });
       }
     },
-    [data, inboxId, view, value, page, queryClient]
+    [data, inboxId, values.view, value, values.page, queryClient]
   );
 
   useEffect(() => {
+    console.log('subscribing to inbox', inboxId);
     const channel = supabase
       .channel(`inbox:${inboxId}`)
       .on(
@@ -98,8 +108,10 @@ export function MailDashboard({
               type='search'
               placeholder='Search'
               className='pl-8'
-              value={text}
-              onChange={(e) => setText(e.target.value)}
+              value={values.search}
+              onChange={(e) =>
+                setValues((prev) => ({ ...prev, search: e.target.value }))
+              }
             />
           </div>
         </div>
@@ -120,7 +132,7 @@ export function MailDashboard({
           ) : !data?.data.length ? (
             <div className='flex flex-col items-center justify-center h-full gap-2 py-10'>
               <h1 className='text-lg font-semibold'>
-                No emails found in {view}
+                No emails found in {values.view}
               </h1>
               <p className='text-muted-foreground text-sm'>
                 Setup email forwarding to your inbox to start receiving emails
@@ -135,14 +147,12 @@ export function MailDashboard({
           ) : (
             <>
               {data?.data.map((email) => (
-                <div key={email.id}>
-                  <EmailCard
-                    email={email}
-                    inboxId={inboxId}
-                    members={members || []}
-                    view={view}
-                  />
-                </div>
+                <EmailCard
+                  email={email}
+                  inboxId={inboxId}
+                  members={members || []}
+                  key={email.id}
+                />
               ))}
               <ListPagination metadata={data?.metadata} />
             </>

@@ -122,9 +122,6 @@ importers:
       framer-motion:
         specifier: ^12.15.0
         version: 12.15.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      linkify-react:
-        specifier: ^4.3.1
-        version: 4.3.1(linkifyjs@4.3.1)(react@19.1.0)
       lucide-react:
         specifier: ^0.511.0
         version: 0.511.0(react@19.1.0)
@@ -2537,12 +2534,6 @@ packages:
 
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
-
-  linkify-react@4.3.1:
-    resolution: {integrity: sha512-w8ahBdCwF9C/doS4V3nE93QF1oyORmosvi8UEUbpHYws077eGzhkxUzJQcE2/SU5Q2K7SD80M4ybwwZGHErx5Q==}
-    peerDependencies:
-      linkifyjs: ^4.0.0
-      react: '>= 15.0.0'
 
   linkifyjs@4.3.1:
     resolution: {integrity: sha512-DRSlB9DKVW04c4SUdGvKK5FR6be45lTU9M76JnngqPeeGDqPwYc0zdUErtsNVMtxPXgUWV4HbXbnC4sNyBxkYg==}
@@ -5728,11 +5719,6 @@ snapshots:
   linkify-it@5.0.0:
     dependencies:
       uc.micro: 2.1.0
-
-  linkify-react@4.3.1(linkifyjs@4.3.1)(react@19.1.0):
-    dependencies:
-      linkifyjs: 4.3.1
-      react: 19.1.0
 
   linkifyjs@4.3.1: {}
 

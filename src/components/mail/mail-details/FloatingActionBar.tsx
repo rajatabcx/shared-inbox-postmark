@@ -30,19 +30,8 @@ import { useQueryStates } from 'nuqs';
 import { LabelPicker } from '../label/LabelPicker';
 import { toast } from 'sonner';
 import { EmailDetail, ResponseType } from '@/lib/types';
-import {
-  toggleEmailArchive,
-  toggleEmailReadStatus,
-  toggleEmailSpam,
-  toggleEmailStar,
-} from '@/actions/email';
 import { toastHelper } from '@/lib/toastHelper';
-import {
-  toggleEmailBookmark,
-  toggleEmailSubscription,
-} from '@/actions/notification';
 import { useRouter } from 'next/navigation';
-import { extractNameAndEmail } from '@/lib/const';
 import { useCurrentUser } from '@/hooks/user.hooks';
 import { useState } from 'react';
 import {
@@ -79,8 +68,6 @@ export function FloatingActionBar({
       history: 'push',
     }
   );
-
-  const { name, backupName } = extractNameAndEmail(emailData.from_email || '');
 
   const { mutateAsync: executeStar, isPending: isStarring } =
     useToggleEmailStar();
@@ -299,7 +286,7 @@ export function FloatingActionBar({
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <User className='mr-2 h-4 w-4' />
-                See all from {name || backupName}
+                See all from {emailData.from_name || emailData.from_email}
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

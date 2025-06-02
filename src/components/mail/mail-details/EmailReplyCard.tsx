@@ -15,9 +15,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { MailOptions } from './MailOptions';
-import { extractNameAndEmail, linkifyOptions } from '@/lib/const';
-import Linkify from 'linkify-react';
-import { emailBodyHasLinks } from '@/lib/emailBodyHelper';
 import { EmailBodyIframe } from './EmailBodyIframe';
 import { cn } from '@/lib/utils';
 
@@ -25,21 +22,18 @@ export function EmailReplyCard({ emailData }: { emailData: any }) {
   const [detailsOpened, setDetailsOpened] = useState(false);
   const [shrinkCard, setShrinkCard] = useState(false);
 
-  const { name: fromName, backupName } = extractNameAndEmail(
-    emailData.from_email || ''
-  );
   const avatarInitials = useMemo(() => {
-    const words = (fromName || backupName)
+    const words = (emailData.from_name || emailData.from_email!)
       .trim()
       .split(' ')
-      .filter((word) => word.length > 0);
+      .filter((word: string) => word.length > 0);
     if (words.length === 0) return 'NA';
     if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
     if (words.length >= 2) {
       return (words[0][0] + words[words.length - 1][0]).toUpperCase();
     }
     return 'NA';
-  }, [fromName, backupName]);
+  }, [emailData.from_name, emailData.from_email]);
 
   return shrinkCard ? (
     <Card>
@@ -160,21 +154,12 @@ export function EmailReplyCard({ emailData }: { emailData: any }) {
         </CardContent>
       ) : null}
       <CardContent className='text-sm break-all overflow-x-auto'>
-        {emailData.stripped_html ? (
-          emailBodyHasLinks(emailData.stripped_html) ? (
-            <EmailBodyIframe rawHtml={emailData.stripped_html} />
-          ) : (
-            <div className={cn('mail-body text-sm whitespace-pre-wrap')}>
-              <Linkify options={linkifyOptions}>
-                {emailData.stripped_text}
-              </Linkify>
-            </div>
-          )
-        ) : (
-          ''
-        )}
+        {emailData.html}
+      </CardContent>
+      {/* <CardContent className='text-sm break-all overflow-x-auto'>
+            <EmailBodyIframe rawHtml={emailData.html} />
 
-        {/* {emailData.email_attachments.length > 0 && (
+        {emailData.email_attachments.length > 0 && (
           <div className='mt-4'>
             <div className='flex flex-wrap gap-2'>
               {emailData.email_attachments.map((attachment) => (
@@ -185,9 +170,9 @@ export function EmailReplyCard({ emailData }: { emailData: any }) {
               ))}
             </div>
           </div>
-        )} */}
+        )}
 
-        {/* {emailData.references_mail_ids &&
+        {emailData.references_mail_ids &&
         emailData.references_mail_ids.length > 0 ? (
           <Button
             variant='ghost'
@@ -197,8 +182,8 @@ export function EmailReplyCard({ emailData }: { emailData: any }) {
           >
             <Ellipsis className='size-4' />
           </Button>
-        ) : null} */}
-        {/* <div
+        ) : null}
+        <div
           className={cn(
             'mail-body-reply text-sm whitespace-pre-wrap',
             !showReply ? 'hidden' : 'block'
@@ -206,8 +191,8 @@ export function EmailReplyCard({ emailData }: { emailData: any }) {
           dangerouslySetInnerHTML={{
             __html: emailData.body_html || '',
           }}
-        /> */}
-      </CardContent>
+        />
+      </CardContent> */}
     </Card>
   );
 }

@@ -95,6 +95,7 @@ export enum EmailStatus {
 export type EmailListItem = {
   id: number;
   from_email: string | null;
+  from_name: string | null;
   subject: string;
   stripped_text: string | null;
   send_at: string | null;
@@ -205,6 +206,7 @@ export interface EmailDetail {
   cc_emails: string[];
   mail_id: string | null;
   from_email: string | null;
+  from_name: string | null;
   references_mail_ids: string[] | null;
   reply_to_mail_id: string | null;
   shared_inbox_id: number;

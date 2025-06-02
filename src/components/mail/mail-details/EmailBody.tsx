@@ -1,22 +1,13 @@
 'use client';
 
-import {
-  ChevronDownSquare,
-  ChevronUpSquare,
-  Ellipsis,
-  Paperclip,
-} from 'lucide-react';
+import { ChevronDownSquare, ChevronUpSquare, Paperclip } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
-import Linkify from 'linkify-react';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { EmailDetail } from '@/lib/types';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { extractNameAndEmail, linkifyOptions } from '@/lib/const';
-import { emailBodyHasLinks } from '@/lib/emailBodyHelper';
 import { EmailBodyIframe } from './EmailBodyIframe';
 import { EmailAttachments } from './EmailAttachments';
 import {
@@ -31,11 +22,8 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
   const [shrinkCard, setShrinkCard] = useState(false);
   const [showReply, setShowReply] = useState(false);
 
-  const { name: fromName, backupName } = extractNameAndEmail(
-    emailData.from_email || ''
-  );
   const avatarInitials = useMemo(() => {
-    const words = (fromName || backupName)
+    const words = (emailData.from_name || emailData.from_email!)
       .trim()
       .split(' ')
       .filter((word) => word.length > 0);
@@ -45,7 +33,7 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
       return (words[0][0] + words[words.length - 1][0]).toUpperCase();
     }
     return 'NA';
-  }, [fromName, backupName]);
+  }, [emailData.from_name, emailData.from_email]);
 
   return shrinkCard ? (
     <Card>
@@ -99,7 +87,7 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
 
           <div className='flex items-center gap-2'>
             <span className='text-muted-foreground'>To:</span>
-            <span>{emailData.to_email?.replaceAll(`"`, '')}</span>
+            <span>{emailData.to_emails?.join(', ').replaceAll(`"`, '')}</span>
             <Button
               size='icon'
               variant='ghost'
@@ -117,10 +105,10 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
             </Button>
           </div>
 
-          {emailData.cc_email && emailData.cc_email.length > 0 && (
+          {emailData.cc_emails && emailData.cc_emails.length > 0 && (
             <div className='flex items-center gap-2'>
               <span className='text-muted-foreground'>CC:</span>
-              <span>{emailData.cc_email.join(', ')}</span>
+              <span>{emailData.cc_emails.join(', ')}</span>
             </div>
           )}
 
@@ -158,7 +146,7 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
           <p className='text-muted-foreground'>From:</p>
           <p>{emailData.from_email}</p>
           <p className='text-muted-foreground'>To:</p>
-          <p>{emailData.to_email?.replaceAll(`"`, '')}</p>
+          <p>{emailData.to_emails?.join(', ').replaceAll(`"`, '')}</p>
           <p className='text-muted-foreground'>Date:</p>
           <p>{format(emailData.send_at!, 'MMM d, yyyy hh:mm a')}</p>
           <p className='text-muted-foreground'>Subject:</p>
@@ -166,6 +154,9 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
         </CardContent>
       ) : null}
       <CardContent className='text-sm break-all overflow-x-auto'>
+        {emailData.body_plain}
+      </CardContent>
+      {/* <CardContent className='text-sm break-all overflow-x-auto'>
         {emailData.stripped_html ? (
           emailBodyHasLinks(emailData.stripped_html) ? (
             <EmailBodyIframe rawHtml={emailData.stripped_html} />
@@ -204,7 +195,7 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
             <Ellipsis className='size-4' />
           </Button>
         ) : null}
-        {/* <div
+        <div
           className={cn(
             'mail-body-reply text-sm whitespace-pre-wrap',
             !showReply ? 'hidden' : 'block'
@@ -212,8 +203,8 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
           dangerouslySetInnerHTML={{
             __html: emailData.body_html || '',
           }}
-        /> */}
-      </CardContent>
+        />
+      </CardContent> */}
     </Card>
   );
 }

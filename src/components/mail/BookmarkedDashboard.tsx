@@ -11,27 +11,58 @@ import { Separator } from '@/components/ui/separator';
 import { useBookmarkedEmailList } from '@/hooks/email.hooks';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useOrganizationMembers } from '@/hooks/organization.hooks';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createSupabaseClient } from '@/lib/supabase/client';
 import { ListPagination } from '@/components/common/ListPagination';
 import { useQueryClient } from '@tanstack/react-query';
+import { useQueryStates } from 'nuqs';
+import { parseAsInteger } from 'nuqs/server';
+import { parseAsString } from 'nuqs/server';
 
-export function BookmarkedDashboard({
-  page,
-  profileId,
-}: {
-  page: number;
-  profileId: number;
-}) {
-  const [text, setText] = useState('');
-  const [value] = useDebounce(text, 1000);
+export function BookmarkedDashboard({ profileId }: { profileId: number }) {
+  const [values, setValues] = useQueryStates({
+    page: parseAsInteger.withDefault(1),
+    search: parseAsString.withDefault(''),
+  });
+  const [value] = useDebounce(values.search, 1000);
 
   const supabase = createSupabaseClient();
-  const { data, isLoading } = useBookmarkedEmailList(value, page);
+  const { data, isLoading } = useBookmarkedEmailList(
+    value,
+    values.page,
+    values.search
+  );
 
   const { data: members } = useOrganizationMembers();
 
   const queryClient = useQueryClient();
+
+  const handleUpdate = useCallback(
+    async (emailId: number, event: string) => {
+      // if event is UPDATE, we need to check if the email is bookmarked
+      // if it is, we need to invalidate the query
+      // if it is not, we need to do nothing
+      if (event === 'UPDATE') {
+        const { data: userEmailStatus } = await supabase
+          .from('user_email_status')
+          .select('is_bookmarked')
+          .eq('email_id', emailId)
+          .eq('user_id', profileId)
+          .single();
+        if (userEmailStatus?.is_bookmarked) {
+          queryClient.invalidateQueries({
+            queryKey: [
+              'bookmarkedEmailList',
+              value,
+              values.page,
+              values.search,
+            ],
+          });
+        }
+      }
+    },
+    [queryClient, value, values.page, values.search, profileId, supabase]
+  );
 
   useEffect(() => {
     const channel = supabase
@@ -49,9 +80,8 @@ export function BookmarkedDashboard({
               payload.old.assignee === profileId) &&
             payload.new.assignee !== payload.old.assignee
           ) {
-            queryClient.invalidateQueries({
-              queryKey: ['bookmarkedEmailList', value, page],
-            });
+            const emailId = payload.new.id as number;
+            handleUpdate(emailId, payload.eventType);
           }
         }
       )
@@ -60,7 +90,15 @@ export function BookmarkedDashboard({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, profileId, queryClient, value, page]);
+  }, [
+    supabase,
+    profileId,
+    queryClient,
+    value,
+    values.page,
+    values.search,
+    handleUpdate,
+  ]);
 
   return (
     <div className='flex h-full flex-col w-full'>
@@ -68,20 +106,17 @@ export function BookmarkedDashboard({
         <div className='border-b p-4 flex justify-between items-center'>
           <div className='flex items-center'>
             <SidebarTrigger className='-ml-1' />
-            <Separator
-              orientation='vertical'
-              className='mx-2 data-[orientation=vertical]:h-4'
-            />
-            <MailboxViewSwitcher />
           </div>
-          <div className='relative'>
+          <div className='relative max-w-lg w-full'>
             <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
             <Input
               type='search'
               placeholder='Search'
               className='pl-8'
-              value={text}
-              onChange={(e) => setText(e.target.value)}
+              value={values.search}
+              onChange={(e) =>
+                setValues((prev) => ({ ...prev, search: e.target.value }))
+              }
             />
           </div>
         </div>

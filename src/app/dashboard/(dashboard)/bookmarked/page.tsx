@@ -1,6 +1,10 @@
 import { currentUser } from '@/actions/user';
 import { BookmarkedDashboard } from '@/components/mail/BookmarkedDashboard';
-import { createSearchParamsCache, parseAsInteger } from 'nuqs/server';
+import {
+  createSearchParamsCache,
+  parseAsInteger,
+  parseAsString,
+} from 'nuqs/server';
 import { redirect } from 'next/navigation';
 import { useBookmarkedEmailListPrefetch } from '@/hooks/email.hooks';
 import { dehydrate } from '@tanstack/react-query';
@@ -8,6 +12,7 @@ import { HydrationBoundary } from '@tanstack/react-query';
 
 const searchParamsCache = createSearchParamsCache({
   page: parseAsInteger.withDefault(1),
+  search: parseAsString.withDefault(''),
 });
 
 export default async function BookmarkedEmails({
@@ -20,18 +25,19 @@ export default async function BookmarkedEmails({
     redirect('/auth/sign-in');
   }
   const searchParamsData = await searchParams;
-  const { page } = searchParamsCache.parse(searchParamsData) as {
+  const { page, search } = searchParamsCache.parse(searchParamsData) as {
     page: number;
+    search: string;
   };
 
   const queryClient = await useBookmarkedEmailListPrefetch({
     page,
-    search: '',
+    search,
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <BookmarkedDashboard page={page} profileId={user.profileId} />
+      <BookmarkedDashboard profileId={user.profileId} />
     </HydrationBoundary>
   );
 }
