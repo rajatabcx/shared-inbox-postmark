@@ -1,5 +1,6 @@
 import type { Config } from 'dompurify';
 import DOMPurify from 'dompurify';
+import { createSupabaseClient } from './supabase/client';
 
 const matches = (element: Element, selector: string) =>
   (element.matches || (element as any).msMatchesSelector).call(
@@ -325,7 +326,10 @@ const transformStyleAttributes = (document: Element) => {
   }
 };
 
-export const prepareHtml = (content = '') => {
+export const prepareHtml = (
+  content = '',
+  attachments: { attachment_path: string; cid: string; original_name: string }[]
+) => {
   const document = transformEscape(content);
   transformLinks(document);
   transformAnchors(document);

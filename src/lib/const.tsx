@@ -372,3 +372,7 @@ export function getDistinctEmails(
 
   return Array.from(emailMap.values());
 }
+
+export const MESSAGE_IFRAME_ROOT_ID = 'replyas-root';
+export const MESSAGE_IFRAME_BLOCKQUOTE_ID = 'replyas-blockquote';
+export const MESSAGE_IFRAME_TOGGLE_ID = 'replyas-toggle';

@@ -155,7 +155,7 @@ export function EmailReplyCard({ emailData }: { emailData: any }) {
         </CardContent>
       ) : null}
       <CardContent className='text-sm break-all overflow-x-auto'>
-        <EmailMessage message={emailData.html} />
+        <EmailMessage message={emailData.html} attachments={[]} />
       </CardContent>
       {/* <CardContent className='text-sm break-all overflow-x-auto'>
             <EmailBodyIframe rawHtml={emailData.html} />

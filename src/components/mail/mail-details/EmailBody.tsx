@@ -157,6 +157,7 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
       <CardContent className='text-sm break-all overflow-x-auto'>
         <EmailMessage
           message={emailData.body_html || emailData.body_plain || ''}
+          attachments={emailData.email_attachments}
         />
         {emailData.email_attachments.length > 0 && (
           <div className='mt-4'>

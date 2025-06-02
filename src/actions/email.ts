@@ -84,9 +84,16 @@ const handleEmailReferences = async (
 
     await supabase.from('emails').update({ is_reply: true }).eq('id', emailId);
 
-    const firstEmailId = referencedEmails?.find(
-      (email) => email.references_mail_ids.length === 0
-    )?.id;
+    const firstEmailId = referencedEmails?.reduce((minEmail, currentEmail) => {
+      if (
+        !minEmail ||
+        currentEmail.references_mail_ids.length <
+          minEmail.references_mail_ids.length
+      ) {
+        return currentEmail;
+      }
+      return minEmail;
+    }, null as (typeof referencedEmails)[0] | null)?.id;
 
     if (referenceError) {
       console.error('❌Error saving email references:❌', referenceError);
@@ -143,9 +150,9 @@ const handleEmailAttachments = async (
     supabase.storage
       .from('attachments')
       .upload(
-        `${orgName}/${sharedInboxName}/${
+        `${orgName}/${sharedInboxName}/${new Date().getTime()}-${
           attachment.Name
-        }-${new Date().getTime()}`,
+        }`,
         processBase64Data(attachment.Content)
       )
   );

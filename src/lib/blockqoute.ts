@@ -26,6 +26,10 @@ export const BLOCKQUOTE_SELECTORS = [
   '[name="quote"]', // gmx
 ];
 
+const ELEMENTS_AFTER_BLOCKQUOTES = [
+  '.replyas-image-anchor', // At this point we already replaced images with an anchor, but we want to keep them
+];
+
 export const split = (source: string, match: string): [string, string] => {
   const index = source.indexOf(match);
   if (index === -1) {
@@ -78,9 +82,12 @@ export const locateBlockquote = (
 
     const after = parseStringToDOM(afterHTML);
 
+    const hasImageAfter = after.body.querySelector(
+      ELEMENTS_AFTER_BLOCKQUOTES.join(',')
+    );
     const hasTextAfter = after.body?.textContent?.trim().length;
 
-    if (!hasTextAfter) {
+    if (!hasTextAfter && !hasImageAfter) {
       return [beforeHTML, blockquoteHTML] as [string, string];
     }
 
