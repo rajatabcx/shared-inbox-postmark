@@ -68,7 +68,6 @@ export function MailDashboard({ inboxId }: { inboxId: number }) {
   );
 
   useEffect(() => {
-    console.log('subscribing to inbox', inboxId);
     const channel = supabase
       .channel(`inbox:${inboxId}`)
       .on(
@@ -152,6 +151,7 @@ export function MailDashboard({ inboxId }: { inboxId: number }) {
                   inboxId={inboxId}
                   members={members || []}
                   key={email.id}
+                  view={values.view}
                 />
               ))}
               <ListPagination metadata={data?.metadata} />

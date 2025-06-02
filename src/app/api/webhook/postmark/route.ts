@@ -99,7 +99,7 @@ export async function POST(request: Request) {
       subject: subject,
       bodyPlain: emailBodyText,
       bodyHtml: emailBodyHtml,
-      strippedText: strippedTextReply,
+      strippedText: strippedTextReply || emailBodyText,
       aliasEmail,
       timestamp: new Date(emailData.Date).toISOString(),
       replyToEmail: replyTo,
@@ -113,6 +113,8 @@ export async function POST(request: Request) {
       ccs: allCcs.map((cc) => ({ email: cc.Email, name: cc.Name })),
       attachments: emailData.Attachments,
     };
+
+    console.log('finalEmailData', finalEmailData);
 
     await saveEmail(finalEmailData);
 

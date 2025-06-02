@@ -17,6 +17,7 @@ import {
 import { MailOptions } from './MailOptions';
 import { EmailBodyIframe } from './EmailBodyIframe';
 import { cn } from '@/lib/utils';
+import { EmailMessage } from './EmailMessage';
 
 export function EmailReplyCard({ emailData }: { emailData: any }) {
   const [detailsOpened, setDetailsOpened] = useState(false);
@@ -154,7 +155,7 @@ export function EmailReplyCard({ emailData }: { emailData: any }) {
         </CardContent>
       ) : null}
       <CardContent className='text-sm break-all overflow-x-auto'>
-        {emailData.html}
+        <EmailMessage message={emailData.html} />
       </CardContent>
       {/* <CardContent className='text-sm break-all overflow-x-auto'>
             <EmailBodyIframe rawHtml={emailData.html} />

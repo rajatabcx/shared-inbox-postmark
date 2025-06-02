@@ -7,7 +7,11 @@ import React, { useState } from 'react';
 export function EmailAttachments({
   attachment,
 }: {
-  attachment: { cid: string; attachment_path: string };
+  attachment: {
+    cid: string;
+    attachment_path: string;
+    original_name: string;
+  };
 }) {
   const [isGeneratingSignedUrl, setIsGeneratingSignedUrl] = useState(false);
 
@@ -38,7 +42,7 @@ export function EmailAttachments({
         handleFile(attachment.attachment_path);
       }}
     >
-      {attachment.attachment_path.split('/').pop()}{' '}
+      {attachment.original_name}{' '}
       {isGeneratingSignedUrl ? (
         <Loader className='size-4! animate-spin' />
       ) : (

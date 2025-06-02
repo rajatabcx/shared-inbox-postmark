@@ -225,7 +225,9 @@ export const saveEmail = async (email: EmailData) => {
       alias_email: email.aliasEmail,
       body_html: email.bodyHtml,
       body_plain: email.bodyPlain,
-      cc_emails: email.ccs.map((cc) => `${cc.name} <${cc.email}>`),
+      cc_emails: email.ccs.map((cc) =>
+        cc.name ? `${cc.name} <${cc.email}>` : cc.email
+      ),
       send_at: new Date(email.timestamp).toISOString(),
       from_email: email.fromEmail,
       from_name: email.fromName,
@@ -235,7 +237,9 @@ export const saveEmail = async (email: EmailData) => {
       shared_inbox_id: sharedInbox.id,
       subject: email.subject,
       stripped_text: email.strippedText,
-      to_emails: email.to.map((to) => `${to.name} <${to.email}>`),
+      to_emails: email.to.map((to) =>
+        to.name ? `${to.name} <${to.email}>` : to.email
+      ),
       reply_to: email.replyToEmail,
       created_at: new Date().toISOString(),
       status: EmailStatus.TODO,
@@ -315,6 +319,7 @@ export const emailList = async ({
       subject,
       stripped_text,
       send_at,
+      list_text,
       references_mail_ids,
       status,
       shared_inbox_id,
@@ -423,6 +428,7 @@ export const myEmailList = async ({
     subject,
     stripped_text,
     send_at,
+    list_text,
     references_mail_ids,
     status,
     shared_inbox_id,
@@ -551,7 +557,8 @@ export const emailDetails = async ({
     ),
     email_attachments(
       attachment_path,
-      cid
+      cid,
+      original_name
     ),
     attachments,
     mail_id
@@ -1081,6 +1088,7 @@ export const bookmarkedEmailList = async ({
     subject,
     stripped_text,
     send_at,
+    list_text,
     references_mail_ids,
     status,
     shared_inbox_id,

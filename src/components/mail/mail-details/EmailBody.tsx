@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { MailOptions } from './MailOptions';
+import { EmailMessage } from './EmailMessage';
 
 export function EmailBody({ emailData }: { emailData: EmailDetail }) {
   const [detailsOpened, setDetailsOpened] = useState(false);
@@ -154,7 +155,21 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
         </CardContent>
       ) : null}
       <CardContent className='text-sm break-all overflow-x-auto'>
-        {emailData.body_plain}
+        <EmailMessage
+          message={emailData.body_html || emailData.body_plain || ''}
+        />
+        {emailData.email_attachments.length > 0 && (
+          <div className='mt-4'>
+            <div className='flex flex-wrap gap-2'>
+              {emailData.email_attachments.map((attachment) => (
+                <EmailAttachments
+                  key={attachment.cid}
+                  attachment={attachment}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </CardContent>
       {/* <CardContent className='text-sm break-all overflow-x-auto'>
         {emailData.stripped_html ? (

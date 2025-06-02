@@ -27,12 +27,13 @@ export function EmailCard({
   email,
   inboxId,
   members,
+  view,
 }: {
   email: EmailListItem;
   inboxId: number;
   members: Member[];
+  view: EmailViewType;
 }) {
-  console.log('EmailCard rendering');
   const [archived, setArchived] = useState(email.is_archived);
   const [isSpam, setIsSpam] = useState(email.is_spam);
   const [isRead, setIsRead] = useState(email.user_email_status.is_read);
@@ -172,7 +173,7 @@ export function EmailCard({
               isRead && 'opacity-50'
             )}
           >
-            {`${email.stripped_text
+            {`${email.list_text
               ?.slice(0, 160)
               .replaceAll('\n', ' ')
               .replace(/[^a-zA-Z0-9\s]/g, ' ')}`}
@@ -194,9 +195,9 @@ export function EmailCard({
               </TooltipContent>
             </Tooltip>
           ) : null}
-          {/* {view === EmailView.SPAM || view === EmailView.ARCHIVED ? null : (
+          {view === EmailView.SPAM || view === EmailView.ARCHIVED ? null : (
             <StarEmail isStarred={email.is_starred} emailId={email.id} />
-          )} */}
+          )}
           <BookmarkEmail
             emailId={email.id}
             bookmarked={email.user_email_status.is_bookmarked}

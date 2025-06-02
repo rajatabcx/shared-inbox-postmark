@@ -16,6 +16,7 @@ import { createSupabaseClient } from '@/lib/supabase/client';
 import { ListPagination } from '@/components/common/ListPagination';
 import { useQueryClient } from '@tanstack/react-query';
 import { useQueryStates, parseAsString, parseAsInteger } from 'nuqs';
+import { EmailView } from '@/lib/types';
 
 export function MyDashboard({ profileId }: { profileId: number }) {
   const [values, setValues] = useQueryStates({
@@ -67,7 +68,7 @@ export function MyDashboard({ profileId }: { profileId: number }) {
           <div className='flex items-center'>
             <SidebarTrigger className='-ml-1' />
           </div>
-          <div className='relative'>
+          <div className='relative max-w-lg w-full'>
             <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
             <Input
               type='search'
@@ -109,6 +110,7 @@ export function MyDashboard({ profileId }: { profileId: number }) {
                     email={email}
                     inboxId={email.shared_inbox_id}
                     members={members || []}
+                    view={EmailView.INBOX}
                   />
                 </div>
               ))}

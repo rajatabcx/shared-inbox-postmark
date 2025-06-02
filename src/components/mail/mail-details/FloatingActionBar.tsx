@@ -127,7 +127,7 @@ export function FloatingActionBar({
     });
     toastHelper(res);
     if (res?.type === ResponseType.SUCCESS) {
-      router.replace(`/dashboard/inbox/${inboxId}`);
+      router.back();
     }
   };
 

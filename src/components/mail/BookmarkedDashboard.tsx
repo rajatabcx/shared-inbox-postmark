@@ -15,6 +15,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { createSupabaseClient } from '@/lib/supabase/client';
 import { ListPagination } from '@/components/common/ListPagination';
 import { useQueryClient } from '@tanstack/react-query';
+import { EmailView } from '@/lib/types';
 import { useQueryStates } from 'nuqs';
 import { parseAsInteger } from 'nuqs/server';
 import { parseAsString } from 'nuqs/server';
@@ -149,6 +150,7 @@ export function BookmarkedDashboard({ profileId }: { profileId: number }) {
                     email={email}
                     inboxId={email.shared_inbox_id}
                     members={members || []}
+                    view={EmailView.INBOX}
                   />
                 </div>
               ))}

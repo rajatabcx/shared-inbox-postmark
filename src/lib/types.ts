@@ -98,6 +98,7 @@ export type EmailListItem = {
   from_name: string | null;
   subject: string;
   stripped_text: string | null;
+  list_text: string;
   send_at: string | null;
   references_mail_ids: string[] | null;
   reference_count: number;
@@ -254,6 +255,7 @@ export interface EmailDetail {
   email_attachments: {
     attachment_path: string;
     cid: string;
+    original_name: string;
   }[];
   attachments: number;
   replyData: {
@@ -261,4 +263,16 @@ export interface EmailDetail {
     references: string[];
   };
   updatedSubject?: string;
+}
+
+export interface InternalChat {
+  created_at: string | null;
+  email_id: number;
+  id: number;
+  message: string;
+  sender_id: number | null;
+  user_profiles: {
+    first_name: string;
+    last_name: string;
+  } | null;
 }
