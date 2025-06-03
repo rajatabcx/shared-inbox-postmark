@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/tooltip';
 import { MailOptions } from './MailOptions';
 import { EmailMessage } from './EmailMessage';
+import { EmailAttachments } from './EmailAttachments';
 
 export function EmailReplyCard({ emailData }: { emailData: any }) {
   const [detailsOpened, setDetailsOpened] = useState(false);
@@ -153,7 +154,29 @@ export function EmailReplyCard({ emailData }: { emailData: any }) {
         </CardContent>
       ) : null}
       <CardContent className='text-sm break-all overflow-x-auto'>
-        <EmailMessage message={emailData.html} attachments={[]} />
+        <EmailMessage
+          message={emailData.html}
+          attachments={emailData.email_attachments}
+        />
+        {emailData.email_attachments.length > 0 && (
+          <div className='mt-4'>
+            <div className='flex flex-wrap gap-2'>
+              {emailData.email_attachments.map(
+                (attachment: {
+                  cid: string;
+                  attachment_path: string;
+                  original_name: string;
+                  signed_url: string | null;
+                }) => (
+                  <EmailAttachments
+                    key={attachment.cid}
+                    attachment={attachment}
+                  />
+                )
+              )}
+            </div>
+          </div>
+        )}
       </CardContent>
       {/* <CardContent className='text-sm break-all overflow-x-auto'>
             <EmailBodyIframe rawHtml={emailData.html} />

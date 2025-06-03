@@ -103,6 +103,11 @@ const handleEmailReferences = async (
         .from('emails')
         .update({ list_text: emailStrippedText, subject: emailSubject })
         .eq('id', firstEmailId);
+
+      await supabase
+        .from('user_email_status')
+        .update({ is_read: false })
+        .eq('email_id', firstEmailId);
     }
     console.log(`✅Email references saved✅`);
   }
@@ -140,13 +145,32 @@ const handleEmailAttachments = async (
   }[],
   orgName: string,
   sharedInboxName: string,
-  emailId: number
+  emailId: number,
+  bodyHtml: string
 ) => {
-  const fileData: { path: string; cid: string; name: string }[] = [];
   const supabase = await createSupabaseAdminServerClient();
 
-  // Upload all attachments in parallel
-  const uploadPromises = attachments.map((attachment) =>
+  // First, get existing attachments with their CIDs and paths
+  const attachmentCids = attachments
+    .map((att) => att.ContentID)
+    .filter(Boolean);
+  const { data: existingAttachments } = await supabase
+    .from('email_attachments')
+    .select('cid, attachment_path')
+    .in('cid', attachmentCids);
+
+  // Create a map of existing CID -> attachment_path
+  const existingCidMap = new Map(
+    existingAttachments?.map((att) => [att.cid, att.attachment_path]) || []
+  );
+
+  // Filter attachments to only upload those that don't exist
+  const attachmentsToUpload = attachments.filter(
+    (attachment) => !existingCidMap.has(attachment.ContentID)
+  );
+
+  // Upload only new attachments in parallel
+  const uploadPromises = attachmentsToUpload.map((attachment) =>
     supabase.storage
       .from('attachments')
       .upload(
@@ -159,10 +183,16 @@ const handleEmailAttachments = async (
 
   const uploadResults = await Promise.all(uploadPromises);
 
-  // Process results based on array position
+  // Process results for newly uploaded files
+  const newFileData: Array<{
+    path: string;
+    cid: string;
+    name: string;
+    is_embed: boolean;
+  }> = [];
   uploadResults.forEach((result, index) => {
     const { data: attachmentData, error: attachmentError } = result;
-    const attachment = attachments[index];
+    const attachment = attachmentsToUpload[index];
 
     if (attachmentError) {
       console.error(
@@ -171,22 +201,47 @@ const handleEmailAttachments = async (
       );
     }
     if (attachmentData) {
-      fileData.push({
+      newFileData.push({
         path: attachmentData.path,
         cid: attachment.ContentID,
         name: attachment.Name,
+        is_embed: bodyHtml.includes(attachment.ContentID),
       });
     }
   });
 
+  // Combine existing and new file data
+  const allFileData = attachments
+    .map((attachment) => {
+      const existingPath = existingCidMap.get(attachment.ContentID);
+
+      if (existingPath) {
+        // Use existing attachment data
+        return {
+          path: existingPath,
+          cid: attachment.ContentID,
+          name: attachment.Name,
+          is_embed: bodyHtml.includes(attachment.ContentID),
+        };
+      } else {
+        // Find the newly uploaded attachment
+        const newFile = newFileData.find(
+          (file) => file.cid === attachment.ContentID
+        )!;
+        return newFile;
+      }
+    })
+    .filter(Boolean); // Remove any undefined entries
+
   const { error: updateError } = await supabase
     .from('email_attachments')
     .insert(
-      fileData.map((file) => ({
+      allFileData.map((file) => ({
         attachment_path: file.path,
         cid: file.cid,
         email_id: emailId,
         original_name: file.name,
+        is_embed: file.is_embed,
       }))
     );
 
@@ -194,7 +249,7 @@ const handleEmailAttachments = async (
     console.error('❌Error saving email attachments to table:❌', updateError);
   }
 
-  return fileData;
+  return allFileData;
 };
 
 export const saveEmail = async (email: EmailData) => {
@@ -269,7 +324,8 @@ export const saveEmail = async (email: EmailData) => {
     email.attachments,
     sharedInbox.organization.name,
     sharedInbox.name!,
-    emailData.id
+    emailData.id,
+    email.bodyHtml
   );
 
   await handleEmailReferences(
@@ -565,7 +621,8 @@ export const emailDetails = async ({
     email_attachments(
       attachment_path,
       cid,
-      original_name
+      original_name,
+      is_embed
     ),
     attachments,
     mail_id
@@ -606,11 +663,33 @@ export const emailDetails = async ({
       ]
     : [...(data.references_mail_ids || []), data.mail_id];
 
+  // Create updated attachments array with signed URLs
+  const updatedAttachments = await Promise.all(
+    data.email_attachments.map(async (attachment) => {
+      let signedUrl = null;
+
+      // Create signed URL for embedded images (those with cid)
+      if (attachment.cid && attachment.attachment_path && attachment.is_embed) {
+        const { data: urlData } = await supabase.storage
+          .from('attachments')
+          .createSignedUrl(attachment.attachment_path, 60 * 5); // 5 minutes expiry
+
+        signedUrl = urlData?.signedUrl || null;
+      }
+
+      return {
+        ...attachment,
+        signed_url: signedUrl,
+      };
+    })
+  );
+
   const activities = await emailActivityLogs({ emailId });
 
   return {
     email: {
       ...data,
+      email_attachments: updatedAttachments,
       user_email_status: data.user_email_status[0],
       replyData: {
         replyTo: lastReferenceEmail?.mail_id || data.mail_id,
@@ -867,7 +946,13 @@ async function allExternalEmailReplies(allReferencedEmailIds: number[]) {
         send_at,
         body_html,
         body_plain,
-        stripped_text
+        stripped_text,
+        email_attachments(
+          attachment_path,
+          cid,
+          original_name,
+          is_embed
+        )
     `
     )
     .in('id', allReferencedEmailIds);
@@ -886,19 +971,48 @@ async function allExternalEmailReplies(allReferencedEmailIds: number[]) {
     send_at: string;
     html: string;
     stripped_text: string;
-  }[] = [];
-  for (const email of data) {
-    allExternalEmails.push({
-      id: email.id,
-      subject: email.subject,
-      from_email: email.from_email,
-      from_name: email.from_name,
-      to_email: email.to_emails?.join(', '),
-      send_at: email.send_at,
-      html: email.body_html || email.body_plain || '',
-      stripped_text: email.stripped_text || '',
-    });
-  }
+    email_attachments: {
+      attachment_path: string;
+      cid: string;
+      original_name: string;
+      is_embed: boolean;
+      signed_url: string | null;
+    }[];
+  }[] = await Promise.all(
+    data.map(async (email) => {
+      const updatedAttachments = await Promise.all(
+        email.email_attachments.map(async (attachment) => {
+          let signedUrl = null;
+
+          // Create signed URL for embedded images (those with cid)
+          if (attachment.cid && attachment.attachment_path) {
+            const { data: urlData } = await supabase.storage
+              .from('attachments')
+              .createSignedUrl(attachment.attachment_path, 60 * 5); // 5 minutes expiry
+
+            signedUrl = urlData?.signedUrl || null;
+          }
+
+          return {
+            ...attachment,
+            signed_url: signedUrl,
+          };
+        })
+      );
+
+      return {
+        id: email.id,
+        subject: email.subject,
+        from_email: email.from_email,
+        from_name: email.from_name,
+        to_email: email.to_emails?.join(', '),
+        send_at: email.send_at,
+        html: email.body_html || email.body_plain || '',
+        stripped_text: email.stripped_text || '',
+        email_attachments: updatedAttachments,
+      };
+    })
+  );
 
   return allExternalEmails;
 }

@@ -35,7 +35,7 @@ export function EmailPage({
 
   const supabase = createSupabaseClient();
   useEffect(() => {
-    const channel = supabase
+    const activityChannel = supabase
       .channel(`emailActivity:${emailId}`)
       .on(
         'postgres_changes',
@@ -51,8 +51,25 @@ export function EmailPage({
       )
       .subscribe();
 
+    const emailChannel = supabase
+      .channel(`email:${emailId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'emails',
+        },
+        (payload: any) => {
+          const emailId = payload.new.id as number;
+          handleUpdate(emailId);
+        }
+      )
+      .subscribe();
+
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(activityChannel);
+      supabase.removeChannel(emailChannel);
     };
   }, [supabase, inboxId]);
 

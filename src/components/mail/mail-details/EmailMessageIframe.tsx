@@ -56,36 +56,25 @@ export function EmailMessageIframe({
         allowFullScreen={false}
         translate='yes'
       />
-      {/* {initStatus !== 'start' && (
-        <MessageBodyImages
-          iframeRef={iframeRef}
-          isPrint={isPrint}
-          messageImages={message.messageImages}
-          localID={message.localID}
-          useProxy={!!mailSettings.ImageProxy}
-        />
-      )} */}
       {showToggle &&
         iframeToggleDiv &&
         !!blockquote &&
         createPortal(
-          <Tooltip relativeReference={iframeRef}>
-            <button
-              type='button'
-              className='replyas-toggle-button'
-              onClick={() => {
-                setShowBlockquote(!showBlockquote);
-              }}
-              data-testid='message-view:expand-codeblock'
-            >
-              <MoreHorizontal className='m-auto' size={12} />
-              <span className='replyas-sr-only'>
-                {showBlockquote
-                  ? `Hide original message`
-                  : `Show original message`}
-              </span>
-            </button>
-          </Tooltip>,
+          <button
+            type='button'
+            className='replyas-toggle-button'
+            onClick={() => {
+              setShowBlockquote(!showBlockquote);
+            }}
+            data-testid='message-view:expand-codeblock'
+          >
+            <MoreHorizontal className='m-auto' size={12} />
+            <span className='replyas-sr-only'>
+              {showBlockquote
+                ? `Hide original message`
+                : `Show original message`}
+            </span>
+          </button>,
           iframeToggleDiv
         )}
     </>

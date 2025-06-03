@@ -325,13 +325,36 @@ const transformStyleAttributes = (document: Element) => {
   }
 };
 
+export const transformEmbedded = async (
+  document: Element,
+  attachments: {
+    attachment_path: string;
+    cid: string;
+    original_name: string;
+    signed_url: string | null;
+  }[]
+) => {
+  for (const attachment of attachments) {
+    const img = document.querySelector(`img[src="cid:${attachment.cid}"]`);
+    if (img) {
+      (img as HTMLImageElement).src = attachment.signed_url!;
+    }
+  }
+};
+
 export const prepareHtml = (
   content = '',
-  attachments: { attachment_path: string; cid: string; original_name: string }[]
+  attachments: {
+    attachment_path: string;
+    cid: string;
+    original_name: string;
+    signed_url: string | null;
+  }[]
 ) => {
   const document = transformEscape(content);
   transformLinks(document);
   transformAnchors(document);
+  transformEmbedded(document, attachments);
   transformStylesheet(document);
   transformStyleAttributes(document);
   return document;

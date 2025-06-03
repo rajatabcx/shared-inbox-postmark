@@ -145,6 +145,7 @@ export type Database = {
           created_at: string | null
           email_id: number
           id: number
+          is_embed: boolean
           original_name: string
         }
         Insert: {
@@ -153,6 +154,7 @@ export type Database = {
           created_at?: string | null
           email_id: number
           id?: never
+          is_embed?: boolean
           original_name?: string
         }
         Update: {
@@ -161,6 +163,7 @@ export type Database = {
           created_at?: string | null
           email_id?: number
           id?: never
+          is_embed?: boolean
           original_name?: string
         }
         Relationships: [

@@ -172,55 +172,6 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
           </div>
         )}
       </CardContent>
-      {/* <CardContent className='text-sm break-all overflow-x-auto'>
-        {emailData.stripped_html ? (
-          emailBodyHasLinks(emailData.stripped_html) ? (
-            <EmailBodyIframe rawHtml={emailData.stripped_html} />
-          ) : (
-            <div className={cn('mail-body text-sm whitespace-pre-wrap')}>
-              <Linkify options={linkifyOptions}>
-                {emailData.stripped_text}
-              </Linkify>
-            </div>
-          )
-        ) : (
-          ''
-        )}
-
-        {emailData.email_attachments.length > 0 && (
-          <div className='mt-4'>
-            <div className='flex flex-wrap gap-2'>
-              {emailData.email_attachments.map((attachment) => (
-                <EmailAttachments
-                  key={attachment.cid}
-                  attachment={attachment}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {emailData.references_mail_ids &&
-        emailData.references_mail_ids.length > 0 ? (
-          <Button
-            variant='ghost'
-            size='icon'
-            onClick={() => setShowReply(!showReply)}
-            className='!h-4 !w-7 bg-background rounded-full hover:bg-background/90 mt-4'
-          >
-            <Ellipsis className='size-4' />
-          </Button>
-        ) : null}
-        <div
-          className={cn(
-            'mail-body-reply text-sm whitespace-pre-wrap',
-            !showReply ? 'hidden' : 'block'
-          )}
-          dangerouslySetInnerHTML={{
-            __html: emailData.body_html || '',
-          }}
-        />
-      </CardContent> */}
     </Card>
   );
 }

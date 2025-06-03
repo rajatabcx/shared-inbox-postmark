@@ -14,6 +14,7 @@ export function EmailMessage({
     attachment_path: string;
     cid: string;
     original_name: string;
+    signed_url: string | null;
   }[];
 }) {
   const plain = !isHtml(message);
@@ -43,9 +44,10 @@ function EmailMessageHtml({
     attachment_path: string;
     cid: string;
     original_name: string;
+    signed_url: string | null;
   }[];
 }) {
-  const [isIframeContentSet, setIsIframeContentSet] = useState(false);
+  const [_isIframeContentSet, setIsIframeContentSet] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const modifiedMessage = prepareHtml(message, attachments);

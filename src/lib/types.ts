@@ -257,6 +257,8 @@ export interface EmailDetail {
     attachment_path: string;
     cid: string;
     original_name: string;
+    is_embed: boolean;
+    signed_url: string | null;
   }[];
   attachments: number;
   replyData: {
