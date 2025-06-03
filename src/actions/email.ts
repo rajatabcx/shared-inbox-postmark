@@ -885,6 +885,7 @@ async function allExternalEmailReplies(allReferencedEmailIds: number[]) {
     to_email: string;
     send_at: string;
     html: string;
+    stripped_text: string;
   }[] = [];
   for (const email of data) {
     allExternalEmails.push({
@@ -895,6 +896,7 @@ async function allExternalEmailReplies(allReferencedEmailIds: number[]) {
       to_email: email.to_emails?.join(', '),
       send_at: email.send_at,
       html: email.body_html || email.body_plain || '',
+      stripped_text: email.stripped_text || '',
     });
   }
 

@@ -54,6 +54,7 @@ export const getIframeHtml = ({
         <style>${cssStyles}</style>
         ${messageHead}
       </head>
+      <body>
       <div id="${MESSAGE_IFRAME_ROOT_ID}">
         <div style="display: block !important; width: 100% !important;">
         <div style="width: 100% !important;padding-bottom:10px;!important">

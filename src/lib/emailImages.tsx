@@ -15,6 +15,6 @@ export const getAnchor = (
   }
 
   return document.querySelector(
-    `.proton-image-anchor[data-proton-${cid}]`
+    `.replyas-image-anchor[data-cid="${cid}"]`
   ) as HTMLElement | null;
 };

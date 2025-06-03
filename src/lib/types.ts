@@ -202,6 +202,7 @@ export interface EmailData {
 export interface EmailDetail {
   id: number;
   alias_email: string;
+  list_text: string;
   body_html: string | null;
   body_plain: string | null;
   cc_emails: string[];

@@ -22,7 +22,7 @@ export function EmailMessageIframe({
   handleContentLoaded: (iframeRootDivElement: HTMLDivElement) => void;
 }) {
   const [showBlockQuoteState, setShowBlockQuoteState] = useState(!!blockquote);
-  const { initStatus, iframeRootDivRef } = useInitIframeContent({
+  const { initStatus } = useInitIframeContent({
     iframeRef,
     message,
     content,
@@ -72,14 +72,14 @@ export function EmailMessageIframe({
           <Tooltip relativeReference={iframeRef}>
             <button
               type='button'
-              className='proton-toggle-button'
+              className='replyas-toggle-button'
               onClick={() => {
                 setShowBlockquote(!showBlockquote);
               }}
               data-testid='message-view:expand-codeblock'
             >
-              <MoreHorizontal className='m-auto size-4' />
-              <span className='proton-sr-only'>
+              <MoreHorizontal className='m-auto' size={12} />
+              <span className='replyas-sr-only'>
                 {showBlockquote
                   ? `Hide original message`
                   : `Show original message`}

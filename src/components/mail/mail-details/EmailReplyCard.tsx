@@ -15,8 +15,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { MailOptions } from './MailOptions';
-import { EmailBodyIframe } from './EmailBodyIframe';
-import { cn } from '@/lib/utils';
 import { EmailMessage } from './EmailMessage';
 
 export function EmailReplyCard({ emailData }: { emailData: any }) {

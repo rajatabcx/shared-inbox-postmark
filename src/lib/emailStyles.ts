@@ -79,19 +79,19 @@ ol {
       CUSTOM STYLES AND HELPERS
 ----------------------------------- */
 a {
-	color: var(--interaction-norm, #657ee4);
+	color: var(--interaction-norm, #00bc7d);
 	text-decoration: underline;
 	cursor: pointer;
 }
 
 a:hover,
 a:focus {
-	color: var(--interaction-norm-hover, #4c63d2);
+	color: var(--interaction-norm-hover, #008236);
 	text-decoration: none;
 }
 
 a:active {
-	color: var(--interaction-norm-active, #3c5bc7);
+	color: var(--interaction-norm-active, #0d542b);
 	text-decoration: none;
 }
 
@@ -106,11 +106,6 @@ a:not([href]) {
 	box-sizing: content-box;
 	max-inline-size: none;
 	overflow: auto;
-}
-
-.replyas-dark-style {
-	color: var(--text-norm, #0c0c14);
-	background-color: var(--background-norm, #ffffff);
 }
 
 .replyas-hidden {
@@ -146,7 +141,7 @@ a:not([href]) {
 blockquote.replyas-blockquote {
 	padding-block: 0.2em;
 	padding-inline: 1.2em 0;
-	border-color: #657ee4;
+	border-color: #00bc7d;
 	border-inline-start-width: 3px;
 	border-inline-start-style: solid;
 }
@@ -156,18 +151,6 @@ blockquote.replyas_quote blockquote.replyas_quote blockquote.replyas_quote block
 	border-inline-start-width: 0;
 }
 
-/* -----------------------
-	PLAIN TEXT
-------------------------- */
-
-.replyas-plain-text {
-	font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-	background: var(--background-norm, #ffffff);
-	color: var(--text-norm, #0c0c14);
-	white-space: pre-wrap;
-	text-rendering: geometricprecision;
-	-webkit-font-smoothing: antialiased;
-}
 
 /* ---------------------------------
       BUTTONS
@@ -187,6 +170,7 @@ blockquote.replyas_quote blockquote.replyas_quote blockquote.replyas_quote block
 	text-align: center;
 	transform: translateZ(0);
 	transition: 0.15s cubic-bezier(0.22, 1, 0.36, 1), background-position 0s;
+	cursor: pointer;
 }
 
 .replyas-toggle-button:hover,

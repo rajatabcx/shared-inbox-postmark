@@ -54,7 +54,7 @@ export function EmailBody({ emailData }: { emailData: EmailDetail }) {
             &nbsp;&nbsp;{emailData.from_email}
           </p>
           <p className='text-muted-foreground truncate'>
-            {emailData.stripped_text}
+            {emailData.list_text}
           </p>
         </div>
         <div>

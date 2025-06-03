@@ -1,6 +1,5 @@
 import type { Config } from 'dompurify';
 import DOMPurify from 'dompurify';
-import { createSupabaseClient } from './supabase/client';
 
 const matches = (element: Element, selector: string) =>
   (element.matches || (element as any).msMatchesSelector).call(
