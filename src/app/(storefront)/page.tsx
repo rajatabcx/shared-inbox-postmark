@@ -23,17 +23,15 @@ export default async function Home() {
         <TeamFeatures />
         <CtaSection
           title="Ready to streamline your team's email workflow?"
-          primaryButtonText='Get Started'
-          secondaryButtonText='Learn More'
+          userId={user?.id}
         />
         <Testimonials />
-        <PricingSection />
+        {/* <PricingSection />
         <ComparisonTable />
-        <FaqSection />
+        <FaqSection /> */}
         <CtaSection
           title="Ready to transform your team's inbox?"
-          primaryButtonText='Get Started'
-          secondaryButtonText='Contact Sales'
+          userId={user?.id}
         />
       </main>
       <Footer />

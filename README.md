@@ -41,5 +41,4 @@ Coming soon...
 
 This project draws inspiration and guide from:
 
-- [ProtonMail](https://github.com/ProtonMail/WebClients) - For security and
-  privacy features
+- [ProtonMail](https://github.com/ProtonMail/WebClients) - For email rendering

@@ -44,7 +44,7 @@ export function PricingSection() {
               className='h-full'
             >
               <Card
-                className={`h-full bg-zinc-900 border-zinc-800 ${
+                className={`h-full ${
                   plan.popular
                     ? 'border-primary/80 shadow-lg shadow-primary/10'
                     : ''

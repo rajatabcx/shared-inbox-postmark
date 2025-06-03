@@ -41,7 +41,7 @@ export function FeatureCards() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className='h-full bg-zinc-900 border-zinc-800 hover:border-primary/50 transition-colors'>
+              <Card className='h-full hover:border-primary/50 transition-colors'>
                 <CardHeader>
                   <div className='h-12 w-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4'>
                     <feature.icon className='h-6 w-6 text-primary' />

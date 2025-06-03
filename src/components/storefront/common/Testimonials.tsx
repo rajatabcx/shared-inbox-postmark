@@ -38,7 +38,7 @@ export function Testimonials() {
               whileHover={{ y: -5 }}
               className='h-full'
             >
-              <Card className='h-full bg-zinc-900 border-zinc-800'>
+              <Card className='h-full'>
                 <CardContent className='pt-6'>
                   <Quote className='h-8 w-8 text-primary mb-4 opacity-50' />
                   <p className='text-muted-foreground'>

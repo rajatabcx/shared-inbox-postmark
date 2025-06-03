@@ -1,21 +1,19 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { CALL_LINK } from '@/lib/const';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 interface CtaSectionProps {
   title: string;
-  primaryButtonText: string;
-  secondaryButtonText: string;
+  userId?: string | null;
 }
 
-export function CtaSection({
-  title,
-  primaryButtonText,
-  secondaryButtonText,
-}: CtaSectionProps) {
+export function CtaSection({ title, userId }: CtaSectionProps) {
   return (
-    <section className='py-16 bg-gradient-to-r from-zinc-950 to-zinc-900'>
+    <section className='py-16 bg-gradient-to-r'>
       <div className='container mx-auto px-4 sm:px-6'>
         <motion.div
           className='max-w-3xl mx-auto text-center'
@@ -26,12 +24,20 @@ export function CtaSection({
         >
           <h2 className='text-3xl font-bold mb-6'>{title}</h2>
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-            <Button size='lg' className='bg-primary hover:bg-primary/80'>
-              {primaryButtonText}
-            </Button>
-            <Button size='lg' variant='outline'>
-              {secondaryButtonText}
-            </Button>
+            <Link
+              href={userId ? '/dashboard/my-tickets' : '/auth/sign-up'}
+              className={cn(buttonVariants({ variant: 'default', size: 'lg' }))}
+            >
+              {userId ? 'Dashboard' : 'Get Started Free'}
+            </Link>
+            <Link
+              href={CALL_LINK}
+              target='_blank'
+              rel='noopener noreferrer nofollow'
+              className={cn(buttonVariants({ variant: 'outline', size: 'lg' }))}
+            >
+              Book a Demo
+            </Link>
           </div>
         </motion.div>
       </div>

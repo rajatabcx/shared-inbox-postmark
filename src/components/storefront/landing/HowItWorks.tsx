@@ -34,7 +34,7 @@ export function HowItWorks() {
               {index < howItWorks.length - 1 && (
                 <div className='hidden lg:block absolute top-[43.5px] left-full w-full h-0.5 bg-gradient-to-r from-primary to-transparent' />
               )}
-              <div className='bg-zinc-900 rounded-xl p-6 h-full border border-zinc-800 hover:border-primary/50 transition-all duration-300'>
+              <div className='rounded-xl bg-background p-6 h-full border hover:border-primary/50 transition-all duration-300'>
                 <div className='flex items-center gap-4 mb-4'>
                   <div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary font-bold'>
                     {step.number}
