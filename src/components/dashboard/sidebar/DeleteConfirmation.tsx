@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { useDeleteInbox } from '@/hooks/inbox.hooks';
 import { toastHelper } from '@/lib/toastHelper';
 import { ResponseType } from '@/lib/types';
+import { useQueryClient } from '@tanstack/react-query';
 import { Loader } from 'lucide-react';
 import { useState } from 'react';
 
@@ -24,7 +25,7 @@ export function DeleteConfirmation({
   onDelete: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useDeleteInbox();
 
   const handleDelete = async () => {
@@ -33,6 +34,7 @@ export function DeleteConfirmation({
     if (res?.type === ResponseType.SUCCESS) {
       setIsOpen(false);
       onDelete();
+      queryClient.invalidateQueries({ queryKey: ['inboxes'] });
     }
   };
 

@@ -44,7 +44,7 @@ export function EmailStatus({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger className='cursor-pointer flex items-center justify-center gap-1 outline-none ring-0'>
-        <StatusIcon status={currentStatusState} />
+        <StatusIcon status={currentStatusState} className='flex-shrink-0' />
         {showStatusText && <p className='text-sm'>{currentStatusState}</p>}
       </DropdownMenuTrigger>
       <DropdownMenuContent

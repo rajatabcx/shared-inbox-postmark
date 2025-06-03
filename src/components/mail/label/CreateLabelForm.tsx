@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { TextInput } from '@/components/form/TextInput';
 import { Label } from '@/components/ui/label';
-import { darkThemeColors } from '@/lib/const';
+import { lightThemeColors } from '@/lib/const';
 import { cn } from '@/lib/utils';
 import { toastHelper } from '@/lib/toastHelper';
 import { ActionResponse, ResponseType } from '@/lib/types';
@@ -112,7 +112,7 @@ export function CreateLabelForm() {
               <div className='mt-4'>
                 <Label className='mb-2'>Select Colors</Label>
                 <div className='flex flex-wrap gap-2'>
-                  {Object.keys(darkThemeColors).map((color) => (
+                  {Object.keys(lightThemeColors).map((color) => (
                     <div key={color}>
                       <Badge
                         className={cn(
@@ -121,9 +121,9 @@ export function CreateLabelForm() {
                             'ring-2 ring-offset-2 ring-offset-background'
                         )}
                         style={{
-                          backgroundColor: darkThemeColors[color].bg,
-                          borderColor: darkThemeColors[color].bg,
-                          color: darkThemeColors[color].text,
+                          backgroundColor: lightThemeColors[color].bg,
+                          borderColor: lightThemeColors[color].bg,
+                          color: lightThemeColors[color].text,
                         }}
                         onClick={() => {
                           form.setValue('color', color);
@@ -131,7 +131,7 @@ export function CreateLabelForm() {
                       >
                         <Tag
                           className='size-4'
-                          style={{ color: darkThemeColors[color].text }}
+                          style={{ color: lightThemeColors[color].text }}
                         />
                         {color}
                         {selectedColor === color && (

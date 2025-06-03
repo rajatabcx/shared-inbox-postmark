@@ -336,6 +336,49 @@ export const darkThemeColors: Record<string, { text: string; bg: string }> = {
   },
 };
 
+export const lightThemeColors: Record<string, { text: string; bg: string }> = {
+  Crimson: {
+    text: '#8B0000',
+    bg: '#FFE4E8',
+  },
+  Emerald: {
+    text: '#006B47',
+    bg: '#E8F5F0',
+  },
+  Sapphire: {
+    text: '#1E3A8A',
+    bg: '#E0F2FE',
+  },
+  Amber: {
+    text: '#92400E',
+    bg: '#FEF3C7',
+  },
+  Violet: {
+    text: '#5B21B6',
+    bg: '#F3E8FF',
+  },
+  Cyan: {
+    text: '#155E63',
+    bg: '#CFFAFE',
+  },
+  Rose: {
+    text: '#9F1239',
+    bg: '#FFE4E6',
+  },
+  Lime: {
+    text: '#365314',
+    bg: '#F7FEE7',
+  },
+  Indigo: {
+    text: '#3730A3',
+    bg: '#E0E7FF',
+  },
+  Charcoal: {
+    text: '#374151',
+    bg: '#F9FAFB',
+  },
+};
+
 export function isValidEmail(email: string): boolean {
   const match = email.match(/<([^>]+)>/);
   const emailToValidate = match ? match[1] : email.trim();

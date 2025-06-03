@@ -27,6 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { inboxSchema } from '@/lib/validationSchema';
 import { TextInput } from '@/components/form/TextInput';
 import { useCreateInbox } from '@/hooks/inbox.hooks';
+import { useQueryClient } from '@tanstack/react-query';
 
 type InboxFormValues = z.infer<typeof inboxSchema>;
 
@@ -42,12 +43,15 @@ export default function CreateInbox() {
     },
   });
 
+  const queryClient = useQueryClient();
+
   const onSubmit = async (data: InboxFormValues) => {
     const response = await createInboxMutation(data);
     toastHelper(response);
     if (response?.type === ResponseType.SUCCESS) {
       setOpen(false);
       form.reset();
+      queryClient.invalidateQueries({ queryKey: ['inboxes'] });
     }
   };
   return (

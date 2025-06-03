@@ -1,9 +1,16 @@
 import { EmailStatus } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import React from 'react';
 
-export default function StatusIcon({ status }: { status: EmailStatus }) {
+export default function StatusIcon({
+  status,
+  className,
+}: {
+  status: EmailStatus;
+  className?: string;
+}) {
   return (
-    <>
+    <div className={cn('flex items-center justify-center', className)}>
       {status === EmailStatus.DRAFTING_REPLY ? (
         <svg
           aria-label='In Progress'
@@ -66,7 +73,7 @@ export default function StatusIcon({ status }: { status: EmailStatus }) {
             width='12'
             height='12'
             rx='6'
-            stroke='#e2e2e2'
+            stroke='#71717b'
             strokeWidth='1.5'
             fill='none'
           ></rect>
@@ -134,6 +141,6 @@ export default function StatusIcon({ status }: { status: EmailStatus }) {
           ></path>
         </svg>
       ) : null}
-    </>
+    </div>
   );
 }

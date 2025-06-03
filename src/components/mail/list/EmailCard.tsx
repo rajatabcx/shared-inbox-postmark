@@ -78,9 +78,9 @@ export function EmailCard({
               <TooltipTrigger asChild>
                 <Badge
                   variant='outline'
-                  className='h-5 px-1.5 border-emerald-800 bg-emerald-950/30'
+                  className='h-5 px-1.5 border-emerald-600 bg-emerald-50'
                 >
-                  <Reply className='w-3 h-3 text-emerald-400' />
+                  <Reply className='w-3 h-3 text-emerald-500' />
                   <span className='text-xs text-emerald-300 sr-only'>
                     Replied
                   </span>
@@ -96,9 +96,9 @@ export function EmailCard({
               <TooltipTrigger asChild>
                 <Badge
                   variant='outline'
-                  className='h-5 px-1.5 border-blue-900 bg-blue-950/30'
+                  className='h-5 px-1.5 border-blue-600 bg-blue-50'
                 >
-                  <Archive className='w-3 h-3 text-blue-400' />
+                  <Archive className='w-3 h-3 text-blue-500' />
                   <span className='text-xs text-blue-300 sr-only'>
                     Archived
                   </span>
@@ -114,9 +114,9 @@ export function EmailCard({
               <TooltipTrigger asChild>
                 <Badge
                   variant='outline'
-                  className='h-5 px-1.5 border-red-900 bg-red-950/30'
+                  className='h-5 px-1.5 border-red-600 bg-red-50'
                 >
-                  <AlertOctagon className='w-3 h-3 text-red-400' />
+                  <AlertOctagon className='w-3 h-3 text-red-500' />
                   <span className='text-xs text-red-300 sr-only'>Spam</span>
                 </Badge>
               </TooltipTrigger>
@@ -158,7 +158,7 @@ export function EmailCard({
                 {/* Show count if there are more than 2 labels */}
                 {email.email_labels.length > 2 && (
                   <div className='-ml-2 relative z-20 hover:z-30'>
-                    <Badge className='text-black bg-white text-xs'>
+                    <Badge className='text-black bg-muted text-xs'>
                       <Plus className='size-4' />
                       {email.email_labels.length - 2}
                     </Badge>

@@ -18,7 +18,7 @@ export default function InboxSidebarOption({ inboxId }: { inboxId: number }) {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size='icon'>
+        <Button variant='ghost' size='icon' className='hover:bg-transparent'>
           <EllipsisVertical className='size-4' />
           <span className='sr-only'>Options</span>
         </Button>
