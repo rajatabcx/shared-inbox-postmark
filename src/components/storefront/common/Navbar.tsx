@@ -38,18 +38,6 @@ export function Navbar({ userId }: { userId?: string | null }) {
             >
               How It Works
             </Link>
-            <Link
-              href='#pricing'
-              className='text-sm font-medium text-muted-foreground transition-colors hover:text-foreground'
-            >
-              Pricing
-            </Link>
-            <Link
-              href='#faq'
-              className='text-sm font-medium text-muted-foreground transition-colors hover:text-foreground'
-            >
-              FAQ
-            </Link>
           </nav>
         </div>
         <div className='flex items-center gap-4'>
