@@ -1,7 +1,8 @@
 'use client';
 import { InviteUser } from '@/components/dashboard/member/InviteUser';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { usePendingInvitations } from '@/hooks/invitation.hooks';
 import { useOrganizationMembers } from '@/hooks/organization.hooks';
 import { cn } from '@/lib/utils';
@@ -40,7 +41,11 @@ export default function Members() {
       <div className='flex flex-col gap-y-6'>
         <div>
           {isOrgMembersLoading ? (
-            <div>Loading...</div>
+            <div className='space-y-3'>
+              <Skeleton className='h-10 w-full' />
+              <Skeleton className='h-10 w-full' />
+              <Skeleton className='h-10 w-full' />
+            </div>
           ) : !orgMembers?.length ? (
             <p className='text-sm text-muted-foreground'>No team members</p>
           ) : (
@@ -52,6 +57,11 @@ export default function Members() {
                 >
                   <div className='flex items-center gap-x-2'>
                     <Avatar className='size-10'>
+                      <AvatarImage
+                        src={member.image_url || ''}
+                        alt={`${member.first_name} ${member.last_name}`}
+                        className='object-cover'
+                      />
                       <AvatarFallback>
                         {member.first_name.charAt(0)}
                         {member.last_name.charAt(0)}
@@ -80,7 +90,11 @@ export default function Members() {
           <h2 className='text-lg font-bold mb-4'>Pending Invitations</h2>
 
           {isPendingInvitesLoading ? (
-            <div>Loading...</div>
+            <div className='space-y-3'>
+              <Skeleton className='h-10 w-full' />
+              <Skeleton className='h-10 w-full' />
+              <Skeleton className='h-10 w-full' />
+            </div>
           ) : !pendingInvites?.length ? (
             <p className='text-sm text-muted-foreground'>
               No pending invitations
