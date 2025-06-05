@@ -36,7 +36,7 @@ export default async function SharedInbox({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <MailDashboard inboxId={Number(slug)} view={view} page={page} />
+      <MailDashboard inboxId={Number(slug)} />
     </HydrationBoundary>
   );
 }

@@ -6,7 +6,7 @@ import {
   parseAsString,
 } from 'nuqs/server';
 import { redirect } from 'next/navigation';
-import { useBookmarkedEmailListPrefetch } from '@/hooks/email.hooks';
+import { bookmarkedEmailListPrefetch } from '@/hooks/email.hooks';
 import { dehydrate } from '@tanstack/react-query';
 import { HydrationBoundary } from '@tanstack/react-query';
 
@@ -30,7 +30,7 @@ export default async function BookmarkedEmails({
     search: string;
   };
 
-  const queryClient = await useBookmarkedEmailListPrefetch({
+  const queryClient = await bookmarkedEmailListPrefetch({
     page,
     search,
   });

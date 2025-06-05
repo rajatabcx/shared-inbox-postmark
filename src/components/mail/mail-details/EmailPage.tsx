@@ -71,7 +71,7 @@ export function EmailPage({
       supabase.removeChannel(activityChannel);
       supabase.removeChannel(emailChannel);
     };
-  }, [supabase, inboxId]);
+  }, [supabase, emailId]);
 
   return !emailData?.email ? (
     <div className='flex h-full items-center justify-center'>

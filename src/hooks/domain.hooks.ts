@@ -6,7 +6,6 @@ import {
   domainList,
   verifyDomain,
 } from '@/actions/domain';
-import { addAlias } from '@/actions/alias';
 
 export const useAddDomain = () => {
   return useMutation({

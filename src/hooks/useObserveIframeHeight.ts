@@ -46,6 +46,7 @@ const useObserveIframeHeight = (
       prevHeightRef.current = height;
       iframeRef.current.style.height = `${height}px`;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -73,6 +74,7 @@ const useObserveIframeHeight = (
     return () => {
       resizeObserver.disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startObserving]);
 };
 

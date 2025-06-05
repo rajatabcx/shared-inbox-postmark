@@ -46,23 +46,6 @@ export const parseStringToDOM = (
   return parser.parseFromString(content, type);
 };
 
-const searchForContent = (element: Element, text: string) => {
-  const xpathResult = element.ownerDocument?.evaluate(
-    `//*[text()='${text}']`,
-    element,
-    null,
-    XPathResult.ORDERED_NODE_ITERATOR_TYPE,
-    null
-  );
-  const result: Element[] = [];
-  let match = null;
-  // eslint-disable-next-line no-cond-assign
-  while ((match = xpathResult?.iterateNext())) {
-    result.push(match as Element);
-  }
-  return result;
-};
-
 export const locateBlockquote = (
   inputDocument: Element | undefined
 ): [content: string, blockquote: string] => {

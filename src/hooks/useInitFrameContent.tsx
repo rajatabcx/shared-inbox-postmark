@@ -68,6 +68,7 @@ const useInitIframeContent = ({
         onContentLoaded(iframeRootDivElement);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initStatus]);
 
   /**
@@ -87,6 +88,7 @@ const useInitIframeContent = ({
     if (initStatus === 'done') {
       setInitStatus('start');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message]);
 
   return { initStatus, iframeRootDivRef };

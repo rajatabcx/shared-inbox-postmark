@@ -9,13 +9,11 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
-import { useCurrentUser } from '@/hooks/user.hooks';
 import { AtSign, MessageSquare, UserPlus, UserMinus } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function NotificationList() {
   const { data, isLoading } = useNotifications();
-  const { data: currentUser } = useCurrentUser();
 
   return isLoading ? (
     <div className='flex flex-col gap-4'>
@@ -60,7 +58,7 @@ export function NotificationList() {
                 icon: <AtSign className='w-4 h-4' />,
                 suffix: (
                   <div className='text-sm text-muted-foreground'>
-                    {notification.chat?.message}
+                    {(notification as any)?.chat?.message}
                   </div>
                 ),
               };

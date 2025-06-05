@@ -127,7 +127,7 @@ const transformAnchors = (inputDocument: Element) => {
     if (hasChildAnchors) {
       const span = document.createElement('span');
 
-      for (let attr of anchor.attributes) {
+      for (const attr of anchor.attributes) {
         span.setAttribute(attr.name, attr.value);
       }
 
@@ -225,7 +225,7 @@ const replaceLeftTopProperties = (element: HTMLElement) => {
   const results = handleTopLeftPropertiesRemoval({ top, left });
 
   results.forEach((value, property) => {
-    // @ts-expect-error
+    // @ts-expect-error // we send valid properties
     element.style[property] = value;
   });
 };

@@ -48,7 +48,7 @@ export default function ImageInput({
         setValue(publicData.publicUrl);
       }
     },
-    [image, setValue, userId]
+    [image, setValue, userId, supabase.storage]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

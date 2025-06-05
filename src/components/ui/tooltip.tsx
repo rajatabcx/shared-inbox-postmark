@@ -19,11 +19,8 @@ function TooltipProvider({
 }
 
 function Tooltip({
-  relativeReference,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Root> & {
-  relativeReference?: React.RefObject<HTMLIFrameElement | null>;
-}) {
+}: React.ComponentProps<typeof TooltipPrimitive.Root>) {
   return (
     <TooltipProvider>
       <TooltipPrimitive.Root data-slot='tooltip' {...props} />

@@ -117,7 +117,7 @@ export const sendEmail = async ({
       .from('emails')
       .insert({
         from_email: from,
-        to_email: to.join(','),
+        to_emails: to,
         subject,
         stripped_html: html,
         stripped_text: text,
@@ -130,7 +130,7 @@ export const sendEmail = async ({
         shared_inbox_id: sharedInboxId,
         alias_email: aliasEmail,
         mail_id: response.id,
-        cc_email: cc,
+        cc_emails: cc,
       })
       .select('id')
       .single();

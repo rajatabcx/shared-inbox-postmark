@@ -21,7 +21,7 @@ import { useRouter } from 'next/navigation';
 import { ResponseType } from '@/lib/types';
 import { toastHelper } from '@/lib/toastHelper';
 import { toast } from 'sonner';
-import { useCompleteOnboarding } from '@/hooks/onboarding.hooks';
+import { useCompleteOnboarding } from '@/hooks/user.hooks';
 import { useCreateInbox } from '@/hooks/inbox.hooks';
 
 type InboxFormValues = z.infer<typeof inboxSchema>;

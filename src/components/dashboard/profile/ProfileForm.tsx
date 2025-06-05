@@ -42,7 +42,7 @@ export default function ProfileForm() {
         imageUrl: user.imageUrl || '',
       });
     }
-  }, [user]);
+  }, [user, form]);
 
   return (
     <div className='container px-4 sm:px-6 mx-auto py-6 h-screen flex flex-col gap-y-6 justify-center items-center'>

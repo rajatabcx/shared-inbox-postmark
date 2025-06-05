@@ -217,7 +217,7 @@ export const useBookmarkedEmailList = (
     staleTime: 5 * 60 * 1000,
   });
 
-export const useBookmarkedEmailListPrefetch = async ({
+export const bookmarkedEmailListPrefetch = async ({
   page,
   search,
 }: {

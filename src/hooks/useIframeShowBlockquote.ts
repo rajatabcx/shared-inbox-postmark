@@ -13,7 +13,7 @@ export const useIframeShowBlockquote = ({
   onBlockquoteToggle,
 }: {
   iframeRef: RefObject<HTMLIFrameElement | null>;
-  initStatus: 'start' | 'base_content' | 'done';
+  initStatus: 'start' | 'done';
   showBlockquoteProp: boolean;
   showBlockquoteToggle: boolean;
   blockquoteContent: string;
@@ -48,6 +48,7 @@ export const useIframeShowBlockquote = ({
     if (showBlockquote !== showBlockquoteProp) {
       onBlockquoteToggle?.();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBlockquote]);
 
   useEffect(() => {
@@ -55,6 +56,7 @@ export const useIframeShowBlockquote = ({
     if (showBlockquote !== showBlockquoteProp) {
       setShowBlockquote(showBlockquoteProp);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBlockquoteProp]);
 
   return {

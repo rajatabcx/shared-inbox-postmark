@@ -53,7 +53,7 @@ function EmailMessageHtml({
   const modifiedMessage = prepareHtml(message, attachments);
   const [content, blockquote] = useMemo(
     () => locateBlockquote(modifiedMessage),
-    [modifiedMessage.innerHTML]
+    [modifiedMessage]
   );
 
   return (
