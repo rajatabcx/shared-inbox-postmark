@@ -21,7 +21,7 @@ export function EmailBodyIframe({ rawHtml }: { rawHtml: string }) {
       :host {
         --background: ${computedStyle.getPropertyValue('--background')};
         --primary: ${computedStyle.getPropertyValue('--primary')};
-        --foreground: ${computedStyle.getPropertyValue('--foreground')};
+        --background: ${computedStyle.getPropertyValue('--background')};
       }
 
       .email-content {

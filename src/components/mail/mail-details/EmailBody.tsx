@@ -21,7 +21,6 @@ import { EmailMessage } from './EmailMessage';
 export function EmailBody({ emailData }: { emailData: EmailDetail }) {
   const [detailsOpened, setDetailsOpened] = useState(false);
   const [shrinkCard, setShrinkCard] = useState(false);
-  const [showReply, setShowReply] = useState(false);
 
   const avatarInitials = useMemo(() => {
     const words = (emailData.from_name || emailData.from_email!)

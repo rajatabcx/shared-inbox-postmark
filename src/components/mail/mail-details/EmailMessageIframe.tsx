@@ -66,7 +66,6 @@ export function EmailMessageIframe({
             onClick={() => {
               setShowBlockquote(!showBlockquote);
             }}
-            data-testid='message-view:expand-codeblock'
           >
             <MoreHorizontal className='m-auto' size={12} />
             <span className='replyas-sr-only'>

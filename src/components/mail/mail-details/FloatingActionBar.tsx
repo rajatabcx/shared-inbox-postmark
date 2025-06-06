@@ -11,7 +11,6 @@ import {
   MoreHorizontal,
   ReplyAll,
   Star,
-  User,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -117,7 +116,7 @@ export function FloatingActionBar({
     });
     toastHelper(res);
     if (res?.type === ResponseType.SUCCESS) {
-      router.replace(routes.dashboard.inbox.details(`${inboxId}`));
+      router.back();
     }
   };
 
@@ -164,12 +163,7 @@ export function FloatingActionBar({
       )}
     >
       <div className='flex items-center gap-1'>
-        <Button
-          variant='ghost'
-          size='sm'
-          onClick={handleStar}
-          disabled={isStarring}
-        >
+        <Button variant='ghost' size='sm' onClick={handleStar}>
           {emailStar ? (
             <Star className='h-4 w-4 fill-yellow-400 text-yellow-400' />
           ) : (
@@ -232,10 +226,7 @@ export function FloatingActionBar({
                 Mark as unread
               </DropdownMenuItem>
 
-              <DropdownMenuItem
-                onClick={handleBookmark}
-                disabled={isTogglingBookmark}
-              >
+              <DropdownMenuItem onClick={handleBookmark}>
                 <Bookmark
                   className={cn(
                     'mr-2 h-4 w-4',
@@ -248,7 +239,6 @@ export function FloatingActionBar({
               <DropdownMenuItem
                 onClick={handleSubscribe}
                 disabled={
-                  isTogglingSubscribe ||
                   isUserLoading ||
                   (emailData.assignee?.id === user?.profileId && emailSubscribe)
                 }
@@ -285,10 +275,10 @@ export function FloatingActionBar({
                 Mark as spam
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <User className='mr-2 h-4 w-4' />
                 See all from {emailData.from_name || emailData.from_email}
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -86,7 +86,6 @@ export function LabelPickerCombo({
                 <CommandItem
                   key={label.id}
                   onSelect={() => handleLabelSelect(label.id)}
-                  disabled={isPending}
                   className={cn(
                     'flex items-center gap-2 px-2 cursor-pointer data-[disabled=true]:opacity-100'
                   )}
