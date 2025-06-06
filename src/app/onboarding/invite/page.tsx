@@ -21,6 +21,7 @@ import { ResponseType, UserRole } from '@/lib/types';
 import { toastHelper } from '@/lib/toastHelper';
 import { SelectInput } from '@/components/form/SelectInput';
 import { useInviteUser } from '@/hooks/invitation.hooks';
+import { routes } from '@/lib/routeHelpers';
 
 type InviteFormValues = z.infer<typeof inviteSchema>;
 
@@ -85,7 +86,7 @@ export default function OnboardingInvite() {
                   disabled={isPending}
                   className='flex gap-1 items-center'
                 >
-                  <Link href='/onboarding/inbox'>Skip for now</Link>
+                  <Link href={routes.onboarding.inbox()}>Skip for now</Link>
                 </Button>
                 <Button
                   type='submit'

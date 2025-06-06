@@ -23,6 +23,7 @@ import { toastHelper } from '@/lib/toastHelper';
 import { toast } from 'sonner';
 import { useCompleteOnboarding } from '@/hooks/user.hooks';
 import { useCreateInbox } from '@/hooks/inbox.hooks';
+import { routes } from '@/lib/routeHelpers';
 
 type InboxFormValues = z.infer<typeof inboxSchema>;
 
@@ -53,7 +54,7 @@ export default function OnboardingInbox() {
     const response = await createInboxMutation(data);
     toastHelper(response);
     if (response?.type === ResponseType.SUCCESS) {
-      router.push('/dashboard');
+      router.push(routes.dashboard.root());
     }
   };
 

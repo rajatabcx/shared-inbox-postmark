@@ -5,6 +5,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePendingInvitations } from '@/hooks/invitation.hooks';
 import { useOrganizationMembers } from '@/hooks/organization.hooks';
+import { routes } from '@/lib/routeHelpers';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, EllipsisVertical } from 'lucide-react';
 import Link from 'next/link';
@@ -21,7 +22,7 @@ export default function Members() {
           <div className='flex items-center gap-x-2'>
             <Link
               className={cn(buttonVariants({ size: 'icon', variant: 'ghost' }))}
-              href='/dashboard'
+              href={routes.dashboard.root()}
             >
               <ArrowLeft className='size-4' />
             </Link>

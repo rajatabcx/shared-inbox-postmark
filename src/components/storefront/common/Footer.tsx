@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { footerLinks } from '@/lib/const';
+import { routes } from '@/lib/routeHelpers';
 
 export function Footer() {
   return (
@@ -15,7 +16,10 @@ export function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Link href='/' className='flex items-center space-x-2 mb-4'>
+            <Link
+              href={routes.home()}
+              className='flex items-center space-x-2 mb-4'
+            >
               <div className='h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary/80' />
               <span className='font-bold text-xl'>Shared Inbox</span>
             </Link>

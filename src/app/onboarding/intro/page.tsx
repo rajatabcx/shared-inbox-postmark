@@ -5,6 +5,7 @@ import React from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { routes } from '@/lib/routeHelpers';
 
 export default function Intro() {
   return (
@@ -39,7 +40,7 @@ export default function Intro() {
         transition={{ delay: 1.4, ease: 'easeInOut' }}
       >
         <Link
-          href='/onboarding/invite'
+          href={routes.onboarding.invite()}
           className={cn(buttonVariants({ size: 'lg' }), 'w-[350px] flex gap-1')}
         >
           Get Started

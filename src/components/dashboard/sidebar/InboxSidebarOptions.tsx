@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { EllipsisVertical } from 'lucide-react';
 import Link from 'next/link';
 import { DeleteConfirmation } from './DeleteConfirmation';
+import { routes } from '@/lib/routeHelpers';
 
 export default function InboxSidebarOption({ inboxId }: { inboxId: number }) {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,10 @@ export default function InboxSidebarOption({ inboxId }: { inboxId: number }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent side='bottom' align='end'>
         <DropdownMenuItem>
-          <Link href={`/dashboard/inbox/${inboxId}/setup`} className='w-full'>
+          <Link
+            href={routes.dashboard.inbox.setup(`${inboxId}`)}
+            className='w-full'
+          >
             Setup
           </Link>
         </DropdownMenuItem>

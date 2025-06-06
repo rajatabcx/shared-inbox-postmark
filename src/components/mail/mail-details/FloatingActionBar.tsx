@@ -42,6 +42,7 @@ import {
 } from '@/hooks/email.hooks';
 import { useToggleEmailStar } from '@/hooks/email.hooks';
 import { useToggleEmailSubscription } from '@/hooks/notification.hooks';
+import { routes } from '@/lib/routeHelpers';
 
 export function FloatingActionBar({
   emailData,
@@ -105,7 +106,7 @@ export function FloatingActionBar({
     });
     toastHelper(res);
     if (res?.type === ResponseType.SUCCESS) {
-      router.replace(`/dashboard/inbox/${inboxId}`);
+      router.replace(routes.dashboard.inbox.details(`${inboxId}`));
     }
   };
 
@@ -116,7 +117,7 @@ export function FloatingActionBar({
     });
     toastHelper(res);
     if (res?.type === ResponseType.SUCCESS) {
-      router.replace(`/dashboard/inbox/${inboxId}`);
+      router.replace(routes.dashboard.inbox.details(`${inboxId}`));
     }
   };
 

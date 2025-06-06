@@ -30,6 +30,7 @@ import { toastHelper } from '@/lib/toastHelper';
 import { ResponseType } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { useSignup } from '@/hooks/auth.hooks';
+import { routes } from '@/lib/routeHelpers';
 
 type SignupFormValues = z.infer<typeof signupSchema>;
 
@@ -55,7 +56,7 @@ export default function SignupPage() {
     const res = await mutateAsync(values);
     toastHelper(res);
     if (res?.type === ResponseType.SUCCESS) {
-      router.push('/auth/email-sent');
+      router.push(routes.auth.emailSent());
     }
   };
 

@@ -5,6 +5,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { CALL_LINK } from '@/lib/const';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { routes } from '@/lib/routeHelpers';
 
 interface CtaSectionProps {
   title: string;
@@ -25,7 +26,9 @@ export function CtaSection({ title, userId }: CtaSectionProps) {
           <h2 className='text-3xl font-bold mb-6'>{title}</h2>
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
             <Link
-              href={userId ? '/dashboard/my-tickets' : '/auth/sign-up'}
+              href={
+                userId ? routes.dashboard.myTickets() : routes.auth.signUp()
+              }
               className={cn(buttonVariants({ variant: 'default', size: 'lg' }))}
             >
               {userId ? 'Dashboard' : 'Get Started Free'}

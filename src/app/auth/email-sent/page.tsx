@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Metadata } from 'next';
+import { routes } from '@/lib/routeHelpers';
 
 export const metadata: Metadata = {
   title: 'Email Sent | Replyas',
@@ -28,7 +29,10 @@ export default function EmailConfirmedPage() {
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <Link href='/' className={cn(buttonVariants({ variant: 'default' }))}>
+          <Link
+            href={routes.home()}
+            className={cn(buttonVariants({ variant: 'default' }))}
+          >
             Back to home
           </Link>
         </CardFooter>

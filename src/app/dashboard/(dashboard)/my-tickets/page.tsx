@@ -9,6 +9,7 @@ import { redirect } from 'next/navigation';
 import { myEmailListPrefetch } from '@/hooks/email.hooks';
 import { dehydrate } from '@tanstack/react-query';
 import { HydrationBoundary } from '@tanstack/react-query';
+import { routes } from '@/lib/routeHelpers';
 
 const searchParamsCache = createSearchParamsCache({
   page: parseAsInteger.withDefault(1),
@@ -22,7 +23,7 @@ export default async function MyTicketsPage({
 }) {
   const user = await currentUser();
   if (!user) {
-    redirect('/auth/sign-in');
+    redirect(routes.auth.signIn());
   }
   const searchParamsData = await searchParams;
   const { page, search } = searchParamsCache.parse(searchParamsData) as {

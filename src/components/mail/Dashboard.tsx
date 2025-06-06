@@ -24,6 +24,7 @@ import {
   parseAsStringEnum,
   useQueryStates,
 } from 'nuqs';
+import { routes } from '@/lib/routeHelpers';
 
 export function MailDashboard({ inboxId }: { inboxId: number }) {
   const [values, setValues] = useQueryStates({
@@ -137,7 +138,7 @@ export function MailDashboard({ inboxId }: { inboxId: number }) {
                 Setup email forwarding to your inbox to start receiving emails
               </p>
               <Link
-                href={`/dashboard/inbox/${inboxId}/setup`}
+                href={routes.dashboard.inbox.setup(`${inboxId}`)}
                 className={cn(buttonVariants({ variant: 'outline' }))}
               >
                 Setup Guide <BookOpen className='w-4 h-4' />

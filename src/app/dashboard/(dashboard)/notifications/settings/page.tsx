@@ -8,6 +8,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { ArrowLeft } from 'lucide-react';
+import { routes } from '@/lib/routeHelpers';
 
 export default function NotificationSettingsPage() {
   const [emailNotifications, setEmailNotifications] = React.useState(true);
@@ -23,7 +24,7 @@ export default function NotificationSettingsPage() {
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <Link
-            href='/dashboard'
+            href={routes.dashboard.root()}
             className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
           >
             <ArrowLeft className='h-4 w-4' />

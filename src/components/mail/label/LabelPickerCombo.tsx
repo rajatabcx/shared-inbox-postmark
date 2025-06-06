@@ -21,6 +21,7 @@ import { toastHelper } from '@/lib/toastHelper';
 import Link from 'next/link';
 import { ResponseType } from '@/lib/types';
 import { useToggleEmailLabel } from '@/hooks/label.hooks';
+import { routes } from '@/lib/routeHelpers';
 
 interface Label {
   id: number;
@@ -105,7 +106,7 @@ export function LabelPickerCombo({
           <CommandGroup>
             <CommandItem asChild>
               <Link
-                href='/dashboard/labels'
+                href={routes.dashboard.labels()}
                 className='flex items-center gap-1 text-muted-foreground justify-center cursor-pointer'
               >
                 <Tags className='h-4 w-4' />

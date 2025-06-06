@@ -1,4 +1,5 @@
 import { currentUser } from '@/actions/user';
+import { routes } from '@/lib/routeHelpers';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
@@ -9,9 +10,9 @@ export default async function DashboardParentLayout({
 }) {
   const user = await currentUser();
   if (!user) {
-    return redirect('/auth/sign-in');
+    return redirect(routes.auth.signIn());
   } else if (user && !user.onboarded) {
-    return redirect('/onboarding/intro');
+    return redirect(routes.onboarding.intro());
   }
   return <>{children}</>;
 }

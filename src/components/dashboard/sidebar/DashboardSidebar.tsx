@@ -32,6 +32,7 @@ import { currentUser } from '@/actions/user';
 import { SidebarUser } from './SidebarUser';
 import { NotificationItem } from './NotificationItem';
 import { SidebarItem } from './SidebarItem';
+import { routes } from '@/lib/routeHelpers';
 
 export async function DashboardSidebar() {
   const organization = await userOrganization();
@@ -60,7 +61,7 @@ export async function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarItem href='/dashboard/my-tickets'>
+                <SidebarItem href={routes.dashboard.myTickets()}>
                   <div className='relative'>
                     <Scan className='size-4' />
                     <Dot className='size-4 absolute top-0 right-0' />
@@ -83,7 +84,7 @@ export async function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarItem href='/dashboard/bookmarked'>
+                <SidebarItem href={routes.dashboard.bookmarked()}>
                   <Bookmark className='h-4 w-4' />
                   <span>My Bookmarks</span>
                 </SidebarItem>
@@ -134,13 +135,13 @@ export async function DashboardSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarItem href='/dashboard/domains'>
+            <SidebarItem href={routes.dashboard.domains()}>
               <Globe className='h-4 w-4' />
               <span>Domains</span>
             </SidebarItem>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarItem href='/dashboard/labels'>
+            <SidebarItem href={routes.dashboard.labels()}>
               <Tags className='h-4 w-4' />
               <span>Labels</span>
             </SidebarItem>

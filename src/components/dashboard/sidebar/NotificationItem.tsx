@@ -4,6 +4,7 @@ import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import React, { useEffect, useState } from 'react';
 import { createSupabaseClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+import { routes } from '@/lib/routeHelpers';
 
 export function NotificationItem({ profileId }: { profileId: number }) {
   const [newToggle, setNewToggle] = useState(false);
@@ -38,7 +39,7 @@ export function NotificationItem({ profileId }: { profileId: number }) {
           }
         }}
       >
-        <Link href='/dashboard/notifications' prefetch={false}>
+        <Link href={routes.dashboard.notifications()} prefetch={false}>
           <div className='relative overflow-visible'>
             {newToggle ? (
               <>

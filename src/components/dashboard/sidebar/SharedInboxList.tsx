@@ -10,6 +10,7 @@ import InboxSidebarOption from './InboxSidebarOptions';
 import { useListInboxes } from '@/hooks/inbox.hooks';
 import { usePathname } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
+import { routes } from '@/lib/routeHelpers';
 
 export function SharedInboxList() {
   const { data: inboxes, isLoading } = useListInboxes();
@@ -29,12 +30,14 @@ export function SharedInboxList() {
           <SidebarMenuItem key={inbox.id}>
             <SidebarMenuButton
               asChild
-              isActive={pathname === `/dashboard/inbox/${inbox.id}`}
+              isActive={
+                pathname === routes.dashboard.inbox.details(`${inbox.id}`)
+              }
             >
               <div className='flex items-center justify-between w-full'>
                 <Link
                   prefetch={false}
-                  href={`/dashboard/inbox/${inbox.id}`}
+                  href={routes.dashboard.inbox.details(`${inbox.id}`)}
                   className='flex items-center justify-between w-full'
                 >
                   <div className='flex items-center gap-2'>

@@ -30,6 +30,7 @@ import { toastHelper } from '@/lib/toastHelper';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSignout } from '@/hooks/auth.hooks';
+import { routes } from '@/lib/routeHelpers';
 
 export function SidebarUser({
   user,
@@ -46,7 +47,7 @@ export function SidebarUser({
   const handleSignout = async () => {
     const res = await signout();
     toastHelper(res);
-    router.push('/');
+    router.push(routes.home());
   };
 
   return (
@@ -99,7 +100,7 @@ export function SidebarUser({
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link
-                  href='/dashboard/members'
+                  href={routes.dashboard.members()}
                   className='cursor-pointer'
                   prefetch={false}
                 >
@@ -109,7 +110,7 @@ export function SidebarUser({
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link
-                  href='/dashboard/profile'
+                  href={routes.dashboard.profile()}
                   className='cursor-pointer'
                   prefetch={false}
                 >

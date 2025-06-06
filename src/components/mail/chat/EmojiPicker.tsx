@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Smile } from 'lucide-react';
 import { useState } from 'react';
 
-export const EmojiPickerComponent = () => {
+export const EmojiPicker = () => {
   const [open, setOpen] = useState(false);
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>

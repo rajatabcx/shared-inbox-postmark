@@ -101,7 +101,6 @@ export async function verifyDomain(domainId: number) {
   const details = await domainDetails(domainId);
 
   if (details?.DKIMVerified && details?.ReturnPathDomainVerified) {
-    console.log('Domain is active');
     await supabase
       .from('domains')
       .update({ verified: true })

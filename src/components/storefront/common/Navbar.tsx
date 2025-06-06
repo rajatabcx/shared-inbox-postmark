@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { routes } from '@/lib/routeHelpers';
 
 export function Navbar({ userId }: { userId?: string | null }) {
   return (
@@ -17,7 +18,7 @@ export function Navbar({ userId }: { userId?: string | null }) {
     >
       <div className='container flex h-16 items-center justify-between px-4 sm:px-6'>
         <div className='flex items-center gap-6'>
-          <Link href='/' className='flex items-center space-x-2'>
+          <Link href={routes.home()} className='flex items-center space-x-2'>
             <motion.div
               className='h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary/80'
               whileHover={{ scale: 1.05 }}
@@ -43,14 +44,14 @@ export function Navbar({ userId }: { userId?: string | null }) {
         <div className='flex items-center gap-4'>
           {!userId ? (
             <Link
-              href='/auth/sign-in'
+              href={routes.auth.signIn()}
               className={cn(buttonVariants({ variant: 'ghost' }))}
             >
               Log in
             </Link>
           ) : null}
           <Link
-            href={userId ? '/dashboard' : '/auth/sign-up'}
+            href={userId ? routes.dashboard.root() : routes.auth.signUp()}
             className={cn(buttonVariants({ variant: 'default' }))}
           >
             {userId ? 'Dashboard' : 'Sign Up Free'}
@@ -93,14 +94,16 @@ export function Navbar({ userId }: { userId?: string | null }) {
                 </Link>
                 {!userId ? (
                   <Link
-                    href='/auth/sign-in'
+                    href={routes.auth.signIn()}
                     className={cn(buttonVariants({ variant: 'ghost' }))}
                   >
                     Log in
                   </Link>
                 ) : null}
                 <Link
-                  href={userId ? '/dashboard/my-tickets' : '/auth/sign-up'}
+                  href={
+                    userId ? routes.dashboard.myTickets() : routes.auth.signUp()
+                  }
                   className={cn(buttonVariants({ variant: 'default' }))}
                 >
                   {userId ? 'Dashboard' : 'Sign Up Free'}

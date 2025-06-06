@@ -15,6 +15,7 @@ import { ResponseType, UserRoleType } from '@/lib/types';
 import { toastHelper } from '@/lib/toastHelper';
 import { useRouter } from 'next/navigation';
 import { useJoinOrganization } from '@/hooks/invitation.hooks';
+import { routes } from '@/lib/routeHelpers';
 
 type JoinFormValues = z.infer<typeof joinSchema>;
 
@@ -50,7 +51,7 @@ export function JoinForm({
 
     toastHelper(res);
     if (res?.type === ResponseType.SUCCESS) {
-      router.push('/auth/sign-in');
+      router.push(routes.auth.signIn());
     }
   };
 

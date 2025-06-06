@@ -1,7 +1,7 @@
 'use client';
 
 import { format, formatDistanceToNow } from 'date-fns';
-import { EmojiPickerComponent } from './EmojiPicker';
+import { EmojiPicker } from './EmojiPicker';
 import {
   Tooltip,
   TooltipContent,
@@ -52,7 +52,7 @@ export const Chat = ({
         className='text-sm py-2 rounded-lg text-foreground'
         dangerouslySetInnerHTML={{ __html: chatData?.message || '' }}
       />
-      <EmojiPickerComponent />
+      <EmojiPicker />
     </div>
   );
 };

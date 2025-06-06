@@ -22,6 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { DomainOptions } from '@/components/common/DomainOptions';
 import { useDomainList } from '@/hooks/domain.hooks';
 import { Skeleton } from '@/components/ui/skeleton';
+import { routes } from '@/lib/routeHelpers';
 
 export default function DomainPage() {
   const { data: domains, isLoading } = useDomainList();
@@ -75,7 +76,7 @@ export default function DomainPage() {
                   <TableRow key={domain.id}>
                     <TableCell>
                       <Link
-                        href={`/dashboard/domains/${domain.id}`}
+                        href={routes.dashboard.domain(`${domain.id}`)}
                         prefetch={false}
                         className='hover:underline w-full block'
                       >

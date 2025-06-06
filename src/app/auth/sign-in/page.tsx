@@ -21,6 +21,7 @@ import { toastHelper } from '@/lib/toastHelper';
 import { ResponseType } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { useSignin } from '@/hooks/auth.hooks';
+import { routes } from '@/lib/routeHelpers';
 
 type SigninFormValues = z.infer<typeof signinSchema>;
 
@@ -40,7 +41,7 @@ export default function SignupPage() {
     const res = await mutateAsync(values);
     toastHelper(res);
     if (res?.type === ResponseType.SUCCESS) {
-      router.push('/dashboard');
+      router.push(routes.dashboard.root());
     }
   };
 

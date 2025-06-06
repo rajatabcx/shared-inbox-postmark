@@ -22,6 +22,7 @@ import { AssignUser } from '@/components/mail/features/AssignUser';
 import { Label } from '@/components/mail/label/Label';
 import { BookmarkEmail } from '@/components/mail/features/BookmarkEmail';
 import { EmailCardOptions } from '@/components/mail/list/EmailCardOptions';
+import { routes } from '@/lib/routeHelpers';
 
 export function EmailCard({
   email,
@@ -63,7 +64,7 @@ export function EmailCard({
         </div>
         <Link
           prefetch={false}
-          href={`/dashboard/inbox/${inboxId}/email/${email.id}`}
+          href={routes.dashboard.inbox.email(`${inboxId}`, `${email.id}`)}
           className={cn(
             'text-sm font-semibold text-ellipsis whitespace-nowrap overflow-hidden w-36 text-left',
             isRead && 'opacity-50'
@@ -128,7 +129,7 @@ export function EmailCard({
         </div>
         <Link
           prefetch={false}
-          href={`/dashboard/inbox/${inboxId}/email/${email.id}`}
+          href={routes.dashboard.inbox.email(`${inboxId}`, `${email.id}`)}
           className='flex flex-col gap-1 flex-1 min-w-0'
         >
           <div className='flex items-center gap-2'>

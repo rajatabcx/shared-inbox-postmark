@@ -18,8 +18,6 @@ export function DnsRecords({ domainData }: { domainData: DomainData }) {
     await mutateAsync(domainData.id);
   };
 
-  console.log(domainData);
-
   return (
     <div className='space-y-6 mt-4 @container'>
       <div className='flex items-center justify-between'>
@@ -54,9 +52,9 @@ export function DnsRecords({ domainData }: { domainData: DomainData }) {
         <div className='flex flex-col gap-1 @3xl/gap-0 @3xl:flex-row py-2 px-4 border-b'>
           <div className='flex-[0_0_18%] flex gap-2 mb-3 @3xl:mb-0'>
             {!domainData.DKIMVerified ? (
-              <XCircle className='size-8 text-muted-foreground' />
+              <XCircle className='size-6 text-muted-foreground' />
             ) : (
-              <CheckCircle className='size-8 text-primary' />
+              <CheckCircle className='size-6 text-primary' />
             )}
             <div>
               <p className='text-lg font-semibold'>DKIM</p>
@@ -131,9 +129,9 @@ export function DnsRecords({ domainData }: { domainData: DomainData }) {
         <div className='flex flex-col gap-1 @3xl/gap-0 @3xl:flex-row py-2 px-4'>
           <div className='flex-[0_0_18%] flex items-start gap-2 mb-3 @3xl:mb-0'>
             {!domainData.ReturnPathDomainVerified ? (
-              <XCircle className='size-8 text-muted-foreground' />
+              <XCircle className='size-6 text-muted-foreground' />
             ) : (
-              <CheckCircle className='size-8 text-primary' />
+              <CheckCircle className='size-6 text-primary' />
             )}
             <div>
               <p className='text-lg font-semibold'>Return Path</p>

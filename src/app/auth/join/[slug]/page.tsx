@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { routes } from '@/lib/routeHelpers';
 import { InvitationStatus } from '@/lib/types';
 import Link from 'next/link';
 import React from 'react';
@@ -29,7 +30,7 @@ export default async function JoinPage({
           </CardDescription>
           <CardFooter>
             <Button asChild>
-              <Link href='/dashboard'>Go to dashboard</Link>
+              <Link href={routes.dashboard.root()}>Go to dashboard</Link>
             </Button>
           </CardFooter>
         </CardHeader>
@@ -45,7 +46,7 @@ export default async function JoinPage({
           </CardDescription>
           <CardFooter>
             <Button asChild>
-              <Link href='/dashboard'>Go to dashboard</Link>
+              <Link href={routes.dashboard.root()}>Go to dashboard</Link>
             </Button>
           </CardFooter>
         </CardHeader>
