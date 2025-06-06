@@ -19,18 +19,17 @@ export function EmailBodyIframe({ rawHtml }: { rawHtml: string }) {
     const styleSheet = document.createElement('style');
     styleSheet.textContent = `
       :host {
-        --theme-background: ${computedStyle.getPropertyValue(
-          '--theme-background'
-        )};
-        --theme-text: ${computedStyle.getPropertyValue('--theme-text')};
+        --background: ${computedStyle.getPropertyValue('--background')};
+        --primary: ${computedStyle.getPropertyValue('--primary')};
+        --foreground: ${computedStyle.getPropertyValue('--foreground')};
       }
 
       .email-content {
         font-family: system-ui, -apple-system, sans-serif;
         line-height: 1.5;
         padding: 1rem;
-        color: var(--theme-text, inherit);
-        background: var(--theme-background, transparent);
+        color: var(--primary, inherit);
+        background: var(--background, transparent);
       }
 
       /* Rest of your styles */

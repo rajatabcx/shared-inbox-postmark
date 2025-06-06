@@ -19,6 +19,7 @@ import { Form } from '@/components/ui/form';
 import { TextInput } from '@/components/form/TextInput';
 import { toastHelper } from '@/lib/toastHelper';
 import { useAddAlias } from '@/hooks/alias.hooks';
+import { useQueryClient } from '@tanstack/react-query';
 
 type AliasData = z.infer<typeof emailAliasSchema>;
 
@@ -40,6 +41,7 @@ export function AddEmailAlias({
     resolver: zodResolver(emailAliasSchema),
   });
 
+  const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useAddAlias();
 
   const onSubmit = async (data: AliasData) => {
@@ -52,6 +54,7 @@ export function AddEmailAlias({
     if (res?.type === 'success') {
       setOpen(false);
       form.reset();
+      queryClient.invalidateQueries({ queryKey: ['emailAliasList'] });
     }
   };
 

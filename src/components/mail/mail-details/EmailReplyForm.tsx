@@ -91,33 +91,33 @@ export default function EmailReplyForm({
   });
   const onSubmit = async (data: EmailFormValues) => {
     const strippedText = handleStrippedText(data.message);
-    console.log(strippedText);
-    // const response = await mutateAsync({
-    //   html: data.message,
-    //   text: data.messageText,
-    //   from: data.from,
-    //   to: data.to,
-    //   cc: data.cc || [],
-    //   bcc: data.bcc || [],
-    //   archive: !!data.archive,
-    //   subject: subject,
-    //   replyTo: inReplyTo,
-    //   references: references,
-    //   sharedInboxId: sharedInboxId,
-    //   aliasEmail: aliasEmail,
-    //   parentEmailId,
-    // });
-    // toastHelper(response);
+    const response = await mutateAsync({
+      html: data.message,
+      text: data.messageText,
+      from: data.from,
+      to: data.to,
+      cc: data.cc || [],
+      bcc: data.bcc || [],
+      archive: !!data.archive,
+      subject: subject,
+      replyTo: inReplyTo,
+      references: references,
+      sharedInboxId: sharedInboxId,
+      aliasEmail: aliasEmail,
+      parentEmailId,
+      strippedText,
+    });
+    toastHelper(response);
   };
 
-  const { modifiedEmailBody } = useMemo(() => {
-    const modifiedEmailBody = wrapHtmlWithQuote(
-      emailBody,
-      emailFrom,
-      emailTime
-    );
-    return { modifiedEmailBody };
-  }, [emailBody, emailFrom, emailTime]);
+  // const { modifiedEmailBody } = useMemo(() => {
+  //   const modifiedEmailBody = wrapHtmlWithQuote(
+  //     emailBody,
+  //     emailFrom,
+  //     emailTime
+  //   );
+  //   return { modifiedEmailBody };
+  // }, [emailBody, emailFrom, emailTime]);
 
   useEffect(() => {
     if (aliasList?.length) {
@@ -128,9 +128,9 @@ export default function EmailReplyForm({
     }
   }, [aliasList, form]);
 
-  useEffect(() => {
-    form.setValue('message', modifiedEmailBody);
-  }, [modifiedEmailBody, form]);
+  // useEffect(() => {
+  //   form.setValue('message', modifiedEmailBody);
+  // }, [modifiedEmailBody, form]);
 
   useEffect(() => {
     if (replying.all) {
@@ -140,6 +140,15 @@ export default function EmailReplyForm({
       form.setValue('to', replyTo ? [replyTo] : [toEmail]);
     }
   }, [replyTo, toEmail, replying, form]);
+
+  useEffect(() => {
+    if (!!aliasList?.[0] && !isLoading) {
+      form.setValue(
+        'from',
+        `${aliasList[0].display_name} <${aliasList[0].address}@${aliasList[0].domains.domain}>`
+      );
+    }
+  }, [aliasList, isLoading, form]);
 
   return (
     <Form {...form}>
@@ -203,6 +212,7 @@ export default function EmailReplyForm({
                     name='cc'
                     control={form.control}
                     className='w-full'
+                    inputClassName='shadow-none'
                   />
                 </div>
               </div>
@@ -215,6 +225,7 @@ export default function EmailReplyForm({
                     name='bcc'
                     control={form.control}
                     className='w-full'
+                    inputClassName='shadow-none'
                   />
                 </div>
               </div>

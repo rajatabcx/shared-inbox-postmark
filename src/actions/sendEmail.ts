@@ -77,37 +77,33 @@ export const sendEmail = async ({
   parentEmailId: number;
   strippedText: string;
 }): Promise<ActionResponse> => {
+  from = 'Rajat Mondal <rajat.abcx@gmail.com>';
   try {
     const user = await currentUser();
     if (!user) {
       throw new Error('User not found');
     }
-    const res = await fetch(
-      `${process.env.MAILGUN_API_BASE}/${process.env.MY_DOMAIN}/messages`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + btoa(`api:${process.env.MAILGUN_API_KEY}`),
+    const res = await postmarkClient().sendEmail({
+      From: from,
+      To: to.join(','),
+      Subject: subject,
+      HtmlBody: html,
+      TextBody: text,
+      Cc: cc.join(','),
+      Bcc: bcc.join(','),
+      ReplyTo: replyTo,
+      MessageStream: 'outbound',
+      Headers: [
+        {
+          Name: 'References',
+          Value: references.join(' '),
         },
-        body: new URLSearchParams({
-          from,
-          to: to.join(','),
-          subject,
-          html: html,
-          text: text,
-          cc: cc.join(','),
-          bcc: bcc.join(','),
-          'h:In-Reply-To': replyTo,
-          'h:References': references.join(' '),
-        }),
-      }
-    );
-    let response: any = null;
-    if (!res.ok) {
-      response = await res.json();
-      throw new Error(response.message);
+      ],
+    });
+    if (res.ErrorCode) {
+      throw new Error(res.Message);
     }
-    response = await res.json();
+    console.log(JSON.stringify(res, null, 2));
 
     // store it in emails table
     const supabase = await createSupabaseServerClient();
@@ -126,7 +122,7 @@ export const sendEmail = async ({
         send_at: new Date().toISOString(),
         shared_inbox_id: sharedInboxId,
         alias_email: aliasEmail,
-        mail_id: response.id,
+        mail_id: res.MessageID,
         cc_emails: cc,
         list_text: strippedText,
       })

@@ -54,7 +54,6 @@ export const wrapHtmlWithQuote = (
 
 export const handleStrippedText = (html: string) => {
   const cleanHtml = purifyHTML(html);
-  // cleanhtm
 
   return cleanHtml.textContent || '';
 };

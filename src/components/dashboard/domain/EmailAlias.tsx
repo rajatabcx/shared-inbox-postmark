@@ -1,6 +1,6 @@
 import React from 'react';
 import { AddEmailAlias } from './AddEmailAlias';
-import { Globe } from 'lucide-react';
+import { Globe, Loader } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/table';
 import { formatDistanceToNow } from 'date-fns';
 import { useEmailAliasList } from '@/hooks/alias.hooks';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function EmailAlias({
   domainVerified,
@@ -21,7 +22,7 @@ export function EmailAlias({
   domainName: string;
   domainId: number;
 }) {
-  const { data: emailAliases } = useEmailAliasList();
+  const { data: emailAliases, isLoading } = useEmailAliasList();
 
   return (
     <div className='space-y-4'>
@@ -44,7 +45,15 @@ export function EmailAlias({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {!emailAliases || emailAliases.length === 0 ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={3} className='text-center space-y-2'>
+                  <Skeleton className='h-8 w-full' />
+                  <Skeleton className='h-8 w-full' />
+                  <Skeleton className='h-8 w-full' />
+                </TableCell>
+              </TableRow>
+            ) : !emailAliases || emailAliases.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={3}

@@ -4,7 +4,7 @@ import { EmailAlias } from '@/components/dashboard/domain/EmailAlias';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDomainDetails } from '@/hooks/domain.hooks';
-import { Globe } from 'lucide-react';
+import { Globe, Loader } from 'lucide-react';
 import { DnsRecords } from './DnsRecords';
 
 export function DomainDetailsPage({ id }: { id: number }) {
@@ -21,7 +21,10 @@ export function DomainDetailsPage({ id }: { id: number }) {
         )}
       </div>
       {isLoading ? (
-        <div>Loading...</div>
+        <div className='flex flex-col gap-2 items-center justify-center h-full'>
+          <Loader className='size-8 animate-spin' />
+          <p className='text-muted-foreground'>Loading please wait...</p>
+        </div>
       ) : !domainData ? (
         <div className='text-center py-12 border rounded-md'>
           <Globe className='h-12 w-12 mx-auto text-muted-foreground' />
