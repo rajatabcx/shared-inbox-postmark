@@ -133,11 +133,11 @@ const EmailActivityTimeline = ({ activities }: { activities: Activity[] }) => {
           >
             <Avatar className='size-8'>
               <AvatarImage
-                src={user?.image_url || undefined}
+                src={user?.image_url || ''}
                 className='object-cover'
               />
               <AvatarFallback className='text-xs'>
-                {fullName
+                {`${user?.first_name} ${user?.last_name}`
                   .split(' ')
                   .map((name) => name[0])
                   .join('')}

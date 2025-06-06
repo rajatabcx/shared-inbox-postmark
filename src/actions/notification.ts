@@ -114,8 +114,7 @@ export const notifications = async () => {
       emails (
         id,
         subject,
-        shared_inbox_id,
-        stripped_text
+        shared_inbox_id
       ),
       action_by:user_profiles!notifications_action_by_fkey (
         id,
@@ -136,7 +135,13 @@ export const notifications = async () => {
     .filter((item) => item.event_type === UserNotificationType.MENTIONED)
     .map((item) => (item.metadata as { message_id: number }).message_id);
 
-  const allChats = await allChatsFromIds({ ids: mentionedChatIds });
+  const commentedChatIds = data
+    .filter((item) => item.event_type === UserNotificationType.COMMENTED)
+    .map((item) => (item.metadata as { message_id: number }).message_id);
+
+  const allChats = await allChatsFromIds({
+    ids: [...mentionedChatIds, ...commentedChatIds],
+  });
 
   const assignedToIds = data
     .filter((item) => item.event_type === UserNotificationType.ASSIGNED)
@@ -153,6 +158,12 @@ export const notifications = async () => {
 
   const modifiedData = data.map((item) => {
     if (item.event_type === UserNotificationType.MENTIONED) {
+      const chat = allChats.find(
+        (chat) =>
+          chat.id === (item.metadata as { message_id: number }).message_id
+      );
+      return { ...item, chat };
+    } else if (item.event_type === UserNotificationType.COMMENTED) {
       const chat = allChats.find(
         (chat) =>
           chat.id === (item.metadata as { message_id: number }).message_id

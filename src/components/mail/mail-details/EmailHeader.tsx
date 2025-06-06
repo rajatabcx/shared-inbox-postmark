@@ -26,7 +26,7 @@ export default function EmailHeader({
           ))}
         </div>
       </div>
-      <div className='flex gap-2 w-[156px]'>
+      <div className='flex gap-2 w-[156px] justify-end'>
         <AssignUser
           assignedTo={
             emailData.assignee

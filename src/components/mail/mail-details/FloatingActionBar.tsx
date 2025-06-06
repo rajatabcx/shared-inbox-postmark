@@ -274,7 +274,7 @@ export function FloatingActionBar({
                 <Flag className='mr-2 h-4 w-4' />
                 Mark as spam
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              {/* <DropdownMenuSeparator /> */}
               {/* <DropdownMenuItem>
                 <User className='mr-2 h-4 w-4' />
                 See all from {emailData.from_name || emailData.from_email}
