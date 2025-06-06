@@ -21,8 +21,7 @@ export const useSendEmail = () => {
       aliasEmail: string;
       archive: boolean;
       parentEmailId: number;
-      // bodyHtml: string;
-      // bodyText: string;
+      strippedText: string;
     }) => {
       const response = await sendEmail(data);
       return response;

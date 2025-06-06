@@ -69,6 +69,9 @@ export function EmailReplyEditor({
   useEffect(() => {
     if (!value) {
       editor?.commands.clearContent();
+    } else if (value !== editor?.getHTML()) {
+      console.log('setting content', value);
+      editor?.commands.setContent(value);
     }
   }, [value, editor]);
 

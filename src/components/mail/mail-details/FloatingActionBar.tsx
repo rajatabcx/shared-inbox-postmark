@@ -159,7 +159,7 @@ export function FloatingActionBar({
   return (
     <div
       className={cn(
-        'sticky top-4 z-[99999] w-fit rounded-lg border bg-secondary p-1',
+        'sticky top-4 z-[49] w-fit rounded-lg border bg-secondary p-1',
         'mb-4'
       )}
     >

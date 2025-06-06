@@ -56,9 +56,8 @@ export const sendEmail = async ({
   text,
   archive,
   parentEmailId,
-}: // bodyHtml,
-// bodyText,
-{
+  strippedText,
+}: {
   html: string;
   text: string;
   from: string;
@@ -76,8 +75,7 @@ export const sendEmail = async ({
   aliasEmail: string;
   archive: boolean;
   parentEmailId: number;
-  // bodyHtml: string;
-  // bodyText: string;
+  strippedText: string;
 }): Promise<ActionResponse> => {
   try {
     const user = await currentUser();
@@ -119,10 +117,9 @@ export const sendEmail = async ({
         from_email: from,
         to_emails: to,
         subject,
-        stripped_html: html,
-        stripped_text: text,
-        // body_html: bodyHtml,
-        // body_text: bodyText,
+        stripped_text: strippedText,
+        body_html: html,
+        body_text: text,
         reply_to_mail_id: replyTo,
         references_mail_ids: references,
         is_reply: true,
@@ -131,6 +128,7 @@ export const sendEmail = async ({
         alias_email: aliasEmail,
         mail_id: response.id,
         cc_emails: cc,
+        list_text: strippedText,
       })
       .select('id')
       .single();

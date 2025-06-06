@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { EmailReplyEditor } from '@/components/editor/mail/EmailReplyEditor';
 import {
@@ -27,6 +33,7 @@ import DiscardReply from './DiscardReply';
 import { getDistinctEmails } from '@/lib/const';
 import { toastHelper } from '@/lib/toastHelper';
 import { useSendEmail } from '@/hooks/sendEmail.hooks';
+import { handleStrippedText, wrapHtmlWithQuote } from '@/lib/utils';
 
 type EmailFormValues = z.infer<typeof emailReplyFormSchema>;
 
@@ -42,6 +49,9 @@ export default function EmailReplyForm({
   sharedInboxId,
   aliasEmail,
   parentEmailId,
+  emailBody,
+  emailFrom,
+  emailTime,
 }: {
   orgId: number;
   subject: string;
@@ -57,6 +67,9 @@ export default function EmailReplyForm({
   sharedInboxId: number;
   aliasEmail: string;
   parentEmailId: number;
+  emailBody: string;
+  emailFrom: { email: string; name: string };
+  emailTime: string;
 }) {
   const [showCc, setShowCc] = useState(false);
   const [showBcc, setShowBcc] = useState(false);
@@ -77,23 +90,34 @@ export default function EmailReplyForm({
     },
   });
   const onSubmit = async (data: EmailFormValues) => {
-    const response = await mutateAsync({
-      html: data.message,
-      text: data.messageText,
-      from: data.from,
-      to: data.to,
-      cc: data.cc || [],
-      bcc: data.bcc || [],
-      archive: !!data.archive,
-      subject: subject,
-      replyTo: inReplyTo,
-      references: references,
-      sharedInboxId: sharedInboxId,
-      aliasEmail: aliasEmail,
-      parentEmailId,
-    });
-    toastHelper(response);
+    const strippedText = handleStrippedText(data.message);
+    console.log(strippedText);
+    // const response = await mutateAsync({
+    //   html: data.message,
+    //   text: data.messageText,
+    //   from: data.from,
+    //   to: data.to,
+    //   cc: data.cc || [],
+    //   bcc: data.bcc || [],
+    //   archive: !!data.archive,
+    //   subject: subject,
+    //   replyTo: inReplyTo,
+    //   references: references,
+    //   sharedInboxId: sharedInboxId,
+    //   aliasEmail: aliasEmail,
+    //   parentEmailId,
+    // });
+    // toastHelper(response);
   };
+
+  const { modifiedEmailBody } = useMemo(() => {
+    const modifiedEmailBody = wrapHtmlWithQuote(
+      emailBody,
+      emailFrom,
+      emailTime
+    );
+    return { modifiedEmailBody };
+  }, [emailBody, emailFrom, emailTime]);
 
   useEffect(() => {
     if (aliasList?.length) {
@@ -103,6 +127,10 @@ export default function EmailReplyForm({
       );
     }
   }, [aliasList, form]);
+
+  useEffect(() => {
+    form.setValue('message', modifiedEmailBody);
+  }, [modifiedEmailBody, form]);
 
   useEffect(() => {
     if (replying.all) {
@@ -133,7 +161,7 @@ export default function EmailReplyForm({
                 disabled={isLoading}
                 loading={isLoading}
                 className='flex-1'
-                selectClassName='bg-transparent! border-none w-fit cursor-pointer'
+                selectClassName='bg-transparent! border-none w-fit cursor-pointer shadow-none'
               />
             </div>
             <div className='flex items-center gap-2 py-2 border-b'>
@@ -143,6 +171,7 @@ export default function EmailReplyForm({
                   name='to'
                   control={form.control}
                   className='w-full'
+                  inputClassName='shadow-none'
                 />
                 <div className='flex items-center gap-2'>
                   <Button
@@ -209,6 +238,7 @@ export default function EmailReplyForm({
                 form.setValue('message', html);
                 form.setValue('messageText', text);
               }}
+              value={form.watch('message')}
             />
           </CardContent>
           <CardFooter className='flex justify-between'>

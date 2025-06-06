@@ -1,5 +1,5 @@
-import type { Config } from 'dompurify';
-import DOMPurify from 'dompurify';
+import type { Config } from 'isomorphic-dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 const matches = (element: Element, selector: string) =>
   (element.matches || (element as any).msMatchesSelector).call(
@@ -33,7 +33,7 @@ const clean = () => {
   };
 };
 
-const purifyHTML = (input: string): Element => {
+export const purifyHTML = (input: string): Element => {
   const process = clean();
   return process(input) as Element;
 };

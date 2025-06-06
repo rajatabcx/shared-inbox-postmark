@@ -16,6 +16,9 @@ export function EmailReply({
   sharedInboxId,
   aliasEmail,
   parentEmailId,
+  emailBody,
+  emailFrom,
+  emailTime,
 }: {
   orgId: number;
   subject: string;
@@ -26,6 +29,9 @@ export function EmailReply({
   sharedInboxId: number;
   aliasEmail: string;
   parentEmailId: number;
+  emailBody: string;
+  emailFrom: { email: string; name: string };
+  emailTime: string;
 }) {
   const [replying, setReplying] = useQueryStates(
     {
@@ -66,6 +72,9 @@ export function EmailReply({
       sharedInboxId={sharedInboxId}
       aliasEmail={aliasEmail}
       parentEmailId={parentEmailId}
+      emailBody={emailBody}
+      emailFrom={emailFrom}
+      emailTime={emailTime}
     />
   );
 }

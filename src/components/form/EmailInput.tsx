@@ -15,6 +15,7 @@ interface PropTypes<T extends FieldValues> {
   placeholder?: string;
   control: Control<T>;
   className?: string;
+  inputClassName?: string;
 }
 
 export function EmailInput<T extends FieldValues>({
@@ -22,6 +23,7 @@ export function EmailInput<T extends FieldValues>({
   placeholder,
   control,
   className,
+  inputClassName,
 }: PropTypes<T>) {
   return (
     <FormField
@@ -42,6 +44,7 @@ export function EmailInput<T extends FieldValues>({
               autoCapitalize='none'
               autoCorrect='off'
               className={cn(className)}
+              inputClassName={cn(inputClassName)}
             />
           </FormControl>
           <FormMessage className='text-left' />

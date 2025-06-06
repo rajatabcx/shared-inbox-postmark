@@ -17,7 +17,6 @@ export function NotificationItem({ profileId }: { profileId: number }) {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'notifications' },
         (payload) => {
-          console.log(payload);
           if (payload.new.notification_for === profileId) {
             setNewToggle(true);
           }

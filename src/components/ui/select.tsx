@@ -52,7 +52,7 @@ function SelectTrigger({
       {children}
       <SelectPrimitive.Icon asChild>
         {isLoading ? (
-          <Loader className='size-4' />
+          <Loader className='size-4 animate-spin' />
         ) : (
           <ChevronDownIcon className='size-4 opacity-50' />
         )}

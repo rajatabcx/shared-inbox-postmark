@@ -52,7 +52,7 @@ export const Chat = ({
         className='text-sm py-2 rounded-lg text-foreground'
         dangerouslySetInnerHTML={{ __html: chatData?.message || '' }}
       />
-      <EmojiPicker />
+      {/* <EmojiPicker /> */}
     </div>
   );
 };

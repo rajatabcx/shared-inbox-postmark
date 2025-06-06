@@ -11,6 +11,7 @@ import { Member, ResponseType } from '@/lib/types';
 import { ChatEditor } from '@/components/editor/chat/ChatEditor';
 import { useState } from 'react';
 import { useAddInternalComment } from '@/hooks/internalChat.hooks';
+import { modifyChatHtml } from '@/lib/utils';
 
 type InternalCommentType = z.infer<typeof internalCommentSchema>;
 
@@ -33,8 +34,9 @@ export function InternalChat({
   const { mutateAsync, isPending } = useAddInternalComment();
 
   const onSubmit = async (data: InternalCommentType) => {
+    const modifiedChatHtml = modifyChatHtml(data.comment);
     const response = await mutateAsync({
-      comment: data.comment,
+      comment: modifiedChatHtml,
       mailId: emailId,
       mentions: data.mentions || [],
     });

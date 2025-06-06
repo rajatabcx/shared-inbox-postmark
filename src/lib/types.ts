@@ -229,7 +229,7 @@ export interface EmailDetail {
   is_starred: boolean;
   is_spam: boolean;
   organization_id: number | null;
-  send_at: string | null;
+  send_at: string;
 
   // Joined fields from related tables
   assignee: {

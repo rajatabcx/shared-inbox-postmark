@@ -201,6 +201,11 @@ html body[data-scroll-locked] {
   pointer-events: none;
 }
 
+.tiptap blockquote {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 .dropdown-menu {
   background: var(--background);
   border: 1px solid var(--border);
@@ -223,6 +228,7 @@ html body[data-scroll-locked] {
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     cursor: pointer;
+    font-size: 0.875rem;
 
     &:hover,
     &:hover.is-selected {
@@ -260,6 +266,7 @@ html body[data-scroll-locked] {
   .mention {
     box-decoration-break: clone;
     color: var(--primary);
+    font-weight: 500;
     padding: 0.1rem 0.3rem;
 
     &::after {

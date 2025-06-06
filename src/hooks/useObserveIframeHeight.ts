@@ -26,6 +26,7 @@ const useObserveIframeHeight = (
       return;
     }
 
+    // TODO: fix this, throwing error
     const emailContentRoot =
       iframeRef.current?.contentWindow?.document.getElementById(
         MESSAGE_IFRAME_ROOT_ID
@@ -57,6 +58,7 @@ const useObserveIframeHeight = (
     // We're ready set some height
     setIframeHeight();
 
+    // TODO: fix this, throwing error
     const iframeRootDiv =
       iframeRef.current?.contentWindow?.document.getElementById(
         MESSAGE_IFRAME_ROOT_ID

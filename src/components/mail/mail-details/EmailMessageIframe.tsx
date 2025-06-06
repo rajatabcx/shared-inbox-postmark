@@ -5,7 +5,7 @@ import useObserveIframeHeight from '@/hooks/useObserveIframeHeight';
 import { getIframeSandboxAttributes } from '@/lib/iframeHelpers';
 import { cn } from '@/lib/utils';
 import { MoreHorizontal } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 
 export function EmailMessageIframe({

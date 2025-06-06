@@ -91,7 +91,7 @@ export function EmailPage({
       {/* Email Body */}
       <div className='p-6 flex-1 overflow-auto max-w-[800px] w-full'>
         <EmailBody emailData={emailData.email} />
-        <div className='email-activity relative z-50 pt-5 mb-4 space-y-4'>
+        <div className='email-activity relative z-[48] pt-5 mb-4 space-y-4'>
           <EmailActivityTimeline activities={emailData.activities} />
           <EmailReply
             orgId={emailData.email.organization_id!}
@@ -108,6 +108,12 @@ export function EmailPage({
             sharedInboxId={emailData.email.shared_inbox_id!}
             aliasEmail={emailData.email.alias_email!}
             parentEmailId={emailData.email.id}
+            emailBody={emailData.email.body_html || ''}
+            emailFrom={{
+              email: emailData.email.from_email!,
+              name: emailData.email.from_name!,
+            }}
+            emailTime={emailData.email.send_at}
           />
         </div>
       </div>

@@ -23,6 +23,7 @@ interface TagsInputProps extends React.HTMLAttributes<HTMLDivElement> {
   placeholder?: string;
   maxItems?: number;
   minItems?: number;
+  inputClassName?: string;
 }
 
 interface TagsInputContextProps {
@@ -46,6 +47,7 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
       maxItems,
       minItems,
       className,
+      inputClassName,
       dir,
       ...props
     },
@@ -300,7 +302,8 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
             className={cn(
               'outline-0 border-none h-7 min-w-fit flex-1 focus-visible:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-0 placeholder:text-muted-foreground px-1',
               activeIndex !== -1 && 'caret-transparent',
-              'bg-transparent!'
+              'bg-transparent!',
+              inputClassName
             )}
           />
         </div>

@@ -100,7 +100,8 @@ function updateMentionsInHTML(
     const $el = $(el);
     const userId = $el.attr('data-user-id');
     const fullName = userMap[userId ?? ''].name || 'Unknown';
-    const imageUrl = userMap[userId ?? ''].imageUrl || null;
+    // we might use it later
+    // const imageUrl = userMap[userId ?? ''].imageUrl || null;
 
     $el.text(`@${fullName}`);
   });
