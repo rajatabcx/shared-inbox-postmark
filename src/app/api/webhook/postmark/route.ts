@@ -71,9 +71,10 @@ export async function POST(request: Request) {
     const emailBodyHtml = emailData.HtmlBody || '';
     const strippedTextReply = emailData.StrippedTextReply || '';
 
-    const aliasEmail = findValueFromNameInHeader(emailHeader, 'X-Forwarded-To')
-      .toString()
-      .split('@')[0];
+    const aliasEmail =
+      allTo
+        .find((to) => to.Email.includes(process.env.MY_DOMAIN!))
+        ?.Email.split('@')[0] || '';
 
     const replyTo = emailData.ReplyTo || '';
 
@@ -93,6 +94,16 @@ export async function POST(request: Request) {
       findValueFromNameInHeader(emailHeader, 'X-Spam-Status') === 'Yes'
         ? true
         : false;
+
+    console.log('aliasEmail', aliasEmail);
+
+    if (!aliasEmail) {
+      console.log('No alias email found');
+      return NextResponse.json({
+        success: false,
+        message: 'No alias email found',
+      });
+    }
 
     const finalEmailData: EmailData = {
       messageId: messageId,

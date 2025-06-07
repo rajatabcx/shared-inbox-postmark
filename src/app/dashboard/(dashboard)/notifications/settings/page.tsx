@@ -44,7 +44,7 @@ export default function NotificationSettingsPage() {
               <div className='flex flex-col gap-2 border p-4 rounded-md bg-muted'>
                 <div className='flex items-center justify-between'>
                   <Label htmlFor='email-notifications' className='flex-1'>
-                    Email me when I receive a Jelly notification
+                    Email me when I receive a notification
                   </Label>
                   <Switch
                     id='email-notifications'

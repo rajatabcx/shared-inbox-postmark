@@ -23,22 +23,36 @@ export const simpleSendEmail = async ({
   to: string;
   subject: string;
 }) => {
-  const res = await postmarkClient().sendEmail({
-    From: from,
-    To: to,
-    Subject: subject,
-    HtmlBody: html,
-  });
-  if (res.ErrorCode) {
+  try {
+    const res = await postmarkClient().sendEmail({
+      From: from,
+      To: to,
+      Subject: subject,
+      HtmlBody: html,
+    });
+
     return {
-      type: ResponseType.ERROR,
+      type: ResponseType.SUCCESS,
       message: res.Message,
     };
+  } catch (err: any) {
+    console.log(
+      JSON.stringify(
+        {
+          From: from,
+          To: to,
+          Subject: subject,
+          HtmlBody: html,
+        },
+        null,
+        2
+      )
+    );
+    return {
+      type: ResponseType.ERROR,
+      message: err.Message,
+    };
   }
-  return {
-    type: ResponseType.SUCCESS,
-    message: res.Message,
-  };
 };
 
 export const sendEmail = async ({

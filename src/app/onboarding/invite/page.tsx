@@ -22,10 +22,12 @@ import { toastHelper } from '@/lib/toastHelper';
 import { SelectInput } from '@/components/form/SelectInput';
 import { useInviteUser } from '@/hooks/invitation.hooks';
 import { routes } from '@/lib/routeHelpers';
+import { useRouter } from 'next/navigation';
 
 type InviteFormValues = z.infer<typeof inviteSchema>;
 
 export default function OnboardingInvite() {
+  const router = useRouter();
   const form = useForm<InviteFormValues>({
     resolver: zodResolver(inviteSchema),
     defaultValues: {
@@ -42,6 +44,7 @@ export default function OnboardingInvite() {
     toastHelper(response);
     if (response?.type === ResponseType.SUCCESS) {
       form.reset();
+      router.push(routes.onboarding.inbox());
     }
   };
 

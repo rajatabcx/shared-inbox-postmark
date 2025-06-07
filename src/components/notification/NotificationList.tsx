@@ -17,15 +17,13 @@ import { routes } from '@/lib/routeHelpers';
 export function NotificationList() {
   const { data, isLoading } = useNotifications();
 
-  console.log(data);
-
   return isLoading ? (
     <div className='flex flex-col gap-4'>
       {Array.from({ length: 10 }).map((_, index) => (
         <Skeleton key={index} className='w-full h-20' />
       ))}
     </div>
-  ) : (
+  ) : data && data?.length > 0 ? (
     <div className='space-y-4 pb-4'>
       {data?.map((notification) => {
         const actionByUser = notification.action_by;
@@ -127,6 +125,10 @@ export function NotificationList() {
           </Link>
         );
       })}
+    </div>
+  ) : (
+    <div className='text-center text-muted-foreground'>
+      No notifications found
     </div>
   );
 }
