@@ -17,6 +17,7 @@ import { toastHelper } from '@/lib/toastHelper';
 import { ResponseType } from '@/lib/types';
 import { domainSchema } from '@/lib/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { Globe, Loader, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -33,6 +34,7 @@ export default function AddDomain() {
     },
   });
 
+  const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useAddDomain();
 
   const handleSubmit = async (data: DomainType) => {
@@ -41,6 +43,7 @@ export default function AddDomain() {
     if (res?.type === ResponseType.SUCCESS) {
       setIsAddDomainOpen(false);
       form.reset();
+      queryClient.invalidateQueries({ queryKey: ['domainList'] });
     }
   };
 

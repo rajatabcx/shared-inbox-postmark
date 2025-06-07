@@ -25,6 +25,7 @@ import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { useCreateLabel, useUpdateLabel } from '@/hooks/label.hooks';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function CreateLabelForm() {
   const [label, setLabel] = useQueryStates(
@@ -39,6 +40,8 @@ export function CreateLabelForm() {
   );
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useCreateLabel();
   const { mutateAsync: updateMutateAsync, isPending: updateIsPending } =
     useUpdateLabel();
@@ -64,6 +67,7 @@ export function CreateLabelForm() {
     if (res?.type === ResponseType.SUCCESS) {
       form.reset();
       setIsOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['labels'] });
     }
   };
 

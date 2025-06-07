@@ -4,6 +4,7 @@ import { LabelOptions } from '@/components/mail/label/LabelOptions';
 import { Label } from '@/components/mail/label/Label';
 import React from 'react';
 import { useLabels } from '@/hooks/label.hooks';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LabelPage() {
   const { data: allLabels, isLoading } = useLabels();
@@ -17,7 +18,11 @@ export default function LabelPage() {
       </div>
       <div className='max-w-2xl mx-auto w-full'>
         {isLoading ? (
-          <div>Loading...</div>
+          <div className='flex flex-col gap-4'>
+            <Skeleton className='h-8 w-full' />
+            <Skeleton className='h-8 w-full' />
+            <Skeleton className='h-8 w-full' />
+          </div>
         ) : !allLabels?.length ? (
           <div className='flex flex-col gap-4'>
             <p className='text-sm text-muted-foreground'>
