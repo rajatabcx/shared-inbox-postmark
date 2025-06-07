@@ -94,10 +94,7 @@ export default function DomainPage() {
                       {format(domain.created_at!, 'MMM d, yyyy')}
                     </TableCell>
                     <TableCell>
-                      <DomainOptions
-                        domainId={domain.id}
-                        domainName={domain.domain}
-                      />
+                      <DomainOptions domainId={domain.id} />
                     </TableCell>
                   </TableRow>
                 ))}
