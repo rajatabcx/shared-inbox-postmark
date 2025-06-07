@@ -71,10 +71,7 @@ export async function POST(request: Request) {
     const emailBodyHtml = emailData.HtmlBody || '';
     const strippedTextReply = emailData.StrippedTextReply || '';
 
-    const aliasEmail =
-      allTo
-        .find((to) => to.Email.includes(process.env.MY_DOMAIN!))
-        ?.Email.split('@')[0] || '';
+    const aliasEmail = emailData.OriginalRecipient.split('@')[0];
 
     const replyTo = emailData.ReplyTo || '';
 
