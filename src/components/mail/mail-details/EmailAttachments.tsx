@@ -19,9 +19,10 @@ export function EmailAttachments({
     setIsGeneratingSignedUrl(true);
     const supabase = createSupabaseClient();
     // get signed url valid for 30 minutes
+    console.log(path);
     const { data, error } = await supabase.storage
       .from('attachments')
-      .createSignedUrl(path, 60 * 30);
+      .download(path);
     if (error) {
       console.error(error);
     }
@@ -29,7 +30,18 @@ export function EmailAttachments({
     setIsGeneratingSignedUrl(false);
 
     if (data) {
-      window.open(data.signedUrl, '_blank');
+      const url = URL.createObjectURL(data);
+
+      // Create a temporary anchor element for download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = attachment.original_name; // Use the original filename
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
   };
 
