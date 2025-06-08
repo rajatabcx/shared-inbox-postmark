@@ -5,7 +5,6 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { getColorForInbox } from '@/lib/const';
 import InboxSidebarOption from './InboxSidebarOptions';
 import { useListInboxes } from '@/hooks/inbox.hooks';
 import { usePathname } from 'next/navigation';
@@ -44,7 +43,7 @@ export function SharedInboxList() {
                     <span>{inbox.name}</span>
                   </div>
                 </Link>
-                <InboxSidebarOption inboxId={inbox.id} />
+                <InboxSidebarOption inbox={inbox} />
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>

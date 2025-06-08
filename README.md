@@ -18,12 +18,12 @@ where multiple people need controlled access to a common email account.
 
 - **Team Collaboration**: Assign emails, add internal notes with @mentions, and
   track real-time activity
-- **Email Organization**: Custom labels, bookmarks, and smart filtering
-  (starred, archived, spam)
+- **Organize Emails**: Custom labels, bookmarks, and smart filtering (starred,
+  archived, spam)
 - **Workflow Management**: 5-stage email status tracking (Todo → In Progress →
   Drafting Reply → In Review → Done)
 - **Custom Domains**: Add your own domains with complete DNS verification and
-  email aliases
+  email aliases to reply from
 - **Real-time Updates**: Live notifications and collision detection to prevent
   duplicate responses
 - **Role-based Access**: Admin and member roles with granular permissions
@@ -33,9 +33,15 @@ where multiple people need controlled access to a common email account.
 - **Custom Reply Addresses**: Once a domain is added, create multiple reply-from
   addresses to send emails from different aliases within your domain
 
-## Getting Started
+## Test Credentials and steps
 
-Coming soon...
+- Email: postmarktest@replyas.com
+- Password: pass1234
+
+1. Sign in with the above credentials here: https://replyas.com/auth/sign-in
+2. Send a email to postmarktest10@gmail.com
+3. See the reply appear in "support" inbox
+4. Check out other features in the app
 
 ## Inspiration & Credits
 

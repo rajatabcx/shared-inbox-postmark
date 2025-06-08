@@ -12,9 +12,19 @@ import { EllipsisVertical } from 'lucide-react';
 import Link from 'next/link';
 import { DeleteConfirmation } from './DeleteConfirmation';
 import { routes } from '@/lib/routeHelpers';
+import { useCurrentUser, useUserOrganization } from '@/hooks/user.hooks';
 
-export default function InboxSidebarOption({ inboxId }: { inboxId: number }) {
+export default function InboxSidebarOption({
+  inbox: { id: inboxId, name: inboxName },
+}: {
+  inbox: {
+    id: number;
+    name: string;
+  };
+}) {
   const [open, setOpen] = useState(false);
+
+  const { data: organization, isLoading } = useUserOrganization();
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -33,9 +43,14 @@ export default function InboxSidebarOption({ inboxId }: { inboxId: number }) {
             Setup
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <DeleteConfirmation id={inboxId} onDelete={() => setOpen(false)} />
-        </DropdownMenuItem>
+        {/* Hide delete option for postmark org support inbox as the email forwarding is setup and needed for testing */}
+        {isLoading ||
+        (organization?.name === 'Postmark' &&
+          inboxName === 'support') ? null : (
+          <DropdownMenuItem asChild>
+            <DeleteConfirmation id={inboxId} onDelete={() => setOpen(false)} />
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

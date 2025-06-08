@@ -24,7 +24,7 @@ export function Navbar({ userId }: { userId?: string | null }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             />
-            <span className='font-bold text-xl'>Shared Inbox</span>
+            <span className='font-bold text-xl'>Replyas</span>
           </Link>
           <nav className='hidden md:flex gap-6'>
             <Link
